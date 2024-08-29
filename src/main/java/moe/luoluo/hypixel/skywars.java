@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 
 public class Skywars {
-    public static MessageChain skywars(String player, String type) throws IOException, URISyntaxException {
+    public static MessageChain skywars(String player) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         JsonObject json = new Gson().fromJson(Api.hypixel("player", Api.mojang(player, "uuid")), JsonObject.class);

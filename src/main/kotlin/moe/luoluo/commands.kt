@@ -12,7 +12,7 @@ class KtCommands : CompositeCommand(
 
     @SubCommand("player")
     @Description("查询玩家的Hypixel总体数据")
-    suspend fun CommandSender.player(playerName: String, type: String = "") = sendMessage(
+    suspend fun CommandSender.player(playerName: String) = sendMessage(
         message = Player.player(playerName)
     )
 
@@ -27,14 +27,14 @@ class KtCommands : CompositeCommand(
 
     @SubCommand("skywars", "sw")
     @Description("查询玩家的空岛战争数据")
-    suspend fun CommandSender.sw(player: String, type: String = "") {
-        sendMessage(Skywars.skywars(player, type))
+    suspend fun CommandSender.sw(player: String) {
+        sendMessage(Skywars.skywars(player))
     }
 
     @SubCommand("tntgames", "tnt")
     @Description("查询玩家的掘战游戏数据")
-    suspend fun CommandSender.tntgames(player: String, type: String = "") {
-        sendMessage(TNT.tnt(player, type))
+    suspend fun CommandSender.tntgames(player: String) {
+        sendMessage(TNT.tnt(player))
     }
 
     @SubCommand("guild")
@@ -63,8 +63,13 @@ class KtCommands : CompositeCommand(
 
     @SubCommand("buildbattle","bb")
     @Description("查询玩家的建筑大师数据")
-    fun bb(context: CommandSender, player: String, type: String = "") {
-        BuildBattle.buildBattle(context, player)
+    suspend fun CommandSender.bb(context: CommandSender, player: String) {
+        sendMessage(BuildBattle.buildBattle(player))
+    }
+    @SubCommand("fish")
+    @Description("查询玩家的钓鱼数据")
+    suspend fun CommandSender.fish(player: String,) {
+        sendMessage(Fish.fish(player))
     }
 
 }

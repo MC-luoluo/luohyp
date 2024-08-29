@@ -27,31 +27,31 @@ public class Api {
             return json.get("id").getAsString();
         } else if (get.equals("name")) {
             return json.get("name").getAsString();
-        } else throw new IOException();
+        } else return null;
 
     }
 
     public static String hypixel(String type) throws URISyntaxException, IOException {
-        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + Config.INSTANCE.getHypixelAPI());
+        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPI());
         return request(uri);
     }
 
     public static String hypixel(String type, String uuid) throws URISyntaxException, IOException {
-        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + Config.INSTANCE.getHypixelAPI() + "&uuid=" + uuid);
+        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPI() + "&uuid=" + uuid);
         return request(uri);
     }
 
     public static String hypixel(String type, String value, String parameter) throws URISyntaxException, IOException {
-        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + Config.INSTANCE.getHypixelAPI() + "&" + parameter + "=" + value);
+        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPI() + "&" + parameter + "=" + value);
         return request(uri);
     }
 
     public static String guild(String type, String arg2) throws URISyntaxException, IOException {
-        URI uri = new URI("https://api.hypixel.net/guild?key=" + Config.INSTANCE.getHypixelAPI() + "&" + type + "=" + URLEncoder.encode(arg2, StandardCharsets.UTF_8));
+        URI uri = new URI("https://api.hypixel.net/guild?key=" + config.INSTANCE.getHypixelAPI() + "&" + type + "=" + URLEncoder.encode(arg2, StandardCharsets.UTF_8));
         return request(uri);
     }
 
-    public static String request(URI uri) throws IOException {
+    public static String request(URI uri) throws MalformedURLException {
         URL url = uri.toURL();
         BufferedReader in = null;
         StringBuilder result = new StringBuilder();

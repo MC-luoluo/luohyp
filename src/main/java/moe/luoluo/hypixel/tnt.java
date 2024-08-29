@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 
 public class TNT {
-    public static MessageChain tnt(String player, String type) throws IOException, URISyntaxException {
+    public static MessageChain tnt(String player) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         JsonObject json = new Gson().fromJson(Api.hypixel("player", Api.mojang(player, "uuid")), JsonObject.class);
         JsonObject playerJson = json.get("player").getAsJsonObject();
