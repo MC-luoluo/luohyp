@@ -2,7 +2,7 @@ package moe.luoluo.hypixel;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import moe.luoluo.api;
+import moe.luoluo.Api;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -12,17 +12,17 @@ import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
-public class bedwars {
+public class Bedwars {
     public static void bedwars(CommandSender context, String player, String type) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         MessageChainBuilder error = new MessageChainBuilder();
-        JsonObject json = new Gson().fromJson(api.hypixel("player", api.mojang(player, "uuid")), JsonObject.class);
+        JsonObject json = new Gson().fromJson(Api.hypixel("player", Api.mojang(player, "uuid")), JsonObject.class);
         JsonObject playerJson = json.get("player").getAsJsonObject();
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
         if (playerJson.has("stats") && json.get("player").isJsonObject()) {
 
-            chain.append(new PlainText(rank.rank(playerJson) + " ")); //玩家名称前缀
+            chain.append(new PlainText(Rank.rank(playerJson) + " ")); //玩家名称前缀
             chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
             chain.append(new PlainText(" | 起床战争数据:\n"));
 

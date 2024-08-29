@@ -39,7 +39,7 @@ public final class luohyp extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        reloadPluginConfig(config.INSTANCE);
+        reloadPluginConfig(Config.INSTANCE);
         getLogger().info("luohyp enabled");
         EventChannel<Event> eventChannel = GlobalEventChannel.INSTANCE.parentScope(this);
         eventChannel.subscribeAlways(GroupMessageEvent.class, g -> {

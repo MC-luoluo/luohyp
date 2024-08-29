@@ -2,7 +2,7 @@ package moe.luoluo.hypixel;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import moe.luoluo.api;
+import moe.luoluo.Api;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -14,27 +14,27 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class player {
-    public static MessageChain player(String player, String type) throws IOException, URISyntaxException {
+public class Player {
+    public static MessageChain player(String player) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         JsonObject playerJson;
         JsonObject giftingMeta;
         DecimalFormat decimalFormat = new DecimalFormat("0.000");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日-HH时mm分ss秒", Locale.CHINA);
 
-        JsonObject json = new Gson().fromJson(api.hypixel("player", api.mojang(player, "uuid")), JsonObject.class);
-        JsonObject guild = new Gson().fromJson(api.guild("player", api.mojang(player, "uuid")), JsonObject.class);
+        JsonObject json = new Gson().fromJson(Api.hypixel("player", Api.mojang(player, "uuid")), JsonObject.class);
+        JsonObject guild = new Gson().fromJson(Api.guild("player", Api.mojang(player, "uuid")), JsonObject.class);
         if (json.get("player").isJsonObject()) {
             playerJson = json.get("player").getAsJsonObject();
 //            achievements = playerJson.get("achievements").getAsJsonObject();  V0.4.2版本更新注释
 
             JsonObject online;
             if (playerJson.has("lastLogin")) {
-                online = new Gson().fromJson(api.hypixel("status", api.mojang(player, "uuid")), JsonObject.class);
+                online = new Gson().fromJson(Api.hypixel("status", Api.mojang(player, "uuid")), JsonObject.class);
             } else {
                 online = null;
             }
-            chain.append(new PlainText(rank.rank(playerJson) + " ")); //玩家名称前缀
+            chain.append(new PlainText(Rank.rank(playerJson) + " ")); //玩家名称前缀
             chain.append(new PlainText(playerJson.get("displayname").getAsString()));
 
             chain.append(new PlainText("\n在线状态: "));

@@ -2,7 +2,7 @@ package moe.luoluo.hypixel;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import moe.luoluo.api;
+import moe.luoluo.Api;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -11,17 +11,17 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 
-public class skywars {
+public class Skywars {
     public static MessageChain skywars(String player, String type) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        JsonObject json = new Gson().fromJson(api.hypixel("player", api.mojang(player, "uuid")), JsonObject.class);
+        JsonObject json = new Gson().fromJson(Api.hypixel("player", Api.mojang(player, "uuid")), JsonObject.class);
         JsonObject playerJson = json.get("player").getAsJsonObject();
         JsonObject swJson = playerJson.get("stats").getAsJsonObject().get("SkyWars").getAsJsonObject();
 
         if (json.get("player").isJsonObject()) {
 
-            chain.append(new PlainText("\n" + rank.rank(playerJson) + " ")); //玩家名称前缀
+            chain.append(new PlainText("\n" + Rank.rank(playerJson) + " ")); //玩家名称前缀
 
             chain.append(new PlainText(playerJson.get("displayname").getAsString()));
             chain.append(new PlainText(" | 空岛战争数据:"));

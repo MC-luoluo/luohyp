@@ -2,7 +2,7 @@ package moe.luoluo.hypixel;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import moe.luoluo.api;
+import moe.luoluo.Api;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -13,14 +13,14 @@ import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
-public class murdermystery {
+public class MurderMystery {
     public static void murdermystery(CommandSender context, String player, String type) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         JsonObject playerJson;
         JsonObject mmJson;
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-        JsonObject json = new Gson().fromJson(api.hypixel("player", api.mojang(player, "uuid")), JsonObject.class);
+        JsonObject json = new Gson().fromJson(Api.hypixel("player", Api.mojang(player, "uuid")), JsonObject.class);
 
         if (json.get("player").isJsonObject()) {
             playerJson = json.get("player").getAsJsonObject();
@@ -28,7 +28,7 @@ public class murdermystery {
             if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("MurderMystery")) {
                 mmJson = playerJson.get("stats").getAsJsonObject().get("MurderMystery").getAsJsonObject();
 
-                chain.append(new PlainText(rank.rank(playerJson) + " "));
+                chain.append(new PlainText(Rank.rank(playerJson) + " "));
                 chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
                 chain.append(new PlainText(" | 密室杀手数据:"));
 
@@ -489,19 +489,16 @@ public class murdermystery {
 
                     if (context.getSubject() != null) {
                         ForwardMessageBuilder builder = new ForwardMessageBuilder(context.getSubject());
-                        builder.add(context.getBot().getId(), context.getBot().getNick(), chain.build());
+                        builder.add(Objects.requireNonNull(context.getBot()).getId(), context.getBot().getNick(), chain.build());
                         context.sendMessage(builder.build());
                     }else context.sendMessage(chain.build());
                 } else {
                     context.sendMessage(chain.build());
                 }
-
             } else {
-                chain.append(new PlainText(" 该玩家的密室杀手数据为空"));
+                chain.append(new PlainText("该玩家的密室杀手数据为空"));
                 context.sendMessage(chain.build());
-
             }
-
         }
     }
 }

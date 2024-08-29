@@ -6,20 +6,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class rank {
+public class Rank {
     public static String rank(JsonObject json) {
         if (json.has("rank") && !Objects.equals(json.get("rank").getAsString(), "NORMAL")) {
             String r1 = json.get("rank").getAsString();
-            switch (r1) {
-                case "YOUTUBER":
-                    return "[YOUTUBE]";
-                case "ADMIN":
-                    return "[ADMIN]";
-                case "GAME_MASTER":
-                    return "[GM]";
-                default:
-                    return "[" + r1 + "]";
-            }
+            return switch (r1) {
+                case "YOUTUBER" -> "[YOUTUBE]";
+                case "ADMIN" -> "[ADMIN]";
+                case "GAME_MASTER" -> "[GM]";
+                default -> "[" + r1 + "]";
+            };
         } else if (json.has("newPackageRank")) {
             String rank = json.get("newPackageRank").getAsString();
             boolean rankPlus = json.has("monthlyPackageRank");

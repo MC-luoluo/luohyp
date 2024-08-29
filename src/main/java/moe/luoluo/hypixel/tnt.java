@@ -2,7 +2,7 @@ package moe.luoluo.hypixel;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import moe.luoluo.api;
+import moe.luoluo.Api;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -11,17 +11,17 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 
-public class tnt {
+public class TNT {
     public static MessageChain tnt(String player, String type) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
-        JsonObject json = new Gson().fromJson(api.hypixel("player", api.mojang(player, "uuid")), JsonObject.class);
+        JsonObject json = new Gson().fromJson(Api.hypixel("player", Api.mojang(player, "uuid")), JsonObject.class);
         JsonObject playerJson = json.get("player").getAsJsonObject();
 
         if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("TNTGames")) {
             JsonObject tntJson = playerJson.get("stats").getAsJsonObject().get("TNTGames").getAsJsonObject();
             DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-            chain.append(new PlainText(rank.rank(playerJson) + " "));
+            chain.append(new PlainText(Rank.rank(playerJson) + " "));
             chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
             chain.append(new PlainText(" | TNT Games数据:"));
 

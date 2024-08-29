@@ -3,7 +3,7 @@ package moe.luoluo.hypixel;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import moe.luoluo.api;
+import moe.luoluo.Api;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
-public class guild {
+public class Guild {
     static DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     public static void guild(CommandSender group, String px, String name, String type) throws URISyntaxException, IOException {
@@ -36,8 +36,8 @@ public class guild {
         JsonObject achievements = new JsonObject();
 
         JsonObject json = switch (px) {
-            case "name", "id" -> new Gson().fromJson(api.guild(px, name), JsonObject.class);
-            default -> new Gson().fromJson(api.guild(px, api.mojang(name, "uuid")), JsonObject.class);
+            case "name", "id" -> new Gson().fromJson(Api.guild(px, name), JsonObject.class);
+            default -> new Gson().fromJson(Api.guild(px, Api.mojang(name, "uuid")), JsonObject.class);
         };
 
         if (json.get("guild").isJsonObject()) {
@@ -53,7 +53,7 @@ public class guild {
                 //chain.append(new PlainText("\n标签: "));
                 chain.append(new PlainText(" [" + json.get("tag").getAsString() + "]"));
                 if (json.has("tagColor")) {
-                    chain.append(new PlainText("(" + rank.color(json.get("tagColor").getAsString()) + ")"));
+                    chain.append(new PlainText("(" + Rank.color(json.get("tagColor").getAsString()) + ")"));
                 }
             }
 
@@ -63,7 +63,7 @@ public class guild {
             chain.append(new PlainText("\n会长: "));
             for (int i = 0; i < members.size(); i++) {
                 if (members.get(i).getAsJsonObject().get("rank").getAsString().equals("Guild Master") || members.get(i).getAsJsonObject().get("rank").getAsString().equals("GUILDMASTER")) {
-                    chain.append(new PlainText(api.mojang(members.get(i).getAsJsonObject().get("uuid").getAsString(), "name")));
+                    chain.append(new PlainText(Api.mojang(members.get(i).getAsJsonObject().get("uuid").getAsString(), "name")));
                     break;
                 }
             }
@@ -182,9 +182,9 @@ public class guild {
             achievementChain.append(new PlainText(formatExp((float) weekExp / members.size())));
 
             if (Objects.equals(px, "player")) {
-                String uuid = api.mojang(name, "uuid");
+                String uuid = Api.mojang(name, "uuid");
                 membersChain.append(new PlainText("成员: "));
-                membersChain.append(new PlainText(api.mojang(uuid, "name")));
+                membersChain.append(new PlainText(Api.mojang(uuid, "name")));
 
                 for (int i = 0; i < members.size(); i++) {
                     JsonObject member = members.get(i).getAsJsonObject();
@@ -356,7 +356,7 @@ public class guild {
 
             if (group.getSubject() != null) {
                 ForwardMessageBuilder builder = new ForwardMessageBuilder(group.getSubject());
-                builder.add(group.getBot().getId(), group.getBot().getNick(), chain.build());
+                builder.add(Objects.requireNonNull(group.getBot()).getId(), group.getBot().getNick(), chain.build());
                 builder.add(group.getBot().getId(), group.getBot().getNick(), achievementChain.build());
                 if (!membersChain.isEmpty()) {
                     builder.add(group.getBot().getId(), group.getBot().getNick(), membersChain.build());
@@ -414,7 +414,7 @@ public class guild {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日-HH时mm分ss秒", Locale.CHINA);
         Set<String> set;
         chain.append(new PlainText("\n\n玩家: "));
-        chain.append(new PlainText(api.mojang(members.get(x).getAsJsonObject().get("uuid").getAsString(), "name")));
+        chain.append(new PlainText(Api.mojang(members.get(x).getAsJsonObject().get("uuid").getAsString(), "name")));
         chain.append(new PlainText("\nrank: "));
         chain.append(new PlainText(members.get(x).getAsJsonObject().get("rank").getAsString()));
         chain.append(new PlainText("\n加入时间: "));
