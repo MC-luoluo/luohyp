@@ -7,7 +7,7 @@ import net.mamoe.mirai.console.command.CompositeCommand
 
 class KtCommands : CompositeCommand(
     luohyp.INSTANCE, "hypixel", "hyp",
-    description = "hypixel command"
+    description = "查询玩家的Hypixel数据"
 ) {
 
     @SubCommand("player")
@@ -32,7 +32,7 @@ class KtCommands : CompositeCommand(
     }
 
     @SubCommand("tntgames", "tntgame", "tnt")
-    @Description("查询玩家的空岛战争数据")
+    @Description("查询玩家的掘战游戏数据")
     suspend fun CommandSender.tntgames(player: String, type: String = "") {
         sendMessage(tnt.tnt(player, type))
     }
@@ -44,13 +44,13 @@ class KtCommands : CompositeCommand(
     }
 
     @SubCommand("guildname")
-    @Description("查询玩家的公会数据")
+    @Description("使用公会名称查询公会数据，带空格公会名称需要使用英文双引号或\\转义")
     fun guildName(context: CommandSender, player: String, type: String = "") {
         guild.guild(context, "name", player, type)
     }
 
     @SubCommand("guildid")
-    @Description("查询玩家的公会数据")
+    @Description("使用公会id查询公会数据")
     fun guildId(context: CommandSender, player: String, type: String = "") {
         guild.guild(context, "id", player, type)
     }
