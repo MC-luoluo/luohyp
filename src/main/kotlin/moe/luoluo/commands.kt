@@ -21,8 +21,8 @@ class KtCommands : CompositeCommand(
     }*/
     @SubCommand("bedwars", "bw")
     @Description("查询玩家的起床战争数据")
-    fun bw(context: CommandSender,player: String, type: String = "") {
-        Bedwars.bedwars(context,player, type)
+    fun bw(context: CommandSender, player: String, type: String = "") {
+        Bedwars.bedwars(context, player, type)
     }
 
     @SubCommand("skywars", "sw")
@@ -55,21 +55,34 @@ class KtCommands : CompositeCommand(
         Guild.guild(context, "id", player, type)
     }
 
-    @SubCommand("murdermystery","mm")
+    @SubCommand("murdermystery", "mm")
     @Description("查询玩家的密室杀手数据")
     fun mm(context: CommandSender, player: String, type: String = "") {
         MurderMystery.murdermystery(context, player, type)
     }
 
-    @SubCommand("buildbattle","bb")
+    @SubCommand("buildbattle", "bb")
     @Description("查询玩家的建筑大师数据")
-    suspend fun CommandSender.bb(context: CommandSender, player: String) {
+    suspend fun CommandSender.bb(player: String) {
         sendMessage(BuildBattle.buildBattle(player))
     }
+
     @SubCommand("fish")
     @Description("查询玩家的钓鱼数据")
-    suspend fun CommandSender.fish(player: String,) {
+    suspend fun CommandSender.fish(player: String) {
         sendMessage(Fish.fish(player))
+    }
+
+    @SubCommand("tournament", "tourney")
+    @Description("查询玩家的锦标赛数据")
+    fun tourney(context: CommandSender, player: String, type: String = "") {
+        Tournament.tourney(context, player, type)
+    }
+
+    @SubCommand("duels", "duel")
+    @Description("查询玩家的决斗游戏数据")
+    fun duel(context: CommandSender, player: String, type: String = "") {
+        Duels.duels(context, player, type)
     }
 
 }

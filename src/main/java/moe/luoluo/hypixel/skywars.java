@@ -21,7 +21,7 @@ public class Skywars {
 
         if (json.get("player").isJsonObject()) {
 
-            chain.append(new PlainText("\n" + Rank.rank(playerJson) + " ")); //玩家名称前缀
+            chain.append(new PlainText( Rank.rank(playerJson) + " ")); //玩家名称前缀
 
             chain.append(new PlainText(playerJson.get("displayname").getAsString()));
             chain.append(new PlainText(" | 空岛战争数据:"));

@@ -1,5 +1,6 @@
 package moe.luoluo;
 
+import net.mamoe.mirai.console.command.CommandManager;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
@@ -8,7 +9,6 @@ import net.mamoe.mirai.event.EventChannel;
 import net.mamoe.mirai.event.GlobalEventChannel;
 import net.mamoe.mirai.event.events.FriendMessageEvent;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
-import net.mamoe.mirai.console.command.CommandManager;
 
 
 /**
@@ -52,7 +52,7 @@ public final class luohyp extends JavaPlugin {
             getLogger().info(f.getMessage().contentToString());
         });
 
-        CommandManager.INSTANCE.registerCommand(new KtCommands(),false);
+        CommandManager.INSTANCE.registerCommand(new KtCommands(), false);
 
         //myCustomPermission.getValue(); // 注册权限
     }

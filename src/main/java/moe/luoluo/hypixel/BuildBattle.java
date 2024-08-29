@@ -111,10 +111,7 @@ public class BuildBattle {
             }
             if (bbJson.has("score")) {
                 chain.append(new PlainText(" | 平均每场得分: "));
-                chain.append(new PlainText(decimalFormat.format(
-                        (double) bbJson.get("score").getAsInt() /
-                                bbJson.get("games_played").getAsInt()
-                )));
+                chain.append(new PlainText(decimalFormat.format((double) bbJson.get("score").getAsInt() / bbJson.get("games_played").getAsInt())));
             }
 
             chain.append(new PlainText("\n游戏场次: "));
@@ -127,10 +124,7 @@ public class BuildBattle {
             if (bbJson.has("wins")) {
                 chain.append(new PlainText(String.valueOf(bbJson.get("wins").getAsInt())));
                 chain.append(new PlainText(" | 胜率: "));
-                chain.append(new PlainText(decimalFormat.format(
-                        (double) bbJson.get("wins").getAsInt() /
-                                bbJson.get("games_played").getAsInt() * 100
-                )));
+                chain.append(new PlainText(decimalFormat.format((double) bbJson.get("wins").getAsInt() / bbJson.get("games_played").getAsInt() * 100)));
                 chain.append(new PlainText("%"));
             } else {
                 chain.append(new PlainText("0"));

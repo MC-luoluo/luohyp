@@ -27,7 +27,7 @@ public class Fish {
             JsonObject playerJson = json.get("player").getAsJsonObject();
             JsonObject fishJson = playerJson.get("stats").getAsJsonObject().get("MainLobby").getAsJsonObject().get("fishing").getAsJsonObject();
 
-            chain.append(new PlainText("\n" + Rank.rank(playerJson) + " "));
+            chain.append(new PlainText(Rank.rank(playerJson) + " "));
             chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
             chain.append(new PlainText(" | 大厅钓鱼数据:"));
             if (fishJson.has("stats") && fishJson.get("stats").getAsJsonObject().has("permanent")) {
