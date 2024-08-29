@@ -43,10 +43,16 @@ class KtCommands : CompositeCommand(
         guild.guild(context, "player", player, type)
     }
 
-    @SubCommand("guild")
+    @SubCommand("guildname")
     @Description("查询玩家的公会数据")
-    fun guild(context: CommandSender, px: String, player: String, type: String = "") {
-        guild.guild(context, px, player, type)
+    fun guildName(context: CommandSender, player: String, type: String = "") {
+        guild.guild(context, "name", player, type)
+    }
+
+    @SubCommand("guildid")
+    @Description("查询玩家的公会数据")
+    fun guildId(context: CommandSender, player: String, type: String = "") {
+        guild.guild(context, "id", player, type)
     }
 
 }

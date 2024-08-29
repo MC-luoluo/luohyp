@@ -5,7 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import moe.luoluo.api;
 import net.mamoe.mirai.console.command.CommandSender;
-import net.mamoe.mirai.message.data.ForwardMessage;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -36,7 +35,10 @@ public class guild {
         JsonArray members;
         JsonObject achievements = new JsonObject();
 
-        JsonObject json = new Gson().fromJson(api.guild(px, api.mojang(name,"uuid")), JsonObject.class);
+        JsonObject json = switch (px) {
+            case "name", "id" -> new Gson().fromJson(api.guild(px, name), JsonObject.class);
+            default -> new Gson().fromJson(api.guild(px, api.mojang(name, "uuid")), JsonObject.class);
+        };
 
 
         json = json.get("guild").getAsJsonObject();
@@ -179,68 +181,63 @@ public class guild {
         achievementChain.append(new PlainText(" | 一周: "));
         achievementChain.append(new PlainText(formatExp((float) weekExp / members.size())));
 
-        if (name != null) {
-            //membersChain.append(new PlainText("name 查询无玩家信息!"));
-            //} else {
-            String uuid = api.mojang(name, "uuid");
+        String uuid = api.mojang(name, "uuid");
 
-            membersChain.append(new PlainText("成员: "));
-            membersChain.append(new PlainText(api.mojang(uuid, "name")));
+        membersChain.append(new PlainText("成员: "));
+        membersChain.append(new PlainText(api.mojang(uuid, "name")));
 
 
-            for (int i = 0; i < members.size(); i++) {
-                JsonObject member = members.get(i).getAsJsonObject();
-                if (member.get("uuid").getAsString().equals(uuid)) {
-                    //rank
-                    membersChain.append(new PlainText("\n成员rank: "));
-                    membersChain.append(member.get("rank").getAsString());
+        for (int i = 0; i < members.size(); i++) {
+            JsonObject member = members.get(i).getAsJsonObject();
+            if (member.get("uuid").getAsString().equals(uuid)) {
+                //rank
+                membersChain.append(new PlainText("\n成员rank: "));
+                membersChain.append(member.get("rank").getAsString());
 
-                    //加入时间
-                    membersChain.append(new PlainText("\n加入时间: "));
-                    instant = Instant.ofEpochMilli(member.get("joined").getAsLong());
-                    LocalDateTime localDate = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
-                    membersChain.append(new PlainText(String.valueOf(localDate)));
+                //加入时间
+                membersChain.append(new PlainText("\n加入时间: "));
+                instant = Instant.ofEpochMilli(member.get("joined").getAsLong());
+                LocalDateTime localDate = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+                membersChain.append(new PlainText(String.valueOf(localDate)));
 
-                    //任务
-                    if (determine(member, "questParticipation")) {
-                        membersChain.append(new PlainText("\n完成任务: "));
-                        membersChain.append(new PlainText(String.valueOf(member.get("questParticipation").getAsInt())));
-                    }
-
-                    //经验
-                    if (determine(member, "expHistory")) {
-                        membersChain.append(new PlainText("\n个人每周经验: "));
-                        sum = 0;
-                        JsonObject expHistory = member.get("expHistory").getAsJsonObject();
-                        for (String s : set) {
-                            sum += expHistory.get(s).getAsInt();
-                        }
-                        membersChain.append(new PlainText(formatExp(sum)));
-
-                        for (String s : set) {
-                            membersChain.append(new PlainText("\n    " + s + ": "));
-                            membersChain.append(new PlainText(formatExp(expHistory.get(s).getAsInt())));
-
-                            //排名
-                            membersChain.append(new PlainText(" #"));
-                            int e = expHistory.get(s).getAsInt();
-                            int x = 1;
-                            for (int m = 0; m < members.size(); m++) {
-                                if (e < members.get(m).getAsJsonObject().get("expHistory").getAsJsonObject().get(s).getAsInt()) {
-                                    x++;
-                                }
-                            }
-                            membersChain.append(new PlainText(String.valueOf(x)));
-                            membersChain.append(new PlainText("/"));
-                            membersChain.append(new PlainText(String.valueOf(members.size())));
-                        }
-                    }
-                    break;
+                //任务
+                if (determine(member, "questParticipation")) {
+                    membersChain.append(new PlainText("\n完成任务: "));
+                    membersChain.append(new PlainText(String.valueOf(member.get("questParticipation").getAsInt())));
                 }
+
+                //经验
+                if (determine(member, "expHistory")) {
+                    membersChain.append(new PlainText("\n个人每周经验: "));
+                    sum = 0;
+                    JsonObject expHistory = member.get("expHistory").getAsJsonObject();
+                    for (String s : set) {
+                        sum += expHistory.get(s).getAsInt();
+                    }
+                    membersChain.append(new PlainText(formatExp(sum)));
+
+                    for (String s : set) {
+                        membersChain.append(new PlainText("\n    " + s + ": "));
+                        membersChain.append(new PlainText(formatExp(expHistory.get(s).getAsInt())));
+
+                        //排名
+                        membersChain.append(new PlainText(" #"));
+                        int e = expHistory.get(s).getAsInt();
+                        int x = 1;
+                        for (int m = 0; m < members.size(); m++) {
+                            if (e < members.get(m).getAsJsonObject().get("expHistory").getAsJsonObject().get(s).getAsInt()) {
+                                x++;
+                            }
+                        }
+                        membersChain.append(new PlainText(String.valueOf(x)));
+                        membersChain.append(new PlainText("/"));
+                        membersChain.append(new PlainText(String.valueOf(members.size())));
+                    }
+                }
+                break;
             }
-
-
         }
+
 
         boolean game = Objects.equals(type, "games") || Objects.equals(type, "all");
         if (game && json.has("preferredGames")) {
@@ -346,7 +343,6 @@ public class guild {
         }
 
         if (Objects.equals(type, "members") || Objects.equals(type, "all")) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日-HH时mm分ss秒", Locale.CHINA);
             membersList.append(new PlainText("成员列表: "));
             for (int x = 0; x < members.size(); x++) {
                 if (x <= 42) {
@@ -359,28 +355,36 @@ public class guild {
             }
         }
 
-        ForwardMessageBuilder builder = new ForwardMessageBuilder(group.getSubject());
-        builder.add(group.getBot().getId(), group.getBot().getNick(), chain.build());
-        builder.add(group.getBot().getId(), group.getBot().getNick(), achievementChain.build());
-        if (!membersChain.isEmpty()) {
-            builder.add(group.getBot().getId(), group.getBot().getNick(), membersChain.build());
+        if (group.getSubject() != null) {
+            ForwardMessageBuilder builder = new ForwardMessageBuilder(group.getSubject());
+            builder.add(group.getBot().getId(), group.getBot().getNick(), chain.build());
+            builder.add(group.getBot().getId(), group.getBot().getNick(), achievementChain.build());
+            if (!membersChain.isEmpty()) {
+                builder.add(group.getBot().getId(), group.getBot().getNick(), membersChain.build());
+            }
+            if (!preferredGames.isEmpty()) {
+                builder.add(group.getBot().getId(), group.getBot().getNick(), preferredGames.build());
+            }
+            if (!gameExp.isEmpty()) {
+                builder.add(group.getBot().getId(), group.getBot().getNick(), gameExp.build());
+            }
+            if (!membersList.isEmpty()) {
+                builder.add(group.getBot().getId(), group.getBot().getNick(), membersList.build());
+            }
+            if (!membersList2.isEmpty()) {
+                builder.add(group.getBot().getId(), group.getBot().getNick(), membersList2.build());
+            }
+            if (!membersList3.isEmpty()) {
+                builder.add(group.getBot().getId(), group.getBot().getNick(), membersList3.build());
+            }
+            group.sendMessage(builder.build());
+        } else {
+            group.sendMessage(chain.build());
+            group.sendMessage(achievementChain.build());
+            if (!membersChain.isEmpty()) {
+                group.sendMessage(membersChain.build());
+            }
         }
-        if (!preferredGames.isEmpty()) {
-            builder.add(group.getBot().getId(), group.getBot().getNick(), preferredGames.build());
-        }
-        if (!gameExp.isEmpty()) {
-            builder.add(group.getBot().getId(), group.getBot().getNick(), gameExp.build());
-        }
-        if (!membersList.isEmpty()) {
-            builder.add(group.getBot().getId(), group.getBot().getNick(), membersList.build());
-        }
-        if (!membersList2.isEmpty()) {
-            builder.add(group.getBot().getId(), group.getBot().getNick(), membersList2.build());
-        }
-        if (!membersList3.isEmpty()) {
-            builder.add(group.getBot().getId(), group.getBot().getNick(), membersList3.build());
-        }
-        group.sendMessage(builder.build());
     }
 
 
@@ -427,6 +431,7 @@ public class guild {
     public static Boolean determine(JsonObject json, String str) {
         return json.has(str);
     }
+
     public static String exp(int exp) {
         String[] map = {"100K", "150K", "250K", "500K", "750K", "1M", "1.25M", "1.50M", "2M", "2.5M", "2.5M", "2.5M", "2.5M", "2.5M", "3M"};
         return map[exp];
