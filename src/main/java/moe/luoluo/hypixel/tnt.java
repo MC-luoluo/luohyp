@@ -14,7 +14,7 @@ import java.text.DecimalFormat;
 public class tnt {
     public static MessageChain tnt(String player, String type) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
-        JsonObject json = new Gson().fromJson(api.hypixel("player", api.mojang(player, "name")), JsonObject.class);
+        JsonObject json = new Gson().fromJson(api.hypixel("player", api.mojang(player, "uuid")), JsonObject.class);
         JsonObject playerJson = json.get("player").getAsJsonObject();
 
         if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("TNTGames")) {

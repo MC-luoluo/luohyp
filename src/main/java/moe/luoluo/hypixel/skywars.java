@@ -15,7 +15,7 @@ public class skywars {
     public static MessageChain skywars(String player, String type) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        JsonObject json = new Gson().fromJson(api.hypixel("player", api.mojang(player, "name")), JsonObject.class);
+        JsonObject json = new Gson().fromJson(api.hypixel("player", api.mojang(player, "uuid")), JsonObject.class);
         JsonObject playerJson = json.get("player").getAsJsonObject();
         JsonObject swJson = playerJson.get("stats").getAsJsonObject().get("SkyWars").getAsJsonObject();
 

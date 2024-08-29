@@ -22,19 +22,19 @@ public class player {
         DecimalFormat decimalFormat = new DecimalFormat("0.000");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日-HH时mm分ss秒", Locale.CHINA);
 
-        JsonObject json = new Gson().fromJson(api.hypixel("player", api.mojang(player, "name")), JsonObject.class);
-        JsonObject guild = new Gson().fromJson(api.hypixel("guild", api.mojang(player, "name")), JsonObject.class);
+        JsonObject json = new Gson().fromJson(api.hypixel("player", api.mojang(player, "uuid")), JsonObject.class);
+        JsonObject guild = new Gson().fromJson(api.guild("player", api.mojang(player, "uuid")), JsonObject.class);
         if (json.get("player").isJsonObject()) {
             playerJson = json.get("player").getAsJsonObject();
 //            achievements = playerJson.get("achievements").getAsJsonObject();  V0.4.2版本更新注释
 
             JsonObject online;
             if (playerJson.has("lastLogin")) {
-                online = new Gson().fromJson(api.hypixel("status", api.mojang(player, "name")), JsonObject.class);
+                online = new Gson().fromJson(api.hypixel("status", api.mojang(player, "uuid")), JsonObject.class);
             } else {
                 online = null;
             }
-            chain.append(new PlainText("\n" + rank.rank(playerJson) + " ")); //玩家名称前缀
+            chain.append(new PlainText(rank.rank(playerJson) + " ")); //玩家名称前缀
             chain.append(new PlainText(playerJson.get("displayname").getAsString()));
 
             chain.append(new PlainText("\n在线状态: "));
@@ -61,7 +61,7 @@ public class player {
             chain.append(new PlainText("\nRANK赠送数: "));
             if (playerJson.has("giftingMeta")) {
                 giftingMeta = playerJson.get("giftingMeta").getAsJsonObject();
-                if (playerJson.has("ranksGiven")) {
+                if (giftingMeta.has("ranksGiven")) {
                     chain.append(new PlainText(String.valueOf(giftingMeta.get("ranksGiven").getAsInt())));
                 } else chain.append(new PlainText("0"));
             } else chain.append(new PlainText("0"));

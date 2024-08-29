@@ -3,7 +3,7 @@ package moe.luoluo.hypixel;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import moe.luoluo.api;
-import net.mamoe.mirai.message.data.MessageChain;
+import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
 
@@ -13,10 +13,10 @@ import java.text.DecimalFormat;
 import java.util.Objects;
 
 public class bedwars {
-    public static MessageChain bedwars(String player, String type) throws IOException, URISyntaxException {
+    public static void bedwars(CommandSender context, String player, String type) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         MessageChainBuilder error = new MessageChainBuilder();
-        JsonObject json = new Gson().fromJson(api.hypixel("player", api.mojang(player, "name")), JsonObject.class);
+        JsonObject json = new Gson().fromJson(api.hypixel("player", api.mojang(player, "uuid")), JsonObject.class);
         JsonObject playerJson = json.get("player").getAsJsonObject();
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
@@ -632,16 +632,16 @@ public class bedwars {
                     }
                 } else {
                     error.append("type有误，支持参数：solo, double, 3s, 4s, 4v4");
-                    return error.build();
+                    context.sendMessage(error.build());
                 }
-                return chain.build();
+                context.sendMessage(chain.build());
             } else {
                 error.append(new PlainText("该玩家的起床战争数据为空"));
-                return error.build();
+                context.sendMessage(error.build());
             }
         } else if (json.get("player").isJsonNull()) {
             error.append(new PlainText("<playerID> 不存在"));
-            return (error.build());
-        } else return null;
+            context.sendMessage(error.build());
+        }
     }
 }

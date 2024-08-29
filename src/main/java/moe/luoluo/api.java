@@ -7,35 +7,36 @@ import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 
 
 public class api {
-    public static String mojang(String arg1, String type) throws IOException, URISyntaxException {
-        URI uri = switch (type) {
-            case "name" -> new URI("https://api.mojang.com/users/profiles/minecraft/" + arg1);
-            case "uuid" -> new URI("https://sessionserver.mojang.com/session/minecraft/profile/" + arg1);
-            default -> throw new IllegalStateException("Unexpected value: " + type);
+    public static String mojang(String arg1, String get) throws IOException, URISyntaxException {
+        URI uri = switch (arg1.length()) {
+            case 32, 36 -> new URI("https://sessionserver.mojang.com/session/minecraft/profile/" + arg1);
+            default -> new URI("https://api.mojang.com/users/profiles/minecraft/" + arg1);
         };
         Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
         JsonObject json = gson.fromJson(request(uri), JsonObject.class);
-        if (type.equals("name")){
+        if (get.equals("uuid")) {
             return json.get("id").getAsString();
-        } else {
+        } else if (get.equals("name")){
             return json.get("name").getAsString();
-        }
+        }else throw new IOException();
 
     }
 
     public static String hypixel(String type, String uuid) throws URISyntaxException, IOException {
-        URI uri = switch (type) {
-            case "guild" ->
-                    new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPI() + "&player=" + uuid);
-            default ->
-                    new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPI() + "&uuid=" + uuid);
-        };
+        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPI() + "&uuid=" + uuid);
+        return request(uri);
+    }
 
+    public static String guild(String type, String arg2) throws URISyntaxException, IOException {
+        URI uri = new URI("https://api.hypixel.net/guild?key=" + config.INSTANCE.getHypixelAPI() + "&" + type + "=" + arg2);
         return request(uri);
     }
 
@@ -55,10 +56,9 @@ public class api {
             while ((line = in.readLine()) != null) {
                 result.append(line);
             }
-        }catch (IOException e) {
+        } catch (IOException e) {
             return String.valueOf(e);
-        }
-        finally {
+        } finally {
             try {
                 if (in != null) {
                     in.close();
