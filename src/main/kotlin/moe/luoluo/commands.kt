@@ -55,4 +55,10 @@ class KtCommands : CompositeCommand(
         guild.guild(context, "id", player, type)
     }
 
+    @SubCommand("murdermystery","murder","mur","mm")
+    @Description("查询玩家的密室杀手数据")
+    fun mm(context: CommandSender, player: String, type: String = "") {
+        murdermystery.murdermystery(context, player, type)
+    }
+
 }

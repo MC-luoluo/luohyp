@@ -7,10 +7,7 @@ import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 
@@ -36,7 +33,7 @@ public class api {
     }
 
     public static String guild(String type, String arg2) throws URISyntaxException, IOException {
-        URI uri = new URI("https://api.hypixel.net/guild?key=" + config.INSTANCE.getHypixelAPI() + "&" + type + "=" + arg2);
+        URI uri = new URI("https://api.hypixel.net/guild?key=" + config.INSTANCE.getHypixelAPI() + "&" + type + "=" + URLEncoder.encode(arg2, StandardCharsets.UTF_8));
         return request(uri);
     }
 
