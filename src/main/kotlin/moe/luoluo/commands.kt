@@ -2,6 +2,7 @@ package moe.luoluo
 
 import moe.luoluo.hypixel.bedwars
 import moe.luoluo.hypixel.player
+import moe.luoluo.hypixel.skywars
 import moe.luoluo.hypixel.tnt
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.CompositeCommand
@@ -30,14 +31,12 @@ class KtCommands : CompositeCommand(
     @SubCommand("skywars","skywar","sw")
     @Description("查询玩家的空岛战争数据")
     suspend fun CommandSender.sw(player: String, type: String = "") {
-        sendMessage(bedwars.bedwars(player,type))
-        //sendMessage(ForwardMessage(test.test1(),"title","brief","source","summary",test.test2()))
+        sendMessage(skywars.skywars(player,type))
     }
     @SubCommand("tntgames","tntgame","tnt")
     @Description("查询玩家的空岛战争数据")
     suspend fun CommandSender.tntgames(player: String, type: String = "") {
         sendMessage(tnt.tnt(player,type))
-        //sendMessage(ForwardMessage(test.test1(),"title","brief","source","summary",test.test2()))
     }
 
 }
