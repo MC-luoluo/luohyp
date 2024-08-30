@@ -28,15 +28,15 @@ public class Player {
         DecimalFormat decimalFormat = new DecimalFormat("0.000");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日-HH时mm分ss秒", Locale.CHINA);
 
-        JsonObject json = new Gson().fromJson(Api.hypixel("player", Api.mojang(player, "uuid")), JsonObject.class);
-        JsonObject guild = new Gson().fromJson(Api.guild("player", Api.mojang(player, "uuid")), JsonObject.class);
+        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
+        JsonObject guild = Api.hypixel("guild", "player",Api.mojang(player, "uuid"));
         if (json.get("player").isJsonObject()) {
             playerJson = json.get("player").getAsJsonObject();
 //            achievements = playerJson.get("achievements").getAsJsonObject();  V0.4.2版本更新注释
 
             JsonObject online;
             if (playerJson.has("lastLogin")) {
-                online = new Gson().fromJson(Api.hypixel("status", Api.mojang(player, "uuid")), JsonObject.class);
+                online = Api.hypixel("status", Api.mojang(player, "uuid"));
             } else {
                 online = null;
             }

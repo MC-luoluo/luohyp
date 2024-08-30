@@ -20,8 +20,8 @@ public class BuildBattle {
         MessageChainBuilder chain = new MessageChainBuilder();
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-        JsonObject json = new Gson().fromJson(Api.hypixel("player", Api.mojang(player, "uuid")), JsonObject.class);
-        JsonObject leader = new Gson().fromJson(Api.hypixel("leaderboards"), JsonObject.class);
+        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
+        JsonObject leader = Api.hypixel("leaderboards");
 
         JsonObject playerJson = json.get("player").getAsJsonObject();
 

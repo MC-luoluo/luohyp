@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 
 public class Fish {
     public static MessageChain fish(String player) throws IOException, URISyntaxException {
-        JsonObject json = new Gson().fromJson(Api.hypixel("player", Api.mojang(player, "uuid")), JsonObject.class);
+        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
         MessageChainBuilder chain = new MessageChainBuilder();
         /*
         MessageChainBuilder all = new MessageChainBuilder();

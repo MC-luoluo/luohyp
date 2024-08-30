@@ -22,7 +22,7 @@ public class Duels {
         MessageChainBuilder team = new MessageChainBuilder();
         MessageChainBuilder other = new MessageChainBuilder();
 
-        JsonObject json = new Gson().fromJson(Api.hypixel("player", Api.mojang(player, "uuid")), JsonObject.class);
+        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
 
         JsonObject playerJson;
         JsonObject duelsJson;

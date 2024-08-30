@@ -18,7 +18,7 @@ public class Tournament {
         MessageChainBuilder chain = new MessageChainBuilder();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
 
-        JsonObject json = new Gson().fromJson(Api.hypixel("player", Api.mojang(player, "uuid")), JsonObject.class);
+        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
 
         if (json.get("player").isJsonObject()) {
             JsonObject playerJson = json.get("player").getAsJsonObject();

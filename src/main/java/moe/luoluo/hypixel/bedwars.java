@@ -16,7 +16,7 @@ public class Bedwars {
     public static void bedwars(CommandSender context, String player, String type) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         MessageChainBuilder error = new MessageChainBuilder();
-        JsonObject json = new Gson().fromJson(Api.hypixel("player", Api.mojang(player, "uuid")), JsonObject.class);
+        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
         JsonObject playerJson = json.get("player").getAsJsonObject();
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 

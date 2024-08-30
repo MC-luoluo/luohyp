@@ -3,6 +3,7 @@ package moe.luoluo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,33 +32,25 @@ public class Api {
 
     }
 
-    public static String hypixel(String type) throws URISyntaxException, IOException {
-        if (config.INSTANCE.getHypixelAPIkey().isEmpty()) {
-            logger.error("HypixelAPIkey为空");
-        }
-        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPIkey());
-        return request(uri);
+    public static JsonObject hypixel(String type) throws URISyntaxException, IOException {
+        return hypixel(type,"","");
     }
 
-    public static String hypixel(String type, String uuid) throws URISyntaxException, IOException {
-        if (config.INSTANCE.getHypixelAPIkey().isEmpty()) {
-            logger.error("HypixelAPIkey为空");
-        }
-        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPIkey() + "&uuid=" + uuid);
-        return request(uri);
+    public static JsonObject hypixel(String type, String uuid) throws URISyntaxException, IOException {
+        return hypixel(type,"uuid",uuid);
     }
 
-    public static String hypixel(String type, String value, String parameter) throws URISyntaxException, IOException {
-        if (config.INSTANCE.getHypixelAPIkey().isEmpty()) {
-            logger.error("HypixelAPIkey为空");
+    public static JsonObject hypixel(String type,String parameter, String value) throws URISyntaxException, IOException {
+        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPIkey() + "&" + parameter + "=" + URLEncoder.encode(value, StandardCharsets.UTF_8));
+        try {
+            return new Gson().fromJson(request(uri), JsonObject.class);
+        } catch (com.google.gson.JsonSyntaxException e) {
+            if (config.INSTANCE.getHypixelAPIkey().isEmpty()) {
+                throw new JsonSyntaxException("HypixelAPIkey为空，请前往配置文件填写HypixelAPIkey");
+            }else {
+                throw new JsonSyntaxException(e);
+            }
         }
-        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPIkey() + "&" + parameter + "=" + value);
-        return request(uri);
-    }
-
-    public static String guild(String type, String arg2) throws URISyntaxException, IOException {
-        URI uri = new URI("https://api.hypixel.net/guild?key=" + config.INSTANCE.getHypixelAPIkey() + "&" + type + "=" + URLEncoder.encode(arg2, StandardCharsets.UTF_8));
-        return request(uri);
     }
 
     public static String request(URI uri) throws MalformedURLException {

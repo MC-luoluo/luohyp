@@ -36,8 +36,8 @@ public class Guild {
         JsonObject achievements = new JsonObject();
 
         JsonObject json = switch (px) {
-            case "name", "id" -> new Gson().fromJson(Api.guild(px, name), JsonObject.class);
-            default -> new Gson().fromJson(Api.guild(px, Api.mojang(name, "uuid")), JsonObject.class);
+            case "name", "id" -> Api.hypixel("guild",px, name);
+            default -> Api.hypixel("guild",px, Api.mojang(name, "uuid"));
         };
 
         if (json.get("guild").isJsonObject()) {

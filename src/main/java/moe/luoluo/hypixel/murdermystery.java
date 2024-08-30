@@ -20,7 +20,7 @@ public class MurderMystery {
         JsonObject mmJson;
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-        JsonObject json = new Gson().fromJson(Api.hypixel("player", Api.mojang(player, "uuid")), JsonObject.class);
+        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
 
         if (json.get("player").isJsonObject()) {
             playerJson = json.get("player").getAsJsonObject();
