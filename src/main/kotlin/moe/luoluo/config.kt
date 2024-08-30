@@ -6,6 +6,6 @@ import net.mamoe.mirai.console.data.value
 
 
 object config : AutoSavePluginConfig("config") { // 文件名为 MyData, 会被保存为 MyData.yml
-    @ValueDescription("填写HypixelAPI，可在'https://developer.hypixel.net/dashboard'获取")
-    var HypixelAPI: String by value("")
+    @ValueDescription("填写Hypixel API key，可在'https://developer.hypixel.net/dashboard'获取")
+    var HypixelAPIkey: String by value("")
 }

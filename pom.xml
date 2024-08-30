@@ -6,7 +6,7 @@
 
     <groupId>moe.luoluo</groupId>
     <artifactId>luohyp</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>luohyp</name>
 
     <properties>

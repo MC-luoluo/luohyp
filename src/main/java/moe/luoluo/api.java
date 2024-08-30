@@ -32,22 +32,22 @@ public class Api {
     }
 
     public static String hypixel(String type) throws URISyntaxException, IOException {
-        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPI());
+        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPIkey());
         return request(uri);
     }
 
     public static String hypixel(String type, String uuid) throws URISyntaxException, IOException {
-        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPI() + "&uuid=" + uuid);
+        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPIkey() + "&uuid=" + uuid);
         return request(uri);
     }
 
     public static String hypixel(String type, String value, String parameter) throws URISyntaxException, IOException {
-        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPI() + "&" + parameter + "=" + value);
+        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPIkey() + "&" + parameter + "=" + value);
         return request(uri);
     }
 
     public static String guild(String type, String arg2) throws URISyntaxException, IOException {
-        URI uri = new URI("https://api.hypixel.net/guild?key=" + config.INSTANCE.getHypixelAPI() + "&" + type + "=" + URLEncoder.encode(arg2, StandardCharsets.UTF_8));
+        URI uri = new URI("https://api.hypixel.net/guild?key=" + config.INSTANCE.getHypixelAPIkey() + "&" + type + "=" + URLEncoder.encode(arg2, StandardCharsets.UTF_8));
         return request(uri);
     }
 

@@ -4,11 +4,6 @@ import net.mamoe.mirai.console.command.CommandManager;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
-import net.mamoe.mirai.event.Event;
-import net.mamoe.mirai.event.EventChannel;
-import net.mamoe.mirai.event.GlobalEventChannel;
-import net.mamoe.mirai.event.events.FriendMessageEvent;
-import net.mamoe.mirai.event.events.GroupMessageEvent;
 
 
 /**
@@ -41,7 +36,7 @@ public final class luohyp extends JavaPlugin {
     public void onEnable() {
         reloadPluginConfig(config.INSTANCE);
         getLogger().info("luohyp enabled");
-        EventChannel<Event> eventChannel = GlobalEventChannel.INSTANCE.parentScope(this);
+        /*EventChannel<Event> eventChannel = GlobalEventChannel.INSTANCE.parentScope(this);
         eventChannel.subscribeAlways(GroupMessageEvent.class, g -> {
             //监听群消息
             getLogger().info(g.getMessage().contentToString());
@@ -50,7 +45,7 @@ public final class luohyp extends JavaPlugin {
         eventChannel.subscribeAlways(FriendMessageEvent.class, f -> {
             //监听好友消息
             getLogger().info(f.getMessage().contentToString());
-        });
+        });*/
 
         CommandManager.INSTANCE.registerCommand(new KtCommands(), false);
 
