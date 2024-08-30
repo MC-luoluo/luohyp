@@ -32,16 +32,25 @@ public class Api {
     }
 
     public static String hypixel(String type) throws URISyntaxException, IOException {
+        if (config.INSTANCE.getHypixelAPIkey().isEmpty()) {
+            logger.error("HypixelAPIkey为空");
+        }
         URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPIkey());
         return request(uri);
     }
 
     public static String hypixel(String type, String uuid) throws URISyntaxException, IOException {
+        if (config.INSTANCE.getHypixelAPIkey().isEmpty()) {
+            logger.error("HypixelAPIkey为空");
+        }
         URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPIkey() + "&uuid=" + uuid);
         return request(uri);
     }
 
     public static String hypixel(String type, String value, String parameter) throws URISyntaxException, IOException {
+        if (config.INSTANCE.getHypixelAPIkey().isEmpty()) {
+            logger.error("HypixelAPIkey为空");
+        }
         URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPIkey() + "&" + parameter + "=" + value);
         return request(uri);
     }

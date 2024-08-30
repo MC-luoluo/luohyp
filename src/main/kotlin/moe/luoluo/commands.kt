@@ -66,9 +66,9 @@ class KtCommands : CompositeCommand(
 
     @SubCommand("player")
     @Description("查询玩家的Hypixel总体数据")
-    suspend fun CommandSender.player(playerName: String) = sendMessage(
-        message = Player.player(playerName)
-    )
+    fun player(context: CommandSender,playerName: String) {
+        Player.player(context,playerName)
+    }
 
     @SubCommand("skywars", "sw")
     @Description("查询玩家的空岛战争数据")

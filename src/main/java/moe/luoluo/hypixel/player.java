@@ -3,11 +3,17 @@ package moe.luoluo.hypixel;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import moe.luoluo.Api;
-import net.mamoe.mirai.message.data.MessageChain;
+import net.mamoe.mirai.console.command.CommandSender;
+import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
+import net.mamoe.mirai.utils.ExternalResource;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -15,7 +21,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Player {
-    public static MessageChain player(String player) throws IOException, URISyntaxException {
+    public static void player(CommandSender context, String player) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         JsonObject playerJson;
         JsonObject giftingMeta;
@@ -130,9 +136,42 @@ public class Player {
                 chain.append(new PlainText("null"));
             }
 
+
+            URI uri;
+            byte[] data;
+            try {
+                uri = new URI("https://crafatar.com/renders/body/" + playerJson.get("uuid").getAsString() + "?scale=10" + "&overlay");
+                HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                InputStream is = conn.getInputStream();
+
+                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[6024];
+                int len;
+                while ((len = is.read(buffer)) != -1) {
+                    outStream.write(buffer, 0, len);
+                }
+                is.close();
+
+                data = outStream.toByteArray();
+
+            } catch (IOException e) {
+                chain.append(new PlainText("\n\n皮肤图片加载失败, 可能是API出现问题"));
+                chain.append(new PlainText("\n可查看 crafatar.com 确认是否无法加载"));
+                context.sendMessage(chain.build());
+                System.out.println("以对下方报错进行处理, 若 crafatar.com 正常访问请联系作者");
+                throw new RuntimeException(e);
+            }
+
+            if (context.getSubject() != null) {
+                Image img = context.getSubject().uploadImage(ExternalResource.create(data));
+                chain.append(img);
+            }
+
         } else {
             chain.append(new PlainText("该玩家存在, 但是玩家数据不存在, 可能是因为玩家没有进入过hyp服务器, 也可能是数据丢失"));
         }
-        return chain.build();
+        context.sendMessage(chain.build());
     }
 }
