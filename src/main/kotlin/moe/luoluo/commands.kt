@@ -10,31 +10,34 @@ class KtCommands : CompositeCommand(
     description = "查询玩家的Hypixel数据"
 ) {
 
-    @SubCommand("player")
-    @Description("查询玩家的Hypixel总体数据")
-    suspend fun CommandSender.player(playerName: String) = sendMessage(
-        message = Player.player(playerName)
-    )
+    @SubCommand("arcade", "arc")
+    @Description("查询玩家的街机游戏数据")
+    fun arcade(context: CommandSender, player: String, type: String = "") {
+        Arcade.arc(context, player, type)
+    }
 
-    /*fun player(context: CommandSender, player: String, type: String = "") {
-        hypixel.hypixel(context,player, type)
-    }*/
     @SubCommand("bedwars", "bw")
     @Description("查询玩家的起床战争数据")
     fun bw(context: CommandSender, player: String, type: String = "") {
         Bedwars.bedwars(context, player, type)
     }
 
-    @SubCommand("skywars", "sw")
-    @Description("查询玩家的空岛战争数据")
-    suspend fun CommandSender.sw(player: String) {
-        sendMessage(Skywars.skywars(player))
+    @SubCommand("buildbattle", "bb")
+    @Description("查询玩家的建筑大师数据")
+    suspend fun CommandSender.bb(player: String) {
+        sendMessage(BuildBattle.buildBattle(player))
     }
 
-    @SubCommand("tntgames", "tnt")
-    @Description("查询玩家的掘战游戏数据")
-    suspend fun CommandSender.tntgames(player: String) {
-        sendMessage(TNT.tnt(player))
+    @SubCommand("duels", "duel")
+    @Description("查询玩家的决斗游戏数据")
+    fun duel(context: CommandSender, player: String, type: String = "") {
+        Duels.duels(context, player, type)
+    }
+
+    @SubCommand("fish")
+    @Description("查询玩家的钓鱼数据")
+    suspend fun CommandSender.fish(player: String) {
+        sendMessage(Fish.fish(player))
     }
 
     @SubCommand("guild")
@@ -61,34 +64,28 @@ class KtCommands : CompositeCommand(
         MurderMystery.murdermystery(context, player, type)
     }
 
-    @SubCommand("buildbattle", "bb")
-    @Description("查询玩家的建筑大师数据")
-    suspend fun CommandSender.bb(player: String) {
-        sendMessage(BuildBattle.buildBattle(player))
+    @SubCommand("player")
+    @Description("查询玩家的Hypixel总体数据")
+    suspend fun CommandSender.player(playerName: String) = sendMessage(
+        message = Player.player(playerName)
+    )
+
+    @SubCommand("skywars", "sw")
+    @Description("查询玩家的空岛战争数据")
+    suspend fun CommandSender.sw(player: String) {
+        sendMessage(Skywars.skywars(player))
     }
 
-    @SubCommand("fish")
-    @Description("查询玩家的钓鱼数据")
-    suspend fun CommandSender.fish(player: String) {
-        sendMessage(Fish.fish(player))
+    @SubCommand("tntgames", "tnt")
+    @Description("查询玩家的掘战游戏数据")
+    suspend fun CommandSender.tntgames(player: String) {
+        sendMessage(TNT.tnt(player))
     }
 
     @SubCommand("tournament", "tourney")
     @Description("查询玩家的锦标赛数据")
     fun tourney(context: CommandSender, player: String, type: String = "") {
         Tournament.tourney(context, player, type)
-    }
-
-    @SubCommand("duels", "duel")
-    @Description("查询玩家的决斗游戏数据")
-    fun duel(context: CommandSender, player: String, type: String = "") {
-        Duels.duels(context, player, type)
-    }
-
-    @SubCommand("arcade", "arc")
-    @Description("查询玩家的街机游戏数据")
-    fun arcade(context: CommandSender, player: String, type: String = "") {
-        Arcade.arc(context, player, type)
     }
 
 }
