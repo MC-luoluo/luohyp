@@ -85,4 +85,10 @@ class KtCommands : CompositeCommand(
         Duels.duels(context, player, type)
     }
 
+    @SubCommand("arcade", "arc")
+    @Description("查询玩家的街机游戏数据")
+    fun arcade(context: CommandSender, player: String, type: String = "") {
+        Arcade.arc(context, player, type)
+    }
+
 }
