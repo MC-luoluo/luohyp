@@ -1,11 +1,8 @@
 package moe.luoluo.hypixel;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import moe.luoluo.Api;
 import net.mamoe.mirai.console.command.CommandSender;
-import net.mamoe.mirai.contact.Group;
-import net.mamoe.mirai.message.code.MiraiCode;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -22,7 +19,12 @@ public class Duels {
         MessageChainBuilder team = new MessageChainBuilder();
         MessageChainBuilder other = new MessageChainBuilder();
 
-        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
+        JsonObject json;
+        String uuid = Api.mojang(player, "uuid");
+        if (Objects.equals(uuid, "NotFound")) {
+            context.sendMessage("玩家不存在");
+            return;
+        } else json = Api.hypixel("player", uuid);
 
         JsonObject playerJson;
         JsonObject duelsJson;

@@ -1,6 +1,5 @@
 package moe.luoluo.hypixel;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import moe.luoluo.Api;
 import net.mamoe.mirai.console.command.CommandSender;
@@ -20,7 +19,12 @@ public class MurderMystery {
         JsonObject mmJson;
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
+        JsonObject json;
+        String uuid = Api.mojang(player, "uuid");
+        if (Objects.equals(uuid, "NotFound")) {
+            context.sendMessage("玩家不存在");
+            return;
+        } else json = Api.hypixel("player", uuid);
 
         if (json.get("player").isJsonObject()) {
             playerJson = json.get("player").getAsJsonObject();

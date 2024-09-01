@@ -22,13 +22,27 @@ public class Api {
             case 32, 36 -> new URI("https://sessionserver.mojang.com/session/minecraft/profile/" + arg1);
             default -> new URI("https://api.mojang.com/users/profiles/minecraft/" + arg1);
         };
+        String result = request(uri);
+        if (result.isEmpty()){
+            return "";
+        } else if (result.startsWith("java.net.ConnectException:")) {
+            return "TimedOut";
+        } else if (result.startsWith("java.io.FileNotFoundException:")){
+            return "NotFound";
+        } else if (result.startsWith("java.io.IOException:")){
+            return "IO";
+        } else if (result.startsWith("java.net.SocketException:")){
+            return "reset";
+        } else if (result.startsWith("javax.net.ssl.SSLHandshakeException:")) {
+            return "sslEr";
+        }
         Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
         JsonObject json = gson.fromJson(request(uri), JsonObject.class);
         if (get.equals("uuid")) {
             return json.get("id").getAsString();
         } else if (get.equals("name")) {
             return json.get("name").getAsString();
-        } else return null;
+        } else return "null";
 
     }
 

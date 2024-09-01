@@ -8,13 +8,14 @@ import java.util.Objects;
 
 public class Rank {
     public static String rank(JsonObject json) {
-        if (json.has("rank") && !Objects.equals(json.get("rank").getAsString(), "NORMAL")) {
-            String r1 = json.get("rank").getAsString();
-            return switch (r1) {
+        if (json.has("prefix")) {
+            return json.get("perfix").getAsString().replaceAll("§.","");
+        }else if (json.has("rank") && !Objects.equals(json.get("rank").getAsString(), "NORMAL")) {
+            return switch (json.get("rank").getAsString()) {
                 case "YOUTUBER" -> "[YOUTUBE]";
                 case "ADMIN" -> "[ADMIN]";
                 case "GAME_MASTER" -> "[GM]";
-                default -> "[" + r1 + "]";
+                default -> "[" + json.get("rank").getAsString() + "]";
             };
         } else if (json.has("newPackageRank")) {
             String rank = json.get("newPackageRank").getAsString();

@@ -1,6 +1,5 @@
 package moe.luoluo.hypixel;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import moe.luoluo.Api;
 import net.mamoe.mirai.message.data.MessageChain;
@@ -9,11 +8,19 @@ import net.mamoe.mirai.message.data.PlainText;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 public class Fish {
     public static MessageChain fish(String player) throws IOException, URISyntaxException {
-        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
         MessageChainBuilder chain = new MessageChainBuilder();
+
+        JsonObject json;
+        String uuid = Api.mojang(player, "uuid");
+        if (Objects.equals(uuid, "NotFound")) {
+            chain.append("玩家不存在");
+            return chain.build();
+        } else json = Api.hypixel("player", uuid);
+
         /*
         MessageChainBuilder all = new MessageChainBuilder();
         MessageChainBuilder water = new MessageChainBuilder();

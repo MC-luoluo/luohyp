@@ -1,6 +1,5 @@
 package moe.luoluo.hypixel;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import moe.luoluo.Api;
@@ -21,7 +20,7 @@ import java.util.*;
 public class Guild {
     static DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-    public static void guild(CommandSender group, String px, String name, String type) throws URISyntaxException, IOException {
+    public static void guild(CommandSender context, String px, String name, String type) throws URISyntaxException, IOException {
         MessageChainBuilder chain = new MessageChainBuilder();
         MessageChainBuilder achievementChain = new MessageChainBuilder();
         MessageChainBuilder membersChain = new MessageChainBuilder();
@@ -35,10 +34,19 @@ public class Guild {
         JsonArray members;
         JsonObject achievements = new JsonObject();
 
-        JsonObject json = switch (px) {
-            case "name", "id" -> Api.hypixel("guild",px, name);
-            default -> Api.hypixel("guild",px, Api.mojang(name, "uuid"));
-        };
+        JsonObject json;
+        switch (px) {
+            case "name", "id":
+                json = Api.hypixel("guild", px, name);
+                break;
+            default:
+                String uuid = Api.mojang(name, "uuid");
+                if (Objects.equals(uuid, "NotFound")) {
+                    context.sendMessage("玩家不存在");
+                    return;
+                } else json = Api.hypixel("player", uuid);
+                break;
+        }
 
         if (json.get("guild").isJsonObject()) {
             json = json.get("guild").getAsJsonObject();
@@ -354,58 +362,58 @@ public class Guild {
                 }
             }
 
-            if (group.getSubject() != null) {
-                ForwardMessageBuilder builder = new ForwardMessageBuilder(group.getSubject());
-                builder.add(Objects.requireNonNull(group.getBot()).getId(), group.getBot().getNick(), chain.build());
-                builder.add(group.getBot().getId(), group.getBot().getNick(), achievementChain.build());
+            if (context.getSubject() != null) {
+                ForwardMessageBuilder builder = new ForwardMessageBuilder(context.getSubject());
+                builder.add(Objects.requireNonNull(context.getBot()).getId(), context.getBot().getNick(), chain.build());
+                builder.add(context.getBot().getId(), context.getBot().getNick(), achievementChain.build());
                 if (!membersChain.isEmpty()) {
-                    builder.add(group.getBot().getId(), group.getBot().getNick(), membersChain.build());
+                    builder.add(context.getBot().getId(), context.getBot().getNick(), membersChain.build());
                 }
                 if (!preferredGames.isEmpty()) {
-                    builder.add(group.getBot().getId(), group.getBot().getNick(), preferredGames.build());
+                    builder.add(context.getBot().getId(), context.getBot().getNick(), preferredGames.build());
                 }
                 if (!gameExp.isEmpty()) {
-                    builder.add(group.getBot().getId(), group.getBot().getNick(), gameExp.build());
+                    builder.add(context.getBot().getId(), context.getBot().getNick(), gameExp.build());
                 }
                 if (!membersList.isEmpty()) {
-                    builder.add(group.getBot().getId(), group.getBot().getNick(), membersList.build());
+                    builder.add(context.getBot().getId(), context.getBot().getNick(), membersList.build());
                 }
                 if (!membersList2.isEmpty()) {
-                    builder.add(group.getBot().getId(), group.getBot().getNick(), membersList2.build());
+                    builder.add(context.getBot().getId(), context.getBot().getNick(), membersList2.build());
                 }
                 if (!membersList3.isEmpty()) {
-                    builder.add(group.getBot().getId(), group.getBot().getNick(), membersList3.build());
+                    builder.add(context.getBot().getId(), context.getBot().getNick(), membersList3.build());
                 }
-                group.sendMessage(builder.build());
+                context.sendMessage(builder.build());
             } else {
-                group.sendMessage(chain.build());
-                group.sendMessage(achievementChain.build());
+                context.sendMessage(chain.build());
+                context.sendMessage(achievementChain.build());
                 if (!membersChain.isEmpty()) {
-                    group.sendMessage(membersChain.build());
+                    context.sendMessage(membersChain.build());
                 }
                 if (!preferredGames.isEmpty()) {
-                    group.sendMessage(preferredGames.build());
+                    context.sendMessage(preferredGames.build());
                 }
                 if (!gameExp.isEmpty()) {
-                    group.sendMessage(gameExp.build());
+                    context.sendMessage(gameExp.build());
                 }
                 if (!membersList.isEmpty()) {
-                    group.sendMessage(membersList.build());
+                    context.sendMessage(membersList.build());
                 }
                 if (!membersList2.isEmpty()) {
-                    group.sendMessage(membersList2.build());
+                    context.sendMessage(membersList2.build());
                 }
                 if (!membersList3.isEmpty()) {
-                    group.sendMessage(membersList3.build());
+                    context.sendMessage(membersList3.build());
                 }
             }
-        }else {
+        } else {
             if (px.equals("player")) {
                 chain.append("该玩家未加入公会");
             } else {
                 chain.append("不存在此公会");
             }
-            group.sendMessage(chain.build());
+            context.sendMessage(chain.build());
         }
     }
 

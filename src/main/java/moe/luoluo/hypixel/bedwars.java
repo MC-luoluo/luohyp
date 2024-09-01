@@ -1,6 +1,5 @@
 package moe.luoluo.hypixel;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import moe.luoluo.Api;
 import net.mamoe.mirai.console.command.CommandSender;
@@ -16,7 +15,14 @@ public class Bedwars {
     public static void bedwars(CommandSender context, String player, String type) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         MessageChainBuilder error = new MessageChainBuilder();
-        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
+
+        JsonObject json;
+        String uuid = Api.mojang(player, "uuid");
+        if (Objects.equals(uuid, "NotFound")) {
+            context.sendMessage("玩家不存在");
+            return;
+        } else json = Api.hypixel("player", uuid);
+
         JsonObject playerJson = json.get("player").getAsJsonObject();
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 

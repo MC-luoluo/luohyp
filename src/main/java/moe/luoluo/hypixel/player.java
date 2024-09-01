@@ -1,6 +1,5 @@
 package moe.luoluo.hypixel;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import moe.luoluo.Api;
 import net.mamoe.mirai.console.command.CommandSender;
@@ -19,6 +18,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class Player {
     public static void player(CommandSender context, String player) throws IOException, URISyntaxException {
@@ -28,11 +28,17 @@ public class Player {
         DecimalFormat decimalFormat = new DecimalFormat("0.000");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日-HH时mm分ss秒", Locale.CHINA);
 
-        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
-        JsonObject guild = Api.hypixel("guild", "player",Api.mojang(player, "uuid"));
+        JsonObject json;
+        String uuid = Api.mojang(player, "uuid");
+        if (Objects.equals(uuid, "NotFound")) {
+            context.sendMessage("玩家不存在");
+            return;
+        } else json = Api.hypixel("player", uuid);
+
+
+        JsonObject guild = Api.hypixel("guild", "player", Api.mojang(player, "uuid"));
         if (json.get("player").isJsonObject()) {
             playerJson = json.get("player").getAsJsonObject();
-//            achievements = playerJson.get("achievements").getAsJsonObject();  V0.4.2版本更新注释
 
             JsonObject online;
             if (playerJson.has("lastLogin")) {
@@ -43,11 +49,11 @@ public class Player {
             chain.append(new PlainText(Rank.rank(playerJson) + " ")); //玩家名称前缀
             chain.append(new PlainText(playerJson.get("displayname").getAsString()));
 
-            chain.append(new PlainText("\n在线状态: "));
             if (online != null && online.has("session")) {
+                chain.append(new PlainText("\n状态: "));
                 JsonObject session = online.get("session").getAsJsonObject();
                 if (session.get("online").getAsBoolean()) {
-                    chain.append(new PlainText("ONLINE\uD83D\uDFE2"));
+                    chain.append(new PlainText("在线\uD83D\uDFE2"));
                     chain.append(new PlainText("\n" + session.get("gameType").getAsString()));
                     {
                         if (session.has("mode")) {
@@ -59,10 +65,8 @@ public class Player {
                             chain.append(new PlainText(session.get("map").getAsString()));
                         }
                     }
-                } else chain.append(new PlainText("OFFLINE\uD83D\uDD34"));
-            } else {
-                chain.append(new PlainText("未开启在线状态API"));
-            }
+                } else chain.append(new PlainText("离线\uD83D\uDD34"));
+            } else chain.append(new PlainText("  \uD83D\uDD34"));
 
             chain.append(new PlainText("\nRANK赠送数: "));
             if (playerJson.has("giftingMeta")) {
@@ -170,7 +174,7 @@ public class Player {
             }
 
         } else {
-            chain.append(new PlainText("该玩家存在, 但是玩家数据不存在, 可能是因为玩家没有进入过hyp服务器, 也可能是数据丢失"));
+            chain.append(new PlainText("该玩家的Hypixel数据为空"));
         }
         context.sendMessage(chain.build());
     }

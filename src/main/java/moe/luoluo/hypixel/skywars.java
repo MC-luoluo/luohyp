@@ -10,12 +10,20 @@ import net.mamoe.mirai.message.data.PlainText;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
+import java.util.Objects;
 
 public class Skywars {
     public static MessageChain skywars(String player) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
+
+        JsonObject json;
+        String uuid = Api.mojang(player, "uuid");
+        if (Objects.equals(uuid, "NotFound")) {
+            chain.append("玩家不存在");
+            return chain.build();
+        } else json = Api.hypixel("player", uuid);
+
         JsonObject playerJson = json.get("player").getAsJsonObject();
         JsonObject swJson = playerJson.get("stats").getAsJsonObject().get("SkyWars").getAsJsonObject();
 

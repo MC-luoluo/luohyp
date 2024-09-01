@@ -10,11 +10,19 @@ import net.mamoe.mirai.message.data.PlainText;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
+import java.util.Objects;
 
 public class TNT {
     public static MessageChain tnt(String player) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
-        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
+
+        JsonObject json;
+        String uuid = Api.mojang(player, "uuid");
+        if (Objects.equals(uuid, "NotFound")) {
+            chain.append("玩家不存在");
+            return chain.build();
+        } else json = Api.hypixel("player", uuid);
+
         JsonObject playerJson = json.get("player").getAsJsonObject();
 
         if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("TNTGames")) {

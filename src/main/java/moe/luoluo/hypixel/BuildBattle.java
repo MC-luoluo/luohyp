@@ -3,6 +3,7 @@ package moe.luoluo.hypixel;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import moe.luoluo.Api;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -20,7 +21,13 @@ public class BuildBattle {
         MessageChainBuilder chain = new MessageChainBuilder();
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-        JsonObject json = Api.hypixel("player", Api.mojang(player, "uuid"));
+        JsonObject json;
+        String uuid = Api.mojang(player, "uuid");
+        if (Objects.equals(uuid, "NotFound")) {
+            chain.append("玩家不存在");
+            return chain.build();
+        } else json = Api.hypixel("player", uuid);
+
         JsonObject leader = Api.hypixel("leaderboards");
 
         JsonObject playerJson = json.get("player").getAsJsonObject();
