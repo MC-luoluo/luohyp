@@ -30,6 +30,15 @@ public class MCskin {
             return;
         }
 
+        URI mcs = new URI("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid);
+        JsonObject json = new Gson().fromJson(request(mcs), JsonObject.class);
+
+        chain.append("玩家: ");
+        chain.append(json.get("name").getAsString());
+
+        chain.append("\nuuid: ");
+        chain.append(json.get("id").getAsString());
+
         URI uri;
         byte[] data;
         try {
@@ -48,7 +57,7 @@ public class MCskin {
             is.close();
             data = outStream.toByteArray();
         } catch (IOException e) {
-            chain.append(new PlainText("crafatar图片加载失败"));
+            chain.append(new PlainText("\ncrafatar图片加载失败"));
             context.sendMessage(chain.build());
             throw new RuntimeException(e);
         }
@@ -57,8 +66,6 @@ public class MCskin {
             chain.append(img);
         }
 
-        URI mcs = new URI("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid);
-        JsonObject json = new Gson().fromJson(request(mcs), JsonObject.class);
         String value = json.get("properties").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString();
 
         // 获取一个Base64解码器
@@ -94,7 +101,36 @@ public class MCskin {
             chain.append(img);
         }
 
-        chain.append("皮肤文件链接: ").append(String.valueOf(skinUri));
+        chain.append("\n皮肤链接: ").append(String.valueOf(skinUri));
+
+        if (profile.get("textures").getAsJsonObject().has("CAPE")) {
+            URI capeUri = new URI(profile.get("textures").getAsJsonObject().get("CAPE").getAsJsonObject().get("url").getAsString());
+            try {
+                HttpURLConnection conn = (HttpURLConnection) capeUri.toURL().openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                InputStream is = conn.getInputStream();
+
+                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[6024];
+                int len;
+                while ((len = is.read(buffer)) != -1) {
+                    outStream.write(buffer, 0, len);
+                }
+                is.close();
+                data = outStream.toByteArray();
+            } catch (IOException e) {
+                chain.append(new PlainText("\n披风图片加载失败"));
+                context.sendMessage(chain.build());
+                throw new RuntimeException(e);
+            }
+            if (context.getSubject() != null) {
+                Image img = context.getSubject().uploadImage(ExternalResource.create(data));
+                chain.append(img);
+            }
+
+            chain.append("\n披风链接: ").append(String.valueOf(capeUri));
+        }
 
         context.sendMessage(chain.build());
     }
