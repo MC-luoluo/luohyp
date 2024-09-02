@@ -491,27 +491,27 @@ public class Arcade {
                             chain.append(new PlainText(String.valueOf(pixel_party.get("wins").getAsInt())));
                         } else chain.append(new PlainText("null"));
 
-                        chain.append(new PlainText("\n| 经典模式胜场: "));
+                        chain.append(new PlainText("\n| 经典胜场: "));
                         if (pixel_party.has("wins_normal")) {
                             chain.append(new PlainText(String.valueOf(pixel_party.get("wins_normal").getAsInt())));
                         } else chain.append(new PlainText("null"));
 
-                        chain.append(new PlainText(" | 经典模式回合完成数: "));
+                        chain.append(new PlainText(" | 完成回合: "));
                         if (pixel_party.has("rounds_completed_normal")) {
                             chain.append(new PlainText(String.valueOf(pixel_party.get("rounds_completed_normal").getAsInt())));
                         } else chain.append(new PlainText("null"));
 
-                        chain.append(new PlainText("\n| 狂热模式胜场: "));
+                        chain.append(new PlainText("\n| 狂热胜场: "));
                         if (pixel_party.has("wins_hyper")) {
                             chain.append(new PlainText(String.valueOf(pixel_party.get("wins_hyper").getAsInt())));
                         } else chain.append(new PlainText("null"));
 
-                        chain.append(new PlainText(" | 狂热模式回合完成数: "));
+                        chain.append(new PlainText(" | 完成回合: "));
                         if (pixel_party.has("rounds_completed_hyper")) {
                             chain.append(new PlainText(String.valueOf(pixel_party.get("rounds_completed_hyper").getAsInt())));
                         } else chain.append(new PlainText("null"));
 
-                        chain.append(new PlainText("\n| 加成收集数: "));
+                        chain.append(new PlainText("\n| 收集加成: "));
                         if (pixel_party.has("power_ups_collected") && pixel_party.has("power_ups_collected_normal") && pixel_party.has("power_ups_collected_hyper")) {
                             chain.append(new PlainText(String.valueOf(
                                     pixel_party.get("power_ups_collected").getAsInt()

@@ -26,7 +26,7 @@ public final class luohyp extends JavaPlugin {
     public static final luohyp INSTANCE = new luohyp();
 
     private luohyp() {
-        super(new JvmPluginDescriptionBuilder("moe.luoluo.luohyp", "1.0.2")
+        super(new JvmPluginDescriptionBuilder("moe.luoluo.luohyp", "1.0.3")
                 .name("luphyp")
                 .author("MCluoluo")
                 .build());
@@ -47,7 +47,8 @@ public final class luohyp extends JavaPlugin {
             getLogger().info(f.getMessage().contentToString());
         });*/
 
-        CommandManager.INSTANCE.registerCommand(new KtCommands(), false);
+        CommandManager.INSTANCE.registerCommand(new Hypixel(), false);
+        CommandManager.INSTANCE.registerCommand(new MCSkin(), false);
 
         //myCustomPermission.getValue(); // 注册权限
     }

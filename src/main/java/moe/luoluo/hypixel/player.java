@@ -161,8 +161,7 @@ public class Player {
                 data = outStream.toByteArray();
 
             } catch (IOException e) {
-                chain.append(new PlainText("\n\n皮肤图片加载失败, 可能是API出现问题"));
-                chain.append(new PlainText("\n可查看 crafatar.com 确认是否无法加载"));
+                chain.append(new PlainText("\n\n皮肤图片加载失败"));
                 context.sendMessage(chain.build());
                 System.out.println("以对下方报错进行处理, 若 crafatar.com 正常访问请联系作者");
                 throw new RuntimeException(e);

@@ -1,11 +1,13 @@
 package moe.luoluo
 
 import moe.luoluo.hypixel.*
+import moe.luoluo.mcskin.MCskin
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.CompositeCommand
+import net.mamoe.mirai.console.command.SimpleCommand
 
 
-class KtCommands : CompositeCommand(
+class Hypixel : CompositeCommand(
     luohyp.INSTANCE, "hypixel", "hyp",
     description = "查询玩家的Hypixel数据"
 ) {
@@ -66,8 +68,8 @@ class KtCommands : CompositeCommand(
 
     @SubCommand("player")
     @Description("查询玩家的Hypixel总体数据")
-    fun player(context: CommandSender,playerName: String) {
-        Player.player(context,playerName)
+    fun player(context: CommandSender, playerName: String) {
+        Player.player(context, playerName)
     }
 
     @SubCommand("skywars", "sw")
@@ -88,4 +90,13 @@ class KtCommands : CompositeCommand(
         Tournament.tourney(context, player, type)
     }
 
+}
+
+class MCSkin : SimpleCommand(luohyp.INSTANCE, "mcskin",
+    description = "获取玩家的skin文件") {
+    // ...
+    @Handler
+    fun mcskin(context: CommandSender, player: String) {
+        MCskin.mcskin(context, player)
+    }
 }
