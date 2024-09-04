@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Rank {
     public static String rank(JsonObject json) {
         if (json.has("prefix")) {
-            return json.get("perfix").getAsString().replaceAll("§.","");
+            return json.get("prefix").getAsString().replaceAll("§.","");
         }else if (json.has("rank") && !Objects.equals(json.get("rank").getAsString(), "NORMAL")) {
             return switch (json.get("rank").getAsString()) {
                 case "YOUTUBER" -> "[YOUTUBE]";
