@@ -191,9 +191,13 @@ public class Arcade {
                 if (type.equals("dragon wars") || type.equals("dw") || type.equals("all")) {
                     chain.append(new PlainText("\n龙之战: "));
                     chain.append(new PlainText("\n| 胜场: "));
-                    chain.append(new PlainText(String.valueOf(acdJson.get("kills_dragonwars2").getAsInt())));
+                    if (acdJson.has("wins_dragonwars2")) {
+                        chain.append(new PlainText(String.valueOf(acdJson.get("wins_dragonwars2").getAsInt())));
+                    } else chain.append("null");
                     chain.append(new PlainText(" | 击杀: "));
-                    chain.append(new PlainText(String.valueOf(acdJson.get("wins_dragonwars2").getAsInt())));
+                    if (acdJson.has("kills_dragonwars2")) {
+                        chain.append(new PlainText(String.valueOf(acdJson.get("kills_dragonwars2").getAsInt())));
+                    } else chain.append("null");
                 }
 
                 //末影掘战
@@ -603,15 +607,15 @@ public class Arcade {
                     chain.append(new PlainText("\n| 最佳回合: "));
                     if (acdJson.has("best_round_zombies_deadend_normal")) {
                         chain.append(new PlainText(String.valueOf(acdJson.get("best_round_zombies_deadend_normal").getAsInt())));
-                    }else chain.append("-");
+                    } else chain.append("-");
                     chain.append(" | ");
                     if (acdJson.has("best_round_zombies_deadend_hard")) {
                         chain.append(new PlainText(String.valueOf(acdJson.get("best_round_zombies_deadend_hard").getAsInt())));
-                    }else chain.append("-");
+                    } else chain.append("-");
                     chain.append(" | ");
                     if (acdJson.has("best_round_zombies_deadend_rip")) {
                         chain.append(new PlainText(String.valueOf(acdJson.get("best_round_zombies_deadend_rip").getAsInt())));
-                    }else chain.append("-");
+                    } else chain.append("-");
 
                     chain.append(new PlainText("\n| 最佳时间: "));
                     if (acdJson.has("fastest_time_10_zombies_deadend_normal")) {
@@ -645,15 +649,15 @@ public class Arcade {
                     chain.append(new PlainText("\n| 最佳回合: "));
                     if (acdJson.has("best_round_zombies_badblood_normal")) {
                         chain.append(new PlainText(String.valueOf(acdJson.get("best_round_zombies_badblood_normal").getAsInt())));
-                    }else chain.append("-");
+                    } else chain.append("-");
                     chain.append(" | ");
                     if (acdJson.has("best_round_zombies_badblood_hard")) {
                         chain.append(new PlainText(String.valueOf(acdJson.get("best_round_zombies_badblood_hard").getAsInt())));
-                    }else chain.append("-");
+                    } else chain.append("-");
                     chain.append(" | ");
                     if (acdJson.has("best_round_zombies_badblood_rip")) {
                         chain.append(new PlainText(String.valueOf(acdJson.get("best_round_zombies_badblood_rip").getAsInt())));
-                    }else chain.append("-");
+                    } else chain.append("-");
 
                     chain.append(new PlainText("\n| 最佳时间: "));
                     if (acdJson.has("fastest_time_10_zombies_badblood_normal")) {
@@ -688,15 +692,15 @@ public class Arcade {
                     chain.append(new PlainText("\n| 最佳回合: "));
                     if (acdJson.has("best_round_zombies_alienarcadium_normal")) {
                         chain.append(new PlainText(String.valueOf(acdJson.get("best_round_zombies_alienarcadium_normal").getAsInt())));
-                    }else chain.append("-");
+                    } else chain.append("-");
                     chain.append(" | ");
                     if (acdJson.has("best_round_zombies_alienarcadium_hard")) {
                         chain.append(new PlainText(String.valueOf(acdJson.get("best_round_zombies_alienarcadium_hard").getAsInt())));
-                    }else chain.append("-");
+                    } else chain.append("-");
                     chain.append(" | ");
                     if (acdJson.has("best_round_zombies_alienarcadium_rip")) {
                         chain.append(new PlainText(String.valueOf(acdJson.get("best_round_zombies_alienarcadium_rip").getAsInt())));
-                    }else chain.append("-");
+                    } else chain.append("-");
 
                     chain.append(new PlainText("\n| 最佳时间: "));
                     if (acdJson.has("fastest_time_10_zombies_alienarcadium_normal")) {
@@ -729,15 +733,15 @@ public class Arcade {
                     chain.append(new PlainText("\n| 最佳回合: "));
                     if (acdJson.has("best_round_zombies_prison_normal")) {
                         chain.append(new PlainText(String.valueOf(acdJson.get("best_round_zombies_prison_normal").getAsInt())));
-                    }else chain.append("-");
+                    } else chain.append("-");
                     chain.append(" | ");
                     if (acdJson.has("best_round_zombies_prison_hard")) {
                         chain.append(new PlainText(String.valueOf(acdJson.get("best_round_zombies_prison_hard").getAsInt())));
-                    }else chain.append("-");
+                    } else chain.append("-");
                     chain.append(" | ");
                     if (acdJson.has("best_round_zombies_prison_rip")) {
                         chain.append(new PlainText(String.valueOf(acdJson.get("best_round_zombies_prison_rip").getAsInt())));
-                    }else chain.append("-");
+                    } else chain.append("-");
 
                     chain.append(new PlainText("\n| 最佳时间: "));
                     if (acdJson.has("fastest_time_10_zombies_prison_normal")) {
