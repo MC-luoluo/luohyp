@@ -132,6 +132,32 @@ public class MCskin {
             chain.append("\n披风链接: ").append(String.valueOf(capeUri));
         }
 
+        URI ofCape = new URI("http://s.optifine.net/capes/" + json.get("name").getAsString() + ".png");
+        byte[] ofData;
+        try {
+            HttpURLConnection conn = (HttpURLConnection) ofCape.toURL().openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5000);
+            InputStream is = conn.getInputStream();
+
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[6024];
+            int len;
+            while ((len = is.read(buffer)) != -1) {
+                outStream.write(buffer, 0, len);
+            }
+            is.close();
+            ofData = outStream.toByteArray();
+
+            if (context.getSubject() != null) {
+                Image img = context.getSubject().uploadImage(ExternalResource.create(ofData));
+                chain.append(img);
+            }
+
+            chain.append("\noptifine披风链接: ").append(String.valueOf(ofCape));
+        } catch (IOException ignored) {
+        }
+
         context.sendMessage(chain.build());
     }
 }
