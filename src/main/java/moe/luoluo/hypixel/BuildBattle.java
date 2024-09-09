@@ -34,7 +34,7 @@ public class BuildBattle {
 
         if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("BuildBattle")) {
             JsonObject bbJson = playerJson.get("stats").getAsJsonObject().get("BuildBattle").getAsJsonObject();
-            chain.append(new PlainText("\n" + Rank.rank(playerJson) + " ")); //玩家名称前缀
+            chain.append(new PlainText(Rank.rank(playerJson) + " ")); //玩家名称前缀
             chain.append(new PlainText(playerJson.get("displayname").getAsString()));
             chain.append(new PlainText(" | 建筑大师数据: "));
 
