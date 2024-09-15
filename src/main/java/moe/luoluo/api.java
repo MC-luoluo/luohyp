@@ -71,7 +71,6 @@ public class Api {
             }
         }
         Data.setHypixelData(type, value, result);
-        Data.save();
         return result;
     }
 

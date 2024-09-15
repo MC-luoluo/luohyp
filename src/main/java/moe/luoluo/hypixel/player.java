@@ -178,7 +178,6 @@ public class Player {
         }
 
         Data.setHypixelData("player", uuid, json);
-        Data.save();
         context.sendMessage(chain.build());
     }
 }

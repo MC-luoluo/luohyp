@@ -19,7 +19,7 @@ object Data : AutoSavePluginData("data") {
     }
     @JvmStatic
     @OptIn(ConsoleExperimentalApi::class)
-    fun save() {
+    private fun save() {
         kotlin.runCatching {
             storage_.store(owner_, this)
         }.onFailure { e ->
@@ -39,8 +39,10 @@ object Data : AutoSavePluginData("data") {
 
     @JvmStatic
     fun setHypixelData(type: String, uuid: String, json: JsonObject) {
+        HypixelData.getOrPut(uuid) { mutableMapOf() }
         val uuidMap = HypixelData.getOrPut(uuid) { mutableMapOf() }
         uuidMap[type] = (System.currentTimeMillis() to json.toString())
+        save()
 //        HypixelData[uuid]?.put(type,(System.currentTimeMillis() to json.toString()))
     }
 }
