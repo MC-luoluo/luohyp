@@ -23,15 +23,15 @@ public class Api {
             default -> new URI("https://api.mojang.com/users/profiles/minecraft/" + arg1);
         };
         String result = request(uri);
-        if (result.isEmpty()){
+        if (result.isEmpty()) {
             return "";
         } else if (result.startsWith("java.net.ConnectException:")) {
             return "TimedOut";
-        } else if (result.startsWith("java.io.FileNotFoundException:")){
+        } else if (result.startsWith("java.io.FileNotFoundException:")) {
             return "NotFound";
-        } else if (result.startsWith("java.io.IOException:")){
+        } else if (result.startsWith("java.io.IOException:")) {
             return "IO";
-        } else if (result.startsWith("java.net.SocketException:")){
+        } else if (result.startsWith("java.net.SocketException:")) {
             return "reset";
         } else if (result.startsWith("javax.net.ssl.SSLHandshakeException:")) {
             return "sslEr";
@@ -47,24 +47,30 @@ public class Api {
     }
 
     public static JsonObject hypixel(String type) throws URISyntaxException, IOException {
-        return hypixel(type,"","");
+        return hypixel(type, "", "");
     }
 
     public static JsonObject hypixel(String type, String uuid) throws URISyntaxException, IOException {
-        return hypixel(type,"uuid",uuid);
+        return hypixel(type, "uuid", uuid);
     }
 
-    public static JsonObject hypixel(String type,String parameter, String value) throws URISyntaxException, IOException {
+    public static JsonObject hypixel(String type, String parameter, String value) throws URISyntaxException, IOException {
         URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPIkey() + "&" + parameter + "=" + URLEncoder.encode(value, StandardCharsets.UTF_8));
+        JsonObject result;
         try {
-            return new Gson().fromJson(request(uri), JsonObject.class);
+            result = new Gson().fromJson(request(uri), JsonObject.class);
         } catch (com.google.gson.JsonSyntaxException e) {
+            if (!Data.getHypixelData(type, value).equals("null")) {
+                return new Gson().fromJson(Data.getHypixelData(type, value), JsonObject.class);
+            }
             if (config.INSTANCE.getHypixelAPIkey().isEmpty()) {
                 throw new JsonSyntaxException("HypixelAPIkey为空，请前往配置文件填写HypixelAPIkey");
-            }else {
+            } else {
                 throw new JsonSyntaxException(e);
             }
         }
+        Data.setHypixelData(type, value, result);
+        return result;
     }
 
     public static String request(URI uri) throws MalformedURLException {

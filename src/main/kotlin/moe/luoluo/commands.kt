@@ -1,5 +1,6 @@
 package moe.luoluo
 
+import moe.luoluo.Data.getHypixelData
 import moe.luoluo.hypixel.*
 import moe.luoluo.mcskin.MCskin
 import net.mamoe.mirai.console.command.CommandSender

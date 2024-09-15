@@ -26,7 +26,7 @@ public final class luohyp extends JavaPlugin {
     public static final luohyp INSTANCE = new luohyp();
 
     private luohyp() {
-        super(new JvmPluginDescriptionBuilder("moe.luoluo.luohyp", "1.0.3")
+        super(new JvmPluginDescriptionBuilder("moe.luoluo.luohyp", "1.0.4")
                 .name("luphyp")
                 .author("MCluoluo")
                 .build());
@@ -35,6 +35,8 @@ public final class luohyp extends JavaPlugin {
     @Override
     public void onEnable() {
         reloadPluginConfig(config.INSTANCE);
+        reloadPluginData(Data.INSTANCE);
+
         getLogger().info("luohyp enabled");
         /*EventChannel<Event> eventChannel = GlobalEventChannel.INSTANCE.parentScope(this);
         eventChannel.subscribeAlways(GroupMessageEvent.class, g -> {
