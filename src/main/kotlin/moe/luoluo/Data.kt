@@ -2,9 +2,30 @@ package moe.luoluo
 
 import com.google.gson.JsonObject
 import net.mamoe.mirai.console.data.AutoSavePluginData
+import net.mamoe.mirai.console.data.PluginDataHolder
+import net.mamoe.mirai.console.data.PluginDataStorage
 import net.mamoe.mirai.console.data.value
+import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 
 object Data : AutoSavePluginData("data") {
+    @OptIn(ConsoleExperimentalApi::class)
+    private lateinit var owner_: PluginDataHolder
+    @OptIn(ConsoleExperimentalApi::class)
+    private lateinit var storage_: PluginDataStorage
+    @OptIn(ConsoleExperimentalApi::class)
+    override fun onInit(owner: PluginDataHolder, storage: PluginDataStorage) {
+        owner_ = owner
+        storage_ = storage
+    }
+    @JvmStatic
+    @OptIn(ConsoleExperimentalApi::class)
+    fun save() {
+        kotlin.runCatching {
+            storage_.store(owner_, this)
+        }.onFailure { e ->
+            // 处理异常
+        }
+    }
     private val HypixelData: MutableMap<String, MutableMap<String, Pair<Long, String>>> by value()
 
     @JvmStatic

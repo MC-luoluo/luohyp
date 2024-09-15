@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.mamoe.mirai.console.data.PluginData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,6 +71,7 @@ public class Api {
             }
         }
         Data.setHypixelData(type, value, result);
+        Data.save();
         return result;
     }
 

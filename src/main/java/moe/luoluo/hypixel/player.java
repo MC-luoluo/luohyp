@@ -2,6 +2,7 @@ package moe.luoluo.hypixel;
 
 import com.google.gson.JsonObject;
 import moe.luoluo.Api;
+import moe.luoluo.Data;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -175,6 +176,9 @@ public class Player {
         } else {
             chain.append(new PlainText("该玩家的Hypixel数据为空"));
         }
+
+        Data.setHypixelData("player", uuid, json);
+        Data.save();
         context.sendMessage(chain.build());
     }
 }
