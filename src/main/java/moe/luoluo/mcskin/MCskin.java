@@ -8,6 +8,8 @@ import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
 import net.mamoe.mirai.utils.ExternalResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,6 +23,8 @@ import java.util.Objects;
 import static moe.luoluo.Api.request;
 
 public class MCskin {
+    private static final Logger log = LoggerFactory.getLogger(MCskin.class);
+
     public static void mcskin(CommandSender context, String player) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
 
@@ -40,7 +44,7 @@ public class MCskin {
         chain.append(json.get("id").getAsString());
 
         URI uri;
-        byte[] data;
+        byte[] data = new byte[0];
         try {
             uri = new URI("https://crafatar.com/renders/body/" + uuid + "?scale=10" + "&overlay");
             HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
@@ -56,14 +60,14 @@ public class MCskin {
             }
             is.close();
             data = outStream.toByteArray();
+
+            if (context.getSubject() != null) {
+                Image img = context.getSubject().uploadImage(ExternalResource.create(data));
+                chain.append(img);
+            }
         } catch (IOException e) {
             chain.append(new PlainText("\ncrafatar图片加载失败"));
-            context.sendMessage(chain.build());
-            throw new RuntimeException(e);
-        }
-        if (context.getSubject() != null) {
-            Image img = context.getSubject().uploadImage(ExternalResource.create(data));
-            chain.append(img);
+            log.error(String.valueOf(new RuntimeException(e)));
         }
 
         String value = json.get("properties").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString();
@@ -91,14 +95,14 @@ public class MCskin {
             }
             is.close();
             data = outStream.toByteArray();
+
+            if (context.getSubject() != null) {
+                Image img = context.getSubject().uploadImage(ExternalResource.create(data));
+                chain.append(img);
+            }
         } catch (IOException e) {
             chain.append(new PlainText("\n皮肤图片加载失败"));
-            context.sendMessage(chain.build());
-            throw new RuntimeException(e);
-        }
-        if (context.getSubject() != null) {
-            Image img = context.getSubject().uploadImage(ExternalResource.create(data));
-            chain.append(img);
+            log.error(String.valueOf(new RuntimeException(e)));
         }
 
         chain.append("\n皮肤链接: ").append(String.valueOf(skinUri));
@@ -119,14 +123,14 @@ public class MCskin {
                 }
                 is.close();
                 data = outStream.toByteArray();
+
+                if (context.getSubject() != null) {
+                    Image img = context.getSubject().uploadImage(ExternalResource.create(data));
+                    chain.append(img);
+                }
             } catch (IOException e) {
                 chain.append(new PlainText("\n披风图片加载失败"));
-                context.sendMessage(chain.build());
-                throw new RuntimeException(e);
-            }
-            if (context.getSubject() != null) {
-                Image img = context.getSubject().uploadImage(ExternalResource.create(data));
-                chain.append(img);
+                log.error(String.valueOf(new RuntimeException(e)));
             }
 
             chain.append("\n披风链接: ").append(String.valueOf(capeUri));
