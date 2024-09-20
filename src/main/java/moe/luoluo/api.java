@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.mamoe.mirai.console.data.PluginData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +62,7 @@ public class Api {
             result = new Gson().fromJson(request(uri), JsonObject.class);
         } catch (com.google.gson.JsonSyntaxException e) {
             if (!Data.getHypixelData(type, value).equals("null")) {
+                logger.error("请求失败，返回本地缓存", e);
                 return new Gson().fromJson(Data.getHypixelData(type, value), JsonObject.class);
             }
             if (config.INSTANCE.getHypixelAPIkey().isEmpty()) {

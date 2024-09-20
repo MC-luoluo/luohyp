@@ -635,11 +635,12 @@ public class Bedwars {
                         chain.append(new PlainText(decimalFormat.format((double) k / d)));
                     } else chain.append(new PlainText(decimalFormat.format(k)));
                 }
-                context.sendMessage(chain.build());
             } else {
                 error.append("type有误，支持参数：solo, double, 3s, 4s, 4v4");
                 context.sendMessage(error.build());
+                return;
             }
+            context.sendMessage(chain.build());
         } else {
             error.append(new PlainText("该玩家的起床战争数据为空"));
             context.sendMessage(error.build());
