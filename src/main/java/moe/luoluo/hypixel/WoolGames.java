@@ -236,7 +236,75 @@ public class WoolGames {
                     }
                 }
                 if (type.equals("sheep") || type.equals("all")) {
-
+                    chain.append("\n|- 绵羊战争:");
+                    chain.append(new PlainText("\n| 胜场: "));
+                    if (sheepstats.has("wins"))
+                        chain.append(new PlainText(String.valueOf(sheepstats.get("wins").getAsInt())));
+                    else chain.append("null");
+                    chain.append(new PlainText(" | 败场: "));
+                    if (sheepstats.has("losses"))
+                        chain.append(new PlainText(String.valueOf(sheepstats.get("losses").getAsInt())));
+                    else chain.append("null");
+                    if (sheepstats.has("wins")) {
+                        chain.append(" | WLR: ");
+                        if (sheepstats.has("losses"))
+                            chain.append(new PlainText(decimalFormat.format((float) sheepstats.get("wins").getAsInt() / sheepstats.get("losses").getAsInt())));
+                        else chain.append(new PlainText(decimalFormat.format(sheepstats.get("wins").getAsInt())));
+                    }
+                    chain.append("\n| 击杀: ");
+                    if (sheepstats.has("kills"))
+                        chain.append(new PlainText(String.valueOf(sheepstats.get("kills").getAsInt())));
+                    else chain.append("null");
+                    chain.append(" | 死亡: ");
+                    if (sheepstats.has("deaths"))
+                        chain.append(new PlainText(String.valueOf(sheepstats.get("deaths").getAsInt())));
+                    else chain.append("null");
+                    if (sheepstats.has("kills")) {
+                        chain.append(" | KDR: ");
+                        if (sheepstats.has("deaths"))
+                            chain.append(new PlainText(decimalFormat.format((float) sheepstats.get("kills").getAsInt() / sheepstats.get("deaths").getAsInt())));
+                        else chain.append(new PlainText(decimalFormat.format(sheepstats.get("kills").getAsInt())));
+                    }
+                    chain.append("\n| 扔出绵羊: ");
+                    if (sheepstats.has("sheep_thrown"))
+                        chain.append(new PlainText(String.valueOf(sheepstats.get("sheep_thrown").getAsInt())));
+                    else chain.append("null");
+                    if (sheepstats.has("damage_dealt")) {
+                        chain.append(" | 造成伤害: ");
+                        chain.append(new PlainText(String.valueOf(sheepstats.get("damage_dealt").getAsInt())));
+                    }
+                    chain.append("\n| 虚空击杀: ");
+                    if (sheepstats.has("kills_void"))
+                        chain.append(new PlainText(String.valueOf(sheepstats.get("kills_void").getAsInt())));
+                    else chain.append("null");
+                    if (sheepstats.has("deaths_void")) {
+                        chain.append(" | 死于虚空: ");
+                        chain.append(new PlainText(String.valueOf(sheepstats.get("deaths_void").getAsInt())));
+                    }
+                    chain.append("\n| 爆炸击杀: ");
+                    if (sheepstats.has("kills_explosive"))
+                        chain.append(new PlainText(String.valueOf(sheepstats.get("kills_explosive").getAsInt())));
+                    else chain.append("null");
+                    if (sheepstats.has("deaths_explosive")) {
+                        chain.append(" | 死于爆炸: ");
+                        chain.append(new PlainText(String.valueOf(sheepstats.get("deaths_explosive").getAsInt())));
+                    }
+                    chain.append("\n| 弓箭击杀: ");
+                    if (sheepstats.has("kills_bow"))
+                        chain.append(new PlainText(String.valueOf(sheepstats.get("kills_bow").getAsInt())));
+                    else chain.append("null");
+                    if (sheepstats.has("deaths_bow")) {
+                        chain.append(" | 死于弓箭: ");
+                        chain.append(new PlainText(String.valueOf(sheepstats.get("deaths_bow").getAsInt())));
+                    }
+                    chain.append("\n| 近战击杀: ");
+                    if (sheepstats.has("kills_melee"))
+                        chain.append(new PlainText(String.valueOf(sheepstats.get("kills_melee").getAsInt())));
+                    else chain.append("null");
+                    if (sheepstats.has("deaths_melee")) {
+                        chain.append(" | 死于近战: ");
+                        chain.append(new PlainText(String.valueOf(sheepstats.get("deaths_melee").getAsInt())));
+                    }
                 }
             } else {
                 chain.append(new PlainText("该玩家的羊毛游戏数据为空"));
