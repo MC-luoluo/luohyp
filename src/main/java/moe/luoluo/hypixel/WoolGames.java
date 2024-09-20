@@ -3,6 +3,7 @@ package moe.luoluo.hypixel;
 import com.google.gson.JsonObject;
 import moe.luoluo.Api;
 import net.mamoe.mirai.console.command.CommandSender;
+import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
 
@@ -306,10 +307,90 @@ public class WoolGames {
                         chain.append(new PlainText(String.valueOf(sheepstats.get("deaths_melee").getAsInt())));
                     }
                 }
+                if (type.equals("wool") || type.equals("all")) {
+                    chain.append("\n|- 羊毛战争:");
+                    chain.append(new PlainText("\n| 破坏方块: "));
+                    if (woolstats.has("blocks_broken"))
+                        chain.append(new PlainText(String.valueOf(woolstats.get("blocks_broken").getAsInt())));
+                    else chain.append("null");
+                    chain.append(new PlainText(" | 放置羊毛: "));
+                    if (woolstats.has("wool_placed"))
+                        chain.append(new PlainText(String.valueOf(woolstats.get("wool_placed").getAsInt())));
+                    else chain.append("null");
+                    if (woolstats.has("powerups_gotten")) {
+                        chain.append(new PlainText("\n| 捡起增益: "));
+                        chain.append(new PlainText(String.valueOf(woolstats.get("powerups_gotten").getAsInt())));
+                    } else chain.append("null");
+                    chain.append(new PlainText("\n| 胜场: "));
+                    if (woolstats.has("wins"))
+                        chain.append(new PlainText(String.valueOf(woolstats.get("wins").getAsInt())));
+                    else chain.append("null");
+                    chain.append(new PlainText(" | 败场: "));
+                    if (woolstats.has("games_played"))
+                        if (woolstats.has("wins"))
+                            chain.append(new PlainText(String.valueOf(woolstats.get("games_played").getAsInt() - woolstats.get("wins").getAsInt())));
+                        else chain.append(new PlainText(String.valueOf(woolstats.get("games_played").getAsInt())));
+                    else chain.append("null");
+                    if (woolstats.has("wins")) {
+                        chain.append(" | WLR: ");
+                        if (woolstats.has("games_played"))
+                            chain.append(new PlainText(decimalFormat.format(
+                                    (float) woolstats.get("wins").getAsInt() /
+                                            (woolstats.get("games_played").getAsInt() - woolstats.get("wins").getAsInt()))));
+                        else chain.append(new PlainText(decimalFormat.format(woolstats.get("wins").getAsInt())));
+                    }
+                    chain.append("\n| 击杀: ");
+                    if (woolstats.has("kills"))
+                        chain.append(new PlainText(String.valueOf(woolstats.get("kills").getAsInt())));
+                    else chain.append("null");
+                    chain.append(" | 死亡: ");
+                    if (woolstats.has("deaths"))
+                        chain.append(new PlainText(String.valueOf(woolstats.get("deaths").getAsInt())));
+                    else chain.append("null");
+                    if (woolstats.has("kills")) {
+                        chain.append(" | KDR: ");
+                        if (woolstats.has("deaths"))
+                            chain.append(new PlainText(decimalFormat.format((float) woolstats.get("kills").getAsInt() / woolstats.get("deaths").getAsInt())));
+                        else chain.append(new PlainText(decimalFormat.format(woolstats.get("kills").getAsInt())));
+                    }
+                    chain.append("\n| 助攻: ");
+                    if (woolstats.has("assists")) {
+                        chain.append(new PlainText(String.valueOf(woolstats.get("assists").getAsInt())));
+                        chain.append(" | (K+A)/D: ");
+                        if (woolstats.has("kills")) {
+                            if (woolstats.has("deaths"))
+                                chain.append(new PlainText(decimalFormat.format((float) (woolstats.get("kills").getAsInt() + woolstats.get("assists").getAsInt()) / woolstats.get("deaths").getAsInt())));
+                            else
+                                chain.append(new PlainText(decimalFormat.format(woolstats.get("kills").getAsInt() + woolstats.get("assists").getAsInt())));
+                        } else {
+                            if (woolstats.has("deaths"))
+                                chain.append(new PlainText(decimalFormat.format((float) woolstats.get("assists").getAsInt() / woolstats.get("deaths").getAsInt())));
+                            else chain.append(new PlainText(decimalFormat.format(woolstats.get("assists").getAsInt())));
+                        }
+                    } else chain.append("null");
+                }
+
+                switch (type) {
+                    case "", "wool", "ctw", "sheep":
+                        context.sendMessage(chain.build());
+                        break;
+                    case "all":
+                        if (context.getSubject() != null) {
+                            ForwardMessageBuilder builder = new ForwardMessageBuilder(context.getSubject());
+                            builder.add(Objects.requireNonNull(context.getBot()).getId(), context.getBot().getNick(), chain.build());
+                            context.sendMessage(builder.build());
+                        } else context.sendMessage(chain.build());
+                        break;
+                    default:
+                        chain.append(new PlainText("\ntype有误，支持参数：(空), ctw, sheep, wool, all"));
+                        context.sendMessage(chain.build());
+                        break;
+                }
+
             } else {
                 chain.append(new PlainText("该玩家的羊毛游戏数据为空"));
+                context.sendMessage(chain.build());
             }
-            context.sendMessage(chain.build());
         }
     }
 
