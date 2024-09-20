@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
+import static moe.luoluo.Api.formatExp;
+
 public class Guild {
     static DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
@@ -443,19 +445,6 @@ public class Guild {
             sum += expHistory.get(j).getAsInt();
         }
         chain.append(new PlainText(formatExp(sum)));
-    }
-
-    //格式化经验值
-    public static String formatExp(float ex) {
-        if (ex >= 100000 & ex < 1000000) {
-            return decimalFormat.format(ex / 1000) + "K";
-        } else if (ex > 1000000 & ex < 1000000000) {
-            return decimalFormat.format(ex / 1000000) + "M";
-        } else if (ex > 1000000000) {
-            return decimalFormat.format(ex / 1000000000) + "B";
-        } else {
-            return String.valueOf((int) ex);
-        }
     }
 
     public static Boolean determine(JsonObject json, String str) {

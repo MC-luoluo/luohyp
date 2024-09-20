@@ -15,7 +15,6 @@ import java.util.Objects;
 public class MurderMystery {
     public static void murdermystery(CommandSender context, String player, String type) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
-        JsonObject playerJson;
         JsonObject mmJson;
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
@@ -27,12 +26,11 @@ public class MurderMystery {
         } else json = Api.hypixel("player", uuid);
 
         if (json.get("player").isJsonObject()) {
-            playerJson = json.get("player").getAsJsonObject();
 
-            if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("MurderMystery")) {
-                mmJson = playerJson.get("stats").getAsJsonObject().get("MurderMystery").getAsJsonObject();
+            if (json.get("player").getAsJsonObject().has("stats") && json.get("player").getAsJsonObject().get("stats").getAsJsonObject().has("MurderMystery")) {
+                mmJson = json.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("MurderMystery").getAsJsonObject();
 
-                chain.append(new PlainText(Rank.rank(playerJson) + " "));
+                chain.append(new PlainText(Rank.rank(json.get("player").getAsJsonObject()) + " "));
                 chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
                 chain.append(new PlainText(" | 密室杀手数据:"));
 

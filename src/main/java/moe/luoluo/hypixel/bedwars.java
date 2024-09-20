@@ -39,10 +39,10 @@ public class Bedwars {
 
             if (type.isEmpty()) {
                 if (bwJson.has("games_played_bedwars") && bwJson.has("Experience")) {
-                    chain.append(new PlainText("游戏场次: "));
-                    chain.append(new PlainText(String.valueOf(bwJson.get("games_played_bedwars").getAsInt())));
-                    chain.append(new PlainText(" | 等级: "));
+                    chain.append(new PlainText("等级: "));
                     chain.append(new PlainText(String.valueOf(json.get("player").getAsJsonObject().get("achievements").getAsJsonObject().get("bedwars_level").getAsInt())));
+                    chain.append(new PlainText("\n游戏场次: "));
+                    chain.append(new PlainText(String.valueOf(bwJson.get("games_played_bedwars").getAsInt())));
                     if (bwJson.has("winstreak")) {
                         chain.append(new PlainText(" | 连胜: "));
                         chain.append(new PlainText(String.valueOf(bwJson.get("winstreak").getAsInt())));
@@ -635,11 +635,11 @@ public class Bedwars {
                         chain.append(new PlainText(decimalFormat.format((double) k / d)));
                     } else chain.append(new PlainText(decimalFormat.format(k)));
                 }
+                context.sendMessage(chain.build());
             } else {
                 error.append("type有误，支持参数：solo, double, 3s, 4s, 4v4");
                 context.sendMessage(error.build());
             }
-            context.sendMessage(chain.build());
         } else {
             error.append(new PlainText("该玩家的起床战争数据为空"));
             context.sendMessage(error.build());

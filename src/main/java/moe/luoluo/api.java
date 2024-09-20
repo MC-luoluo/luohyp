@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 
 
 public class Api {
@@ -102,5 +103,19 @@ public class Api {
             }
         }
         return result.toString();
+    }
+
+    //格式化经验值
+    static DecimalFormat decimalFormat = new DecimalFormat("0.00");
+    public static String formatExp(float ex) {
+        if (ex >= 100000 & ex < 1000000) {
+            return decimalFormat.format(ex / 1000) + "K";
+        } else if (ex > 1000000 & ex < 1000000000) {
+            return decimalFormat.format(ex / 1000000) + "M";
+        } else if (ex > 1000000000) {
+            return decimalFormat.format(ex / 1000000000) + "B";
+        } else {
+            return String.valueOf((int) ex);
+        }
     }
 }

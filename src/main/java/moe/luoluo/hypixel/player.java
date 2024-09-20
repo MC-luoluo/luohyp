@@ -66,7 +66,14 @@ public class Player {
                             chain.append(new PlainText(session.get("map").getAsString()));
                         }
                     }
-                } else chain.append(new PlainText("离线\uD83D\uDD34"));
+                } else if (json.get("lastLogin").getAsInt() > json.get("lastLogout").getAsInt()){
+                    chain.append(new PlainText("离线\ud83d\udfe8"));
+                } else {
+                    if (playerJson.has("lastLogin"))
+                        chain.append(new PlainText("离线\uD83D\uDD34"));
+                    else chain.append(new PlainText("离线\ud83d\udfe5"));
+                }
+
             } else chain.append(new PlainText("  \uD83D\uDD34"));
 
             chain.append(new PlainText("\nRANK赠送数: "));

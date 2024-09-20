@@ -91,6 +91,12 @@ class Hypixel : CompositeCommand(
         Tournament.tourney(context, player, type)
     }
 
+    @SubCommand("wool", "wg")
+    @Description("查询玩家的羊毛游戏数据")
+    fun wool(context: CommandSender, player: String, type: String = "") {
+        WoolGames.wool(context, player, type)
+    }
+
 }
 
 class MCSkin : SimpleCommand(luohyp.INSTANCE, "mcskin",
