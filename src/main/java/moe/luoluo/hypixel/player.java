@@ -2,7 +2,6 @@ package moe.luoluo.hypixel;
 
 import com.google.gson.JsonObject;
 import moe.luoluo.Api;
-import moe.luoluo.Data;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -66,7 +65,7 @@ public class Player {
                             chain.append(new PlainText(session.get("map").getAsString()));
                         }
                     }
-                } else if (json.get("lastLogin").getAsInt() > json.get("lastLogout").getAsInt()){
+                } else if (playerJson.get("lastLogin").getAsInt() > playerJson.get("lastLogout").getAsInt()){
                     chain.append(new PlainText("离线\ud83d\udfe8"));
                 } else {
                     if (playerJson.has("lastLogin"))
@@ -184,7 +183,6 @@ public class Player {
             chain.append(new PlainText("该玩家的Hypixel数据为空"));
         }
 
-        Data.setHypixelData("player", uuid, json);
         context.sendMessage(chain.build());
     }
 }
