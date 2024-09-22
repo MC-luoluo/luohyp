@@ -52,7 +52,7 @@ public class WoolGames {
                     }
                     chain.append(new PlainText(String.valueOf(level)));
                     //经验进度
-                    int xpLevel = Math.min(level, 4);
+                    int xpLevel = Math.min(level - 1, 4);
                     chain.append(new PlainText(" (" + exp +
                             "/" + exp(xpLevel) + " " +
                             decimalFormat.format((float) exp / expNeeded[xpLevel] * 100) + "%)"

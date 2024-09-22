@@ -41,7 +41,7 @@ public class Player {
             playerJson = json.get("player").getAsJsonObject();
 
             JsonObject online;
-            if (playerJson.has("lastLogin")) {
+            if (playerJson.has("lastLogout")) {
                 online = Api.hypixel("status", Api.mojang(player, "uuid"));
             } else {
                 online = null;
@@ -129,7 +129,7 @@ public class Player {
             }
 
             if (playerJson.has("mostRecentGameType")) {
-                chain.append(new PlainText("\n最近游玩的模式: "));
+                chain.append(new PlainText("\n最近游戏: "));
                 chain.append(new PlainText(playerJson.get("mostRecentGameType").getAsString()));
             }
 

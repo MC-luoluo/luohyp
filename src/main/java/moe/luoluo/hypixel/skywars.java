@@ -1,6 +1,5 @@
 package moe.luoluo.hypixel;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import moe.luoluo.Api;
 import net.mamoe.mirai.message.data.MessageChain;
@@ -29,7 +28,7 @@ public class Skywars {
 
         if (json.get("player").isJsonObject()) {
 
-            chain.append(new PlainText( Rank.rank(playerJson) + " ")); //玩家名称前缀
+            chain.append(new PlainText(Rank.rank(playerJson) + " ")); //玩家名称前缀
 
             chain.append(new PlainText(playerJson.get("displayname").getAsString()));
             chain.append(new PlainText(" | 空岛战争数据:"));
@@ -46,19 +45,39 @@ public class Skywars {
                     chain.append(new PlainText(String.valueOf(swJson.get("coins").getAsInt())));
                 }
 
-                if (swJson.has("games")) {
-                    chain.append(new PlainText("\n游戏场次: "));
-                    int temp = 0;
-                    if (swJson.has("wins")) {
-                        temp += swJson.get("wins").getAsInt();
+                chain.append(new PlainText("\n等级: "));
+                if (swJson.has("skywars_experience")) {
+                    long exp = swJson.get("skywars_experience").getAsLong();
+                    int[] expNeeded = {20, 50, 80, 100, 250, 500, 1000, 1500, 2500, 4000, 5000, 10000};
+                    int level = 1;
+                    for (int j : expNeeded) {
+                        if (exp >= j) {
+                            exp -= j;
+                            level++;
+                        } else break;
                     }
-                    if (swJson.has("losses")) {
-                        temp += swJson.get("losses").getAsInt();
+                    while (exp >= 10000) {
+                        level++;
+                        exp -= 10000;
                     }
-                    chain.append(new PlainText(String.valueOf(temp)));
-                    chain.append(new PlainText(" | 等级: "));
-                    chain.append(new PlainText(swJson.get("levelFormatted").getAsString().replace(swJson.get("levelFormatted").getAsString().substring(0, 2), "").replace("⋆", "✨")));
+                    chain.append(new PlainText(String.valueOf(level)));
+                    //经验进度
+                    int xpLevel = Math.min(level - 1, 11);
+                    chain.append(new PlainText(" (" + exp +
+                            "/" + exp(xpLevel) + " " +
+                            decimalFormat.format((float) exp / expNeeded[xpLevel] * 100) + "%)"
+                    ));
+                } else chain.append("null");
+
+                chain.append(new PlainText("\n游戏场次: "));
+                int temp = 0;
+                if (swJson.has("wins")) {
+                    temp += swJson.get("wins").getAsInt();
                 }
+                if (swJson.has("losses")) {
+                    temp += swJson.get("losses").getAsInt();
+                }
+                chain.append(new PlainText(String.valueOf(temp)));
                 if (swJson.has("win_streak")) {
                     chain.append(new PlainText(" | 连胜: "));
                     chain.append(new PlainText(String.valueOf(swJson.get("win_streak").getAsInt())));
@@ -116,9 +135,9 @@ public class Skywars {
                 }
 
                 if (swJson.has("games_lab")) {
-                    chain.append(new PlainText("\n\n实验模式数据: "));
+                    chain.append(new PlainText("\n\n实验模式: "));
                     chain.append(new PlainText("\n游戏场次: "));
-                    int temp = 0;
+                    temp = 0;
                     if (swJson.has("wins_lab")) {
                         temp += swJson.get("wins_lab").getAsInt();
                     }
@@ -213,5 +232,10 @@ public class Skywars {
 
         }
         return chain.build();
+    }
+
+    public static String exp(int exp) {
+        String[] map = {"20", "50", "80", "100", "250", "500", "1k", "1.5k", "2.5k", "4k", "5k", "10k"};
+        return map[exp];
     }
 }

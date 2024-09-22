@@ -39,8 +39,32 @@ public class Bedwars {
 
             if (type.isEmpty()) {
                 if (bwJson.has("games_played_bedwars") && bwJson.has("Experience")) {
+
                     chain.append(new PlainText("等级: "));
-                    chain.append(new PlainText(String.valueOf(json.get("player").getAsJsonObject().get("achievements").getAsJsonObject().get("bedwars_level").getAsInt())));
+                    if (bwJson.has("Experience")) {
+                        long exp = bwJson.get("Experience").getAsLong();
+                        int level = 100 * ((int) (exp / 487000));
+                        exp %= 487000;
+                        int[] expNeeded = {500, 1000, 2000, 3500, 5000};
+                        for (int j : expNeeded) {
+                            if (exp >= j) {
+                                exp -= j;
+                                level++;
+                            } else break;
+                        }
+                        while (exp >= 5000) {
+                            level++;
+                            exp -= 5000;
+                        }
+                        chain.append(new PlainText(String.valueOf(level)));
+                        //经验进度
+                        int xpLevel = Math.min(level % 100, 4);
+                        chain.append(new PlainText(" (" + exp +
+                                "/" + exp(xpLevel) + " " +
+                                decimalFormat.format((float) exp / expNeeded[xpLevel] * 100) + "%)"
+                        ));
+                    } else chain.append("null");
+
                     chain.append(new PlainText("\n游戏场次: "));
                     chain.append(new PlainText(String.valueOf(bwJson.get("games_played_bedwars").getAsInt())));
                     if (bwJson.has("winstreak")) {
@@ -645,6 +669,10 @@ public class Bedwars {
             error.append(new PlainText("该玩家的起床战争数据为空"));
             context.sendMessage(error.build());
         }
+    }
 
+    public static String exp(int exp) {
+        String[] map = {"500", "1k", "2k", "3.5k", "5k"};
+        return map[exp];
     }
 }

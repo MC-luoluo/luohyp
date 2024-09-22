@@ -46,7 +46,7 @@ public class Guild {
                 if (Objects.equals(uuid, "NotFound")) {
                     context.sendMessage("玩家不存在");
                     return;
-                } else json = Api.hypixel("guild",px, uuid);
+                } else json = Api.hypixel("guild", px, uuid);
                 break;
         }
 
