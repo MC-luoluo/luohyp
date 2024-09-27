@@ -1,6 +1,5 @@
 package moe.luoluo
 
-import moe.luoluo.Data.getHypixelData
 import moe.luoluo.hypixel.*
 import moe.luoluo.mcskin.MCskin
 import net.mamoe.mirai.console.command.CommandSender
@@ -82,7 +81,7 @@ class Hypixel : CompositeCommand(
     @SubCommand("tntgames", "tnt")
     @Description("查询玩家的掘战游戏数据")
     suspend fun CommandSender.tntgames(player: String) {
-        sendMessage(TNT.tnt(player))
+        sendMessage(TNT.tntgames(player))
     }
 
     @SubCommand("tournament", "tourney")

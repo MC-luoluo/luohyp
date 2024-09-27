@@ -1,6 +1,5 @@
 package moe.luoluo.hypixel;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import moe.luoluo.Api;
 import net.mamoe.mirai.message.data.MessageChain;
@@ -13,7 +12,7 @@ import java.text.DecimalFormat;
 import java.util.Objects;
 
 public class TNT {
-    public static MessageChain tnt(String player) throws IOException, URISyntaxException {
+    public static MessageChain tntgames(String player) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
 
         JsonObject json;
@@ -59,8 +58,8 @@ public class TNT {
                 if (tntJson.has("deaths_tntag")) {
                     chain.append(new PlainText(" | WLR: "));
                     chain.append(new PlainText(decimalFormat.format(
-                            (double) tntJson.get("wins_tntag").getAsInt() /
-                                    (double) tntJson.get("deaths_tntag").getAsInt())));
+                            (float) tntJson.get("wins_tntag").getAsInt() /
+                                    tntJson.get("deaths_tntag").getAsInt())));
                 }
             } else chain.append(new PlainText("null"));
 
@@ -75,8 +74,8 @@ public class TNT {
             if (tntJson.has("kills_tntag") && tntJson.has("deaths_tntag")) {
                 chain.append(new PlainText(" | KDR:"));
                 chain.append(new PlainText(decimalFormat.format(
-                        (double) tntJson.get("kills_tntag").getAsInt() /
-                                (double) tntJson.get("deaths_tntag").getAsInt())));
+                        (float) tntJson.get("kills_tntag").getAsInt() /
+                                tntJson.get("deaths_tntag").getAsInt())));
             }
 
 
@@ -99,8 +98,8 @@ public class TNT {
             if (tntJson.has("wins_tntrun") && tntJson.has("deaths_tntrun")) {
                 chain.append(new PlainText(" | WLR: "));
                 chain.append(new PlainText(decimalFormat.format(
-                        (double) tntJson.get("wins_tntrun").getAsInt() /
-                                (double) tntJson.get("deaths_tntrun").getAsInt())));
+                        (float) tntJson.get("wins_tntrun").getAsInt() /
+                                tntJson.get("deaths_tntrun").getAsInt())));
             }
 
 
@@ -121,8 +120,8 @@ public class TNT {
                 if (tntJson.has("deaths_pvprun")) {
                     chain.append(new PlainText(" | WLR: "));
                     chain.append(new PlainText(decimalFormat.format(
-                            (double) tntJson.get("wins_pvprun").getAsInt() /
-                                    (double) tntJson.get("deaths_pvprun").getAsInt())));
+                            (float) tntJson.get("wins_pvprun").getAsInt() /
+                                    tntJson.get("deaths_pvprun").getAsInt())));
                 }
             } else chain.append(new PlainText("null"));
 
@@ -137,8 +136,8 @@ public class TNT {
             if (tntJson.has("kills_pvprun") && tntJson.has("deaths_pvprun")) {
                 chain.append(new PlainText(" | KDR: "));
                 chain.append(new PlainText(decimalFormat.format(
-                        (double) tntJson.get("kills_pvprun").getAsInt() /
-                                (double) tntJson.get("deaths_pvprun").getAsInt())));
+                        (float) tntJson.get("kills_pvprun").getAsInt() /
+                                tntJson.get("deaths_pvprun").getAsInt())));
             }
 
 
@@ -154,13 +153,53 @@ public class TNT {
             if (tntJson.has("wins_bowspleef") && tntJson.has("deaths_bowspleef")) {
                 chain.append(new PlainText(" | WLR: "));
                 chain.append(new PlainText(decimalFormat.format(
-                        (double) tntJson.get("wins_bowspleef").getAsInt() /
-                                (double) tntJson.get("deaths_bowspleef").getAsInt())));
+                        (float) tntJson.get("wins_bowspleef").getAsInt() /
+                                tntJson.get("deaths_bowspleef").getAsInt())));
             }
             if (tntJson.has("tags_bowspleef")) {
                 chain.append(new PlainText("\n  射箭数: "));
                 chain.append(new PlainText(String.valueOf(tntJson.get("tags_bowspleef").getAsInt())));
             }
+
+
+            chain.append("\nWizards: ");
+            chain.append("\n  胜场: ");
+            if (tntJson.has("wins_capture")) {
+                chain.append(new PlainText(String.valueOf(tntJson.get("wins_capture").getAsInt())));
+            } else chain.append("null");
+            if (tntJson.has("points_capture")) {
+                chain.append(" | 占点: ");
+                chain.append(new PlainText(String.valueOf(tntJson.get("points_capture").getAsInt())));
+            }
+            chain.append("\n  击杀: ");
+            if (tntJson.has("kills_capture")) {
+                chain.append(new PlainText(String.valueOf(tntJson.get("kills_capture").getAsInt())));
+            } else chain.append("null");
+            chain.append(" | 死亡: ");
+            if (tntJson.has("deaths_capture")) {
+                chain.append(new PlainText(String.valueOf(tntJson.get("deaths_capture").getAsInt())));
+            } else chain.append("null");
+            if (tntJson.has("kills_capture") && tntJson.has("deaths_capture")) {
+                chain.append(" | KDR: ");
+                chain.append(new PlainText(decimalFormat.format(
+                        (float) tntJson.get("kills_capture").getAsInt() /
+                                tntJson.get("deaths_capture").getAsInt())));
+            }
+            if (tntJson.has("assists_capture")) {
+                chain.append("\n  助攻: ");
+                chain.append(new PlainText(String.valueOf(tntJson.get("assists_capture").getAsInt())));
+                if (tntJson.has("deaths_capture")) {
+                    chain.append(" | (K+A)/D: ");
+                    if (tntJson.has("kills_capture")) {
+                        chain.append(new PlainText(decimalFormat.format((float)
+                                (tntJson.get("kills_capture").getAsInt() + tntJson.get("assists_capture").getAsInt()) /
+                                tntJson.get("deaths_capture").getAsInt())));
+                    } else chain.append(new PlainText(decimalFormat.format((float)
+                            tntJson.get("assists_capture").getAsInt() /
+                            tntJson.get("deaths_capture").getAsInt())));
+                }
+            }
+
         } else {
             chain.append(new PlainText(" 该玩家的TNT游戏数据为空"));
         }
