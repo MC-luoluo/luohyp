@@ -22,13 +22,11 @@ public class TNT {
             return chain.build();
         } else json = Api.hypixel("player", uuid);
 
-        JsonObject playerJson = json.get("player").getAsJsonObject();
-
-        if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("TNTGames")) {
-            JsonObject tntJson = playerJson.get("stats").getAsJsonObject().get("TNTGames").getAsJsonObject();
+        if (json.get("player").isJsonObject() && json.get("player").getAsJsonObject().has("stats") && json.get("player").getAsJsonObject().get("stats").getAsJsonObject().has("TNTGames")) {
+            JsonObject tntJson = json.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("TNTGames").getAsJsonObject();
             DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-            chain.append(new PlainText(Rank.rank(playerJson) + " "));
+            chain.append(new PlainText(Rank.rank(json.get("player").getAsJsonObject()) + " "));
             chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
             chain.append(new PlainText(" | TNT Games数据:"));
 

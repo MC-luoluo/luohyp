@@ -28,12 +28,10 @@ public class BuildBattle {
 
         JsonObject leader = Api.hypixel("leaderboards");
 
-        JsonObject playerJson = json.get("player").getAsJsonObject();
-
-        if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("BuildBattle")) {
-            JsonObject bbJson = playerJson.get("stats").getAsJsonObject().get("BuildBattle").getAsJsonObject();
-            chain.append(new PlainText(Rank.rank(playerJson) + " ")); //玩家名称前缀
-            chain.append(new PlainText(playerJson.get("displayname").getAsString()));
+        if (json.get("player").isJsonObject() && json.get("player").getAsJsonObject().has("stats") && json.get("player").getAsJsonObject().get("stats").getAsJsonObject().has("BuildBattle")) {
+            JsonObject bbJson = json.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("BuildBattle").getAsJsonObject();
+            chain.append(new PlainText(Rank.rank(json.get("player").getAsJsonObject()) + " ")); //玩家名称前缀
+            chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
             chain.append(new PlainText(" | 建筑大师数据: "));
 
             if (bbJson.has("score")) {
@@ -47,7 +45,7 @@ public class BuildBattle {
                 String[] leaders = l2.toArray(new String[10]);
                 int lead = 1;
                 for (String l : leaders) {
-                    if (Objects.equals(playerJson.get("uuid").getAsString(), l.replaceAll("\"", "").replaceAll("-", ""))) {
+                    if (Objects.equals(json.get("player").getAsJsonObject().get("uuid").getAsString(), l.replaceAll("\"", "").replaceAll("-", ""))) {
                         chain.append(new PlainText("#" + lead + "建筑师"));
                         break;
                     } else {

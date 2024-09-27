@@ -28,7 +28,7 @@ public class Fish {
         MessageChainBuilder ice = new MessageChainBuilder();*/
 
         //判断是否存在fishing数据
-        if (json.get("player").getAsJsonObject().has("stats") &&
+        if (json.get("player").isJsonObject() && json.get("player").getAsJsonObject().has("stats") &&
                 json.get("player").getAsJsonObject().get("stats").getAsJsonObject().has("MainLobby") &&
                 json.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("MainLobby").getAsJsonObject().has("fishing")) {
             JsonObject playerJson = json.get("player").getAsJsonObject();

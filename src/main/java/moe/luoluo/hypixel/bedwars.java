@@ -22,18 +22,13 @@ public class Bedwars {
             context.sendMessage("玩家不存在");
             return;
         } else json = Api.hypixel("player", uuid);
-
-        JsonObject playerJson = json.get("player").getAsJsonObject();
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");
-
-
-        chain.append(new PlainText(Rank.rank(playerJson) + " ")); //玩家名称前缀
-        chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
-        chain.append(new PlainText(" | 起床战争数据:\n"));
-
-        if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("Bedwars")) {
+        if (json.get("player").isJsonObject() && json.get("player").getAsJsonObject().has("stats") && json.get("player").getAsJsonObject().get("stats").getAsJsonObject().has("Bedwars")) {
             JsonObject bwJson = json.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("Bedwars").getAsJsonObject();
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
+            chain.append(new PlainText(Rank.rank(json.get("player").getAsJsonObject()) + " ")); //玩家名称前缀
+            chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
+            chain.append(new PlainText(" | 起床战争数据:\n"));
             int k = 0;
             int d = 0;
 
