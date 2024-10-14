@@ -77,7 +77,7 @@ public class Counts {
             }
         }
 
-        if (context.getSubject() != null) {
+        if (type.equals("all") && context.getSubject() != null) {
             ForwardMessageBuilder builder = new ForwardMessageBuilder(context.getSubject());
             builder.add(Objects.requireNonNull(context.getBot()).getId(), context.getBot().getNick(), chain.build());
             context.sendMessage(builder.build());
