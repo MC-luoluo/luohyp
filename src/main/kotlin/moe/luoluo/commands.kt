@@ -60,6 +60,12 @@ class Hypixel : CompositeCommand(
         Guild.guild(context, "id", player, type)
     }
 
+    @SubCommand("list")
+    @Description("查询各游戏玩家计数")
+    suspend fun CommandSender.list() {
+        sendMessage(Counts.playerList())
+    }
+
     @SubCommand("murdermystery", "mm")
     @Description("查询玩家的密室杀手数据")
     fun mm(context: CommandSender, player: String, type: String = "") {

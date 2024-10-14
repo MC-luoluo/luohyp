@@ -306,7 +306,7 @@ public class Guild {
                     gameExp.append(new PlainText(formatExp(expType.get("SURVIVAL_GAMES").getAsFloat())));
                 }
                 if (expType.has("WOOL_GAMES")) {
-                    gameExp.append(new PlainText("\n羊毛战争: "));
+                    gameExp.append(new PlainText("\n羊毛游戏: "));
                     gameExp.append(new PlainText(formatExp(expType.get("WOOL_GAMES").getAsFloat())));
                 }
                 if (expType.has("PIT")) {
