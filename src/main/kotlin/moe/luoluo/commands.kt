@@ -62,8 +62,8 @@ class Hypixel : CompositeCommand(
 
     @SubCommand("list")
     @Description("查询各游戏玩家计数")
-    suspend fun CommandSender.list() {
-        sendMessage(Counts.playerList())
+    fun list(context: CommandSender, type: String = "") {
+        Counts.playerList(context, type)
     }
 
     @SubCommand("murdermystery", "mm")
@@ -104,9 +104,10 @@ class Hypixel : CompositeCommand(
 
 }
 
-class MCSkin : SimpleCommand(luohyp.INSTANCE, "mcskin",
-    description = "获取玩家的skin文件") {
-    // ...
+class MCSkin : SimpleCommand(
+    luohyp.INSTANCE, "mcskin",
+    description = "获取玩家的skin文件"
+) {
     @Handler
     fun mcskin(context: CommandSender, player: String) {
         MCskin.mcskin(context, player)
