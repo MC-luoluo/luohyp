@@ -38,6 +38,15 @@ object Data : AutoSavePluginData("data") {
     }
 
     @JvmStatic
+    fun getHypixelDataTime(type: String, uuid: String): String {
+        val idMap = HypixelData[uuid]
+        idMap ?: return "null"
+        val typePair = idMap[type]
+        typePair ?: return "null"
+        return typePair.first.toString()
+    }
+
+    @JvmStatic
     fun setHypixelData(type: String, uuid: String, json: JsonObject) {
         val uuidMap = HypixelData.getOrPut(uuid) { mutableMapOf() }
         uuidMap[type] = (System.currentTimeMillis() to json.toString())

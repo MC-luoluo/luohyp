@@ -2,6 +2,7 @@ package moe.luoluo.hypixel;
 
 import com.google.gson.JsonObject;
 import moe.luoluo.Api;
+import moe.luoluo.ApiResult;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -10,6 +11,9 @@ import net.mamoe.mirai.message.data.PlainText;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Objects;
 
 public class Duels {
@@ -19,17 +23,27 @@ public class Duels {
         MessageChainBuilder team = new MessageChainBuilder();
         MessageChainBuilder other = new MessageChainBuilder();
 
+        ApiResult result;
         JsonObject json;
         String uuid = Api.mojang(player, "uuid");
         if (Objects.equals(uuid, "NotFound")) {
             context.sendMessage("玩家不存在");
             return;
-        } else json = Api.hypixel("player", uuid);
+        } else {
+            result = Api.hypixel("player", uuid);
+            json = result.getJson();
+        }
 
         JsonObject playerJson;
         JsonObject duelsJson;
         JsonObject achievements;
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
+
+        if (result.getTime() != -1) {
+            Instant instant = Instant.ofEpochMilli(result.getTime());
+            LocalDateTime localDate = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+            main.append("\uD83D\uDFE5").append(localDate.toString()).append("\n");
+        }
 
         if (json.get("player").isJsonObject()) {
             playerJson = json.get("player").getAsJsonObject();

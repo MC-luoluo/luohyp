@@ -47,15 +47,15 @@ public class Api {
 
     }
 
-    public static JsonObject hypixel(String type) throws URISyntaxException, IOException {
+    public static ApiResult hypixel(String type) throws URISyntaxException, IOException {
         return hypixel(type, "", "");
     }
 
-    public static JsonObject hypixel(String type, String uuid) throws URISyntaxException, IOException {
+    public static ApiResult hypixel(String type, String uuid) throws URISyntaxException, IOException {
         return hypixel(type, "uuid", uuid);
     }
 
-    public static JsonObject hypixel(String type, String parameter, String value) throws URISyntaxException, IOException {
+    public static ApiResult hypixel(String type, String parameter, String value) throws URISyntaxException, IOException {
         URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPIkey() + "&" + parameter + "=" + URLEncoder.encode(value, StandardCharsets.UTF_8));
         JsonObject result;
         try {
@@ -63,16 +63,15 @@ public class Api {
         } catch (com.google.gson.JsonSyntaxException e) {
             if (!Data.getHypixelData(type, value).equals("null")) {
                 logger.error("请求失败，返回本地缓存", e);
-                return new Gson().fromJson(Data.getHypixelData(type, value), JsonObject.class);
+                return new ApiResult(new Gson().fromJson(Data.getHypixelData(type, value), JsonObject.class),Long.parseLong(Data.getHypixelDataTime(type, value)));
             }
             if (config.INSTANCE.getHypixelAPIkey().isEmpty()) {
                 throw new JsonSyntaxException("HypixelAPIkey为空，请前往配置文件填写HypixelAPIkey");
-            } else {
-                throw new JsonSyntaxException(e);
             }
+            throw new JsonSyntaxException(e);
         }
         Data.setHypixelData(type, value, result);
-        return result;
+        return new ApiResult(result,-1);
     }
 
     public static String request(URI uri) throws MalformedURLException {
@@ -81,6 +80,7 @@ public class Api {
         StringBuilder result = new StringBuilder();
         try {
             URLConnection connection = url.openConnection();
+            connection.setConnectTimeout(5000);
             connection.setRequestProperty("accept", "*/*");
             connection.setRequestProperty("connection", "Keep-Alive");
             connection.setRequestProperty("user-agent", "Mozilla/5.0 (Linux x86_64; rv:129.0)");
@@ -107,6 +107,7 @@ public class Api {
 
     //格式化经验值
     static DecimalFormat decimalFormat = new DecimalFormat("0.00");
+
     public static String formatExp(float ex) {
         if (ex >= 100000 & ex < 1000000) {
             return decimalFormat.format(ex / 1000) + "K";
