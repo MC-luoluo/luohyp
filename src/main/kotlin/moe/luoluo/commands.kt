@@ -74,8 +74,8 @@ class Hypixel : CompositeCommand(
 
     @SubCommand("player")
     @Description("查询玩家的Hypixel总体数据")
-    fun player(context: CommandSender, playerName: String) {
-        Player.player(context, playerName)
+    fun player(context: CommandSender, playerName: String, type: String = "") {
+        Player.player(context, playerName, type)
     }
 
     @SubCommand("skywars", "sw")

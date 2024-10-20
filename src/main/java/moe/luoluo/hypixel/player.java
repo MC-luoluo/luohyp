@@ -4,9 +4,9 @@ import com.google.gson.JsonObject;
 import moe.luoluo.Api;
 import moe.luoluo.ApiResult;
 import net.mamoe.mirai.console.command.CommandSender;
+import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
-import net.mamoe.mirai.message.data.PlainText;
 import net.mamoe.mirai.utils.ExternalResource;
 
 import java.io.ByteArrayOutputStream;
@@ -25,7 +25,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class Player {
-    public static void player(CommandSender context, String player) throws IOException, URISyntaxException {
+    public static void player(CommandSender context, String player, String type) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         JsonObject playerJson;
         JsonObject giftingMeta;
@@ -51,7 +51,7 @@ public class Player {
 
         JsonObject guild = Api.hypixel("guild", "player", Api.mojang(player, "uuid")).getJson();
         if (!json.get("player").isJsonObject()) {
-            chain.append(new PlainText("该玩家的Hypixel数据为空"));
+            chain.append("该玩家的Hypixel数据为空");
             context.sendMessage(chain.build());
             return;
         }
@@ -63,107 +63,103 @@ public class Player {
         } else {
             online = null;
         }
-        chain.append(new PlainText(Rank.rank(playerJson) + " ")); //玩家名称前缀
-        chain.append(new PlainText(playerJson.get("displayname").getAsString()));
+        chain.append(Rank.rank(playerJson)).append(" "); //玩家名称前缀
+        chain.append(playerJson.get("displayname").getAsString());
 
         if (online != null && online.has("session")) {
-            chain.append(new PlainText("\n状态: "));
             JsonObject session = online.get("session").getAsJsonObject();
             if (session.get("online").getAsBoolean()) {
-                chain.append(new PlainText("在线\uD83D\uDFE2"));
-                chain.append(new PlainText("\n" + session.get("gameType").getAsString()));
-                {
-                    if (session.has("mode")) {
-                        chain.append(new PlainText(" | "));
-                        chain.append(new PlainText(session.get("mode").getAsString()));
-                    }
-                    if (session.has("map")) {
-                        chain.append(new PlainText(" | "));
-                        chain.append(new PlainText(session.get("map").getAsString()));
-                    }
+                chain.append("  在线\uD83D\uDFE2").append("\n").append(session.get("gameType").getAsString());
+                if (session.has("mode")) {
+                    chain.append(" | ").append(session.get("mode").getAsString());
+                }
+                if (session.has("map")) {
+                    chain.append(" | ").append(session.get("map").getAsString());
                 }
             } else if (playerJson.get("lastLogin").getAsInt() > playerJson.get("lastLogout").getAsInt()) {
-                chain.append(new PlainText("离线\ud83d\udfe8"));
+                chain.append("  离线\ud83d\udfe8");
             } else {
                 if (playerJson.has("lastLogin"))
-                    chain.append(new PlainText("离线\uD83D\uDD34"));
-                else chain.append(new PlainText("离线\ud83d\udfe5"));
+                    chain.append("  离线\uD83D\uDD34");
+                else chain.append("  离线\ud83d\udfe5");
             }
+        } else chain.append("  \uD83D\uDD34");
 
-        } else chain.append(new PlainText("  \uD83D\uDD34"));
+        chain.append("\n成就点数: ");
+        if (playerJson.has("achievementPoints"))
+            chain.append(String.valueOf(playerJson.get("achievementPoints").getAsInt()));
+        else chain.append("null");
 
-        chain.append(new PlainText("\nRANK赠送数: "));
-        if (playerJson.has("giftingMeta")) {
-            giftingMeta = playerJson.get("giftingMeta").getAsJsonObject();
-            if (giftingMeta.has("ranksGiven")) {
-                chain.append(new PlainText(String.valueOf(giftingMeta.get("ranksGiven").getAsInt())));
-            } else chain.append(new PlainText("0"));
-        } else chain.append(new PlainText("0"));
 
-        chain.append(new PlainText("\n首次登录: "));
-        if (playerJson.has("firstLogin")) {
-            chain.append(new PlainText(simpleDateFormat.format(new Date(playerJson.get("firstLogin").getAsLong()))));
-        } else {
-            chain.append(new PlainText("null"));
-        }
+        chain.append(" | 人品值: ");
+        if (playerJson.has("karma"))
+            chain.append(String.valueOf(playerJson.get("karma").getAsInt()));
+        else chain.append("null");
 
-        if (playerJson.has("lastLogin")) {
-            chain.append(new PlainText("\n最后登录: "));
-            chain.append(new PlainText(simpleDateFormat.format(new Date(playerJson.get("lastLogin").getAsLong()))));
-        }
 
-        if (playerJson.has("lastLogout")) {
-            chain.append(new PlainText("\n最后退出: "));
-            chain.append(new PlainText(simpleDateFormat.format(new Date(playerJson.get("lastLogout").getAsLong()))));
-        } else if (playerJson.has("lastClaimedReward")) {
-            chain.append(new PlainText("\n最后领取每日奖励: "));
-            chain.append(new PlainText(simpleDateFormat.format(new Date(playerJson.get("lastClaimedReward").getAsLong()))));
-        }
-
-        chain.append(new PlainText("\n使用的语言: "));
-        if (playerJson.has("userLanguage")) {
-            chain.append(new PlainText(playerJson.get("userLanguage").getAsString()));
-        } else {
-            chain.append(new PlainText("English"));
-        }
-
-        chain.append(new PlainText("\n所属公会: "));
-        if (!guild.get("guild").isJsonNull()) {
-            chain.append(new PlainText(guild.get("guild").getAsJsonObject().get("name").getAsString()));
-        } else {
-            chain.append(new PlainText("无"));
-        }
-
-        chain.append(new PlainText("\nHypixel等级: "));
+        chain.append("\nHypixel等级: ");
         if (playerJson.has("networkExp")) {
             String ex = playerJson.get("networkExp").toString();
             long l = (long) Double.parseDouble(ex);
             double xp = Math.sqrt((0.0008 * l) + 12.25) - 2.5;
+            chain.append(decimalFormat.format(xp));
+        } else chain.append("null");
 
-            chain.append(new PlainText(decimalFormat.format(xp)));
-        } else {
-            chain.append(new PlainText("null"));
+        chain.append("\n所属公会: ");
+        if (!guild.get("guild").isJsonNull())
+            chain.append(guild.get("guild").getAsJsonObject().get("name").getAsString());
+        else chain.append("无");
+
+
+        chain.append("\n使用的语言: ");
+        if (playerJson.has("userLanguage"))
+            chain.append(playerJson.get("userLanguage").getAsString());
+        else chain.append("English");
+
+        chain.append("\nRANK赠送数: ");
+        if (playerJson.has("giftingMeta")) {
+            giftingMeta = playerJson.get("giftingMeta").getAsJsonObject();
+            if (giftingMeta.has("ranksGiven"))
+                chain.append(String.valueOf(giftingMeta.get("ranksGiven").getAsInt()));
+            else chain.append("0");
+        } else chain.append("0");
+
+        chain.append("\n首次登录: ");
+        if (playerJson.has("firstLogin"))
+            chain.append(simpleDateFormat.format(new Date(playerJson.get("firstLogin").getAsLong())));
+        else
+            chain.append("null");
+
+        if (playerJson.has("lastLogin"))
+            chain.append("\n最后登录: ").append(simpleDateFormat.format(new Date(playerJson.get("lastLogin").getAsLong())));
+
+        if (playerJson.has("lastLogout"))
+            chain.append("\n最后退出: ").append(simpleDateFormat.format(new Date(playerJson.get("lastLogout").getAsLong())));
+        else if (playerJson.has("lastClaimedReward"))
+            chain.append("\n最后领取每日奖励: ").append(simpleDateFormat.format(new Date(playerJson.get("lastClaimedReward").getAsLong())));
+
+        if (playerJson.has("mostRecentGameType"))
+            chain.append("\n最近游戏: ").append(playerJson.get("mostRecentGameType").getAsString());
+
+
+        if (Objects.equals(type, "all") && playerJson.has("socialMedia") && playerJson.get("socialMedia").getAsJsonObject().has("links")) {
+            JsonObject links = playerJson.get("socialMedia").getAsJsonObject().get("links").getAsJsonObject().getAsJsonObject();
+            chain.append("\n链接的社交媒体账号: ");
+            if (links.has("DISCORD"))
+                chain.append("\n| Discord: ").append(links.get("DISCORD").getAsString());
+            if (links.has("HYPIXEL"))
+                chain.append("\n| Hypixel论坛: ").append(links.get("HYPIXEL").getAsString());
+            if (links.has("YOUTUBE"))
+                chain.append("\n| YouTube: ").append(links.get("YOUTUBE").getAsString());
+            if (links.has("TWITTER"))
+                chain.append("\n| Twitter: ").append(links.get("TWITTER").getAsString());
+            if (links.has("TWITCH"))
+                chain.append("\n| Twitch: ").append(links.get("TWITCH").getAsString());
+            if (links.has("INSTAGRAM"))
+                chain.append("\n| Instagram: ").append(links.get("INSTAGRAM").getAsString());
+            if (links.has("TIKTOK"))
+                chain.append("\n| TikTok: ").append(links.get("TIKTOK").getAsString());
         }
-
-        if (playerJson.has("mostRecentGameType")) {
-            chain.append(new PlainText("\n最近游戏: "));
-            chain.append(new PlainText(playerJson.get("mostRecentGameType").getAsString()));
-        }
-
-        chain.append(new PlainText("\n成就点数: "));
-        if (playerJson.has("achievementPoints")) {
-            chain.append(new PlainText(String.valueOf(playerJson.get("achievementPoints").getAsInt())));
-        } else {
-            chain.append(new PlainText("null"));
-        }
-
-        chain.append(new PlainText(" | 人品值: "));
-        if (playerJson.has("karma")) {
-            chain.append(new PlainText(String.valueOf(playerJson.get("karma").getAsInt())));
-        } else {
-            chain.append(new PlainText("null"));
-        }
-
 
         URI uri;
         byte[] data;
@@ -185,7 +181,7 @@ public class Player {
             data = outStream.toByteArray();
 
         } catch (IOException e) {
-            chain.append(new PlainText("\n\n皮肤图片加载失败"));
+            chain.append("\n\n皮肤图片加载失败");
             context.sendMessage(chain.build());
             System.out.println("以对下方报错进行处理, 若 crafatar.com 正常访问请联系作者");
             throw new RuntimeException(e);
@@ -195,6 +191,10 @@ public class Player {
             Image img = context.getSubject().uploadImage(ExternalResource.create(data));
             chain.append(img);
         }
-        context.sendMessage(chain.build());
+        if (type.equals("all") && context.getSubject() != null) {
+            ForwardMessageBuilder builder = new ForwardMessageBuilder(context.getSubject());
+            builder.add(Objects.requireNonNull(context.getBot()).getId(), context.getBot().getNick(), chain.build());
+            context.sendMessage(builder.build());
+        } else context.sendMessage(chain.build());
     }
 }
