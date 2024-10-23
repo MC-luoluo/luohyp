@@ -76,44 +76,21 @@ public class BuildBattle {
                             level++;
                         } else break;
                     }
-                    switch (level) {
-                        case 1:
-                            chain.append(new PlainText("初来乍到"));
-                            break;
-                        case 2:
-                            chain.append(new PlainText("未经雕琢"));
-                            break;
-                        case 3:
-                            chain.append(new PlainText("初窥门径"));
-                            break;
-                        case 4:
-                            chain.append(new PlainText("学有所成"));
-                            break;
-                        case 5:
-                            chain.append(new PlainText("驾轻就熟"));
-                            break;
-                        case 6:
-                            chain.append(new PlainText("历练老成"));
-                            break;
-                        case 7:
-                            chain.append(new PlainText("技艺精湛"));
-                            break;
-                        case 8:
-                            chain.append(new PlainText("炉火纯青"));
-                            break;
-                        case 9:
-                            chain.append(new PlainText("技惊四座"));
-                            break;
-                        case 10:
-                            chain.append(new PlainText("巧夺天工"));
-                            break;
-                        case 11:
-                            chain.append(new PlainText("闻名于世"));
-                            break;
-                        case 12:
-                            chain.append(new PlainText("建筑大师"));
-                            break;
-                    }
+                    chain.append(switch (level) {
+                        case 1 -> "初来乍到";
+                        case 2 -> "未经雕琢";
+                        case 3 -> "初窥门径";
+                        case 4 -> "学有所成";
+                        case 5 -> "驾轻就熟";
+                        case 6 -> "历练老成";
+                        case 7 -> "技艺精湛";
+                        case 8 -> "炉火纯青";
+                        case 9 -> "技惊四座";
+                        case 10 -> "巧夺天工";
+                        case 11 -> "闻名于世";
+                        case 12 -> "建筑大师";
+                        default -> "null";
+                    });
                     break;
                 }
             }
