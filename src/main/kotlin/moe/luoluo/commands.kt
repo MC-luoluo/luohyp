@@ -96,10 +96,15 @@ class Hypixel : CompositeCommand(
         Tournament.tourney(context, player, type)
     }
 
-    @SubCommand("wool", "wg")
+    @SubCommand("wg")
     @Description("查询玩家的羊毛游戏数据")
-    fun wool(context: CommandSender, player: String, type: String = "") {
+    fun wg(context: CommandSender, player: String, type: String = "") {
         WoolGames.wool(context, player, type)
+    }
+    @SubCommand("sheep")
+    @Description("查询玩家的绵羊战争数据")
+    fun sheep(context: CommandSender, player: String) {
+        WoolGames.wool(context, player, "sheep")
     }
 
 }
