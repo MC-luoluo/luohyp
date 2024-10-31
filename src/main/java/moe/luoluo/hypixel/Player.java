@@ -1,6 +1,8 @@
 package moe.luoluo.hypixel;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import moe.luoluo.Api;
 import moe.luoluo.ApiResult;
 import net.mamoe.mirai.console.command.CommandSender;
@@ -12,6 +14,7 @@ import net.mamoe.mirai.utils.ExternalResource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,9 +23,9 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
+
+import static moe.luoluo.Api.formatExp;
 
 public class Player {
     public static void player(CommandSender context, String player, String type) throws IOException, URISyntaxException {
@@ -93,7 +96,7 @@ public class Player {
 
         chain.append(" | 人品值: ");
         if (playerJson.has("karma"))
-            chain.append(String.valueOf(playerJson.get("karma").getAsInt()));
+            chain.append(formatExp(playerJson.get("karma").getAsInt()));
         else chain.append("null");
 
 
@@ -104,11 +107,6 @@ public class Player {
             double xp = Math.sqrt((0.0008 * l) + 12.25) - 2.5;
             chain.append(decimalFormat.format(xp));
         } else chain.append("null");
-
-        chain.append("\n所属公会: ");
-        if (!guild.get("guild").isJsonNull())
-            chain.append(guild.get("guild").getAsJsonObject().get("name").getAsString());
-        else chain.append("无");
 
 
         chain.append("\n使用的语言: ");
@@ -123,6 +121,24 @@ public class Player {
                 chain.append(String.valueOf(giftingMeta.get("ranksGiven").getAsInt()));
             else chain.append("0");
         } else chain.append("0");
+
+        chain.append("\n所属公会: ");
+        if (!guild.get("guild").isJsonNull()) {
+            chain.append(guild.get("guild").getAsJsonObject().get("name").getAsString());
+
+            Gson gson = new Gson();
+            Type memberListType = new TypeToken<List<Member>>() {}.getType();
+            List<Member> members = gson.fromJson(guild.get("guild").getAsJsonObject().get("members").getAsJsonArray(), memberListType);
+
+            Optional<Member> member = members.stream()
+                    .filter(m -> m.uuid.equals(uuid))
+                    .findFirst();
+
+            member.ifPresent(m -> {
+                chain.append(" (").append(m.rank).append(")");
+            });
+        }
+        else chain.append("无");
 
         chain.append("\n首次登录: ");
         if (playerJson.has("firstLogin"))
@@ -197,4 +213,9 @@ public class Player {
             context.sendMessage(builder.build());
         } else context.sendMessage(chain.build());
     }
+}
+
+class Member {
+    String uuid;
+    String rank;
 }

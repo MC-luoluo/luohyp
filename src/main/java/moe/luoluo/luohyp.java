@@ -8,7 +8,7 @@ public final class luohyp extends JavaPlugin {
     public static final luohyp INSTANCE = new luohyp();
 
     private luohyp() {
-        super(new JvmPluginDescriptionBuilder("moe.luoluo.luohyp", "1.0.6")
+        super(new JvmPluginDescriptionBuilder("moe.luoluo.luohyp", "1.0.7")
                 .name("luphyp")
                 .author("MCluoluo")
                 .build());

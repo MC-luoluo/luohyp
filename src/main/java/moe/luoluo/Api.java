@@ -58,12 +58,15 @@ public class Api {
     public static ApiResult hypixel(String type, String parameter, String value) throws URISyntaxException, IOException {
         URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPIkey() + "&" + parameter + "=" + URLEncoder.encode(value, StandardCharsets.UTF_8));
         JsonObject result;
+        String s = "";
         try {
-            result = new Gson().fromJson(request(uri), JsonObject.class);
-        } catch (com.google.gson.JsonSyntaxException e) {
+            s = request(uri);
+            result = new Gson().fromJson(s, JsonObject.class);
+        } catch (JsonSyntaxException e) {
+            logger.warn("请求结果: {}", s);
             if (!Data.getHypixelData(type, value).equals("null")) {
                 logger.error("请求失败，返回本地缓存", e);
-                return new ApiResult(new Gson().fromJson(Data.getHypixelData(type, value), JsonObject.class),Long.parseLong(Data.getHypixelDataTime(type, value)));
+                return new ApiResult(new Gson().fromJson(Data.getHypixelData(type, value), JsonObject.class), Long.parseLong(Data.getHypixelDataTime(type, value)));
             }
             if (config.INSTANCE.getHypixelAPIkey().isEmpty()) {
                 throw new JsonSyntaxException("HypixelAPIkey为空，请前往配置文件填写HypixelAPIkey");
@@ -71,19 +74,30 @@ public class Api {
             throw new JsonSyntaxException(e);
         }
         Data.setHypixelData(type, value, result);
-        return new ApiResult(result,-1);
+        return new ApiResult(result, -1);
     }
 
     public static String request(URI uri) throws MalformedURLException {
+        System.setProperty("java.net.preferIPv6Addresses", "true");
+
+        Proxy proxy = null;
+        if (!config.INSTANCE.getProxy().isEmpty()) {
+            proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(config.INSTANCE.getProxy(), Integer.parseInt(config.INSTANCE.getProxyPort())));
+        }
         URL url = uri.toURL();
         BufferedReader in = null;
         StringBuilder result = new StringBuilder();
         try {
-            URLConnection connection = url.openConnection();
-            connection.setConnectTimeout(5000);
-            connection.setRequestProperty("accept", "*/*");
-            connection.setRequestProperty("connection", "Keep-Alive");
-            connection.setRequestProperty("user-agent", "Mozilla/5.0 (Linux x86_64; rv:129.0)");
+            URLConnection connection;
+            if (proxy != null) {
+                connection = url.openConnection(proxy);
+            } else {
+                connection = url.openConnection();
+            }
+            connection.setConnectTimeout(10000);
+            connection.setRequestProperty("Accept", "*/*");
+            connection.setRequestProperty("Connection", "keep-alive");
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0");
             connection.connect();
 
             String line;
