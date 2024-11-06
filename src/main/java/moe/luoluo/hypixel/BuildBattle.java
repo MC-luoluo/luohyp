@@ -53,7 +53,9 @@ public class BuildBattle {
 
         if (bbJson.has("score")) {
             int score = bbJson.get("score").getAsInt();
-            chain.append(new PlainText("\n称号: "));
+            chain.append(new PlainText("\n积分: "));
+            chain.append(new PlainText(String.valueOf(score)));
+            chain.append(new PlainText(" | 称号: "));
             JsonArray l1 = leader.get("leaderboards").getAsJsonObject().get("BUILD_BATTLE").getAsJsonArray().get(0).getAsJsonObject().get("leaders").getAsJsonArray();
             List<String> l2 = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
@@ -69,7 +71,7 @@ public class BuildBattle {
                     lead++;
                 }
                 if (lead > 10) {
-                    int[] scoreNeeded = {100, 250, 500, 1000, 2000, 3500, 5000, 7500, 10000, 15000, 20000};
+                    int[] scoreNeeded = {100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000, 20000, 350000, 500000};
                     int level = 1;
                     for (int j : scoreNeeded) {
                         if (score >= j) {
@@ -77,25 +79,25 @@ public class BuildBattle {
                         } else break;
                     }
                     chain.append(switch (level) {
-                        case 1 -> "初来乍到";
-                        case 2 -> "未经雕琢";
-                        case 3 -> "初窥门径";
-                        case 4 -> "学有所成";
-                        case 5 -> "驾轻就熟";
-                        case 6 -> "历练老成";
-                        case 7 -> "技艺精湛";
-                        case 8 -> "炉火纯青";
-                        case 9 -> "技惊四座";
-                        case 10 -> "巧夺天工";
-                        case 11 -> "闻名于世";
-                        case 12 -> "建筑大师";
+                        case 1 -> "Prospect";
+                        case 2 -> "Rookie (初来乍到)";
+                        case 3 -> "Amateur (初窥门径)";
+                        case 4 -> "Apprentice (学有所成)";
+                        case 5 -> "Trained (技艺精湛)";
+                        case 6 -> "Experienced (驾轻就熟)";
+                        case 7 -> "Seasoned (历练老成)";
+                        case 8 -> "Skilled (炉火纯青)";
+                        case 9 -> "Talented (技惊四座)";
+                        case 10 -> "Professional (巧夺天工)";
+                        case 11 -> "Artisan";
+                        case 12 -> "Expert (闻名于世)";
+                        case 13 -> "Master (建筑大师)";
+                        case 14 -> "Grandmaster (最强王者)";
                         default -> "null";
                     });
                     break;
                 }
             }
-            chain.append(new PlainText(" | 积分: "));
-            chain.append(new PlainText(String.valueOf(score)));
         }
 
         chain.append(new PlainText("\n硬币: "));

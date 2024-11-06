@@ -44,7 +44,7 @@ public class MCskin {
         chain.append(json.get("id").getAsString());
 
         URI uri;
-        byte[] data = new byte[0];
+        byte[] data;
         try {
             uri = new URI("https://crafatar.com/renders/body/" + uuid + "?scale=10" + "&overlay");
             HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();

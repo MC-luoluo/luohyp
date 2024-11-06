@@ -134,9 +134,7 @@ public class Player {
                     .filter(m -> m.uuid.equals(uuid))
                     .findFirst();
 
-            member.ifPresent(m -> {
-                chain.append(" (").append(m.rank).append(")");
-            });
+            member.ifPresent(m -> chain.append(" (").append(m.rank).append(")"));
         }
         else chain.append("无");
 
