@@ -71,7 +71,7 @@ public class BuildBattle {
                     lead++;
                 }
                 if (lead > 10) {
-                    int[] scoreNeeded = {100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000, 20000, 350000, 500000};
+                    int[] scoreNeeded = {100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000, 200000, 350000, 500000};
                     int level = 1;
                     for (int j : scoreNeeded) {
                         if (score >= j) {
