@@ -100,7 +100,7 @@ public class BuildBattle {
             }
         }
 
-        chain.append(new PlainText("\n硬币: "));
+        chain.append(new PlainText("\n代币: "));
         if (bbJson.has("coins")) {
             chain.append(new PlainText(String.valueOf(bbJson.get("coins").getAsInt())));
         } else {
@@ -153,28 +153,27 @@ public class BuildBattle {
             chain.append(new PlainText("0"));
         }
 
-        chain.append(new PlainText("\n单人1.8胜场: "));
+        chain.append(new PlainText("\n单人模式胜场: "));
         if (bbJson.has("wins_solo_normal")) {
             chain.append(new PlainText(String.valueOf(bbJson.get("wins_solo_normal").getAsInt())));
         } else {
             chain.append(new PlainText("0"));
         }
-        chain.append(new PlainText(" | 单人1.14胜场: "));
-        if (bbJson.has("wins_solo_normal_latest")) {
-            chain.append(new PlainText(String.valueOf(bbJson.get("wins_solo_normal_latest").getAsInt())));
-        } else {
-            chain.append(new PlainText("0"));
-        }
-
-        chain.append(new PlainText("\n团队模式胜场: "));
+        chain.append(new PlainText(" | 团队模式胜场: "));
         if (bbJson.has("wins_teams_normal")) {
             chain.append(new PlainText(String.valueOf(bbJson.get("wins_teams_normal").getAsInt())));
         } else {
             chain.append(new PlainText("0"));
         }
-        chain.append(new PlainText(" | 高手模式胜场: "));
+        chain.append(new PlainText("\n高手模式胜场: "));
         if (bbJson.has("wins_solo_pro")) {
             chain.append(new PlainText(String.valueOf(bbJson.get("wins_solo_pro").getAsInt())));
+        } else {
+            chain.append(new PlainText("0"));
+        }
+        chain.append(new PlainText("\nSpeed Builders胜场: "));
+        if (bbJson.has("wins_speed_builders")) {
+            chain.append(new PlainText(String.valueOf(bbJson.get("wins_speed_builders").getAsInt())));
         } else {
             chain.append(new PlainText("0"));
         }

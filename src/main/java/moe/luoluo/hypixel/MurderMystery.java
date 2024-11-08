@@ -84,6 +84,22 @@ public class MurderMystery {
                 )));
             } else chain.append(new PlainText("null"));
 
+            if (mmJson.has("murderer_chance")||mmJson.has("detective_chance")||mmJson.has("alpha_chance")) {
+                chain.append("\n");
+                if (mmJson.has("murderer_chance")) {
+                    chain.append("杀手几率: ").append(String.valueOf(mmJson.get("murderer_chance").getAsInt()));
+                    if (mmJson.has("detective_chance") || mmJson.has("alpha_chance"))
+                        chain.append(" | ");
+                }
+                if (mmJson.has("detective_chance")) {
+                    chain.append("侦探几率: ").append(String.valueOf(mmJson.get("detective_chance").getAsInt()));
+                    if (mmJson.has("alpha_chance"))
+                        chain.append(" | ");
+                }
+                if (mmJson.has("alpha_chance"))
+                    chain.append("母体几率: ").append(String.valueOf(mmJson.get("alpha_chance").getAsInt()));
+            }
+
             //侦探胜场
             if (mmJson.has("detective_wins") && mmJson.has("games")) {
                 chain.append(new PlainText("\n侦探胜场: "));

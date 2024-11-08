@@ -24,7 +24,7 @@ public class Api {
             default -> new URI("https://api.mojang.com/users/profiles/minecraft/" + arg1);
         };
         String result = request(uri);
-        if (result.isEmpty()) {
+        /*if (result.isEmpty()) {
             return "";
         } else if (result.startsWith("java.net.ConnectException:")) {
             return "TimedOut";
@@ -36,9 +36,9 @@ public class Api {
             return "reset";
         } else if (result.startsWith("javax.net.ssl.SSLHandshakeException:")) {
             return "sslEr";
-        }
+        }*/
         Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-        JsonObject json = gson.fromJson(request(uri), JsonObject.class);
+        JsonObject json = gson.fromJson(result, JsonObject.class);
         if (get.equals("uuid")) {
             return json.get("id").getAsString();
         } else if (get.equals("name")) {
