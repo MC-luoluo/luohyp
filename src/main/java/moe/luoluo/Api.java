@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.text.DecimalFormat;
 
 
 public class Api {
@@ -24,7 +23,7 @@ public class Api {
             default -> new URI("https://api.mojang.com/users/profiles/minecraft/" + arg1);
         };
         String result = request(uri);
-        /*if (result.isEmpty()) {
+        if (result.isEmpty()) {
             return "";
         } else if (result.startsWith("java.net.ConnectException:")) {
             return "TimedOut";
@@ -36,7 +35,7 @@ public class Api {
             return "reset";
         } else if (result.startsWith("javax.net.ssl.SSLHandshakeException:")) {
             return "sslEr";
-        }*/
+        }
         Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
         JsonObject json = gson.fromJson(result, JsonObject.class);
         if (get.equals("uuid")) {
@@ -117,20 +116,5 @@ public class Api {
             }
         }
         return result.toString();
-    }
-
-    //格式化经验值
-    static DecimalFormat decimalFormat = new DecimalFormat("0.00");
-
-    public static String formatExp(float ex) {
-        if (ex >= 100000 & ex < 1000000) {
-            return decimalFormat.format(ex / 1000) + "K";
-        } else if (ex > 1000000 & ex < 1000000000) {
-            return decimalFormat.format(ex / 1000000) + "M";
-        } else if (ex > 1000000000) {
-            return decimalFormat.format(ex / 1000000000) + "B";
-        } else {
-            return String.valueOf((int) ex);
-        }
     }
 }

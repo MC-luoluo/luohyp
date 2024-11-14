@@ -10,18 +10,19 @@ import net.mamoe.mirai.message.data.PlainText;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Objects;
+
+import static moe.luoluo.util.Format.decimalFormat;
+import static moe.luoluo.util.Format.largeNumFormat;
 
 public class Arcade {
     public static void arc(CommandSender context, String player, String type) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         JsonObject acdJson;
         JsonObject achievements;
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
         ApiResult result;
         JsonObject json;
@@ -56,7 +57,7 @@ public class Arcade {
         //硬币
         chain.append(new PlainText("\n街机硬币: "));
         if (acdJson.has("coins")) {
-            chain.append(new PlainText(String.valueOf(acdJson.get("coins").getAsInt())));
+            chain.append(new PlainText(largeNumFormat(acdJson.get("coins").getAsInt())));
         } else chain.append(new PlainText("null"));
 
         //总胜利数

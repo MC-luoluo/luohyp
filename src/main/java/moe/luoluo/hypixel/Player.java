@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import moe.luoluo.Api;
 import moe.luoluo.ApiResult;
+import moe.luoluo.util.Member;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.Image;
@@ -25,7 +26,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
-import static moe.luoluo.Api.formatExp;
+import static moe.luoluo.util.Format.largeNumFormat;
 
 public class Player {
     public static void player(CommandSender context, String player, String type) throws IOException, URISyntaxException {
@@ -96,7 +97,7 @@ public class Player {
 
         chain.append(" | 人品值: ");
         if (playerJson.has("karma"))
-            chain.append(formatExp(playerJson.get("karma").getAsInt()));
+            chain.append(largeNumFormat(playerJson.get("karma").getAsInt()));
         else chain.append("null");
 
 
@@ -211,9 +212,4 @@ public class Player {
             context.sendMessage(builder.build());
         } else context.sendMessage(chain.build());
     }
-}
-
-class Member {
-    String uuid;
-    String rank;
 }

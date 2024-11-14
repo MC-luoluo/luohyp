@@ -10,17 +10,17 @@ import net.mamoe.mirai.message.data.PlainText;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Objects;
 
+import static moe.luoluo.util.Format.decimalFormat;
+
 public class MurderMystery {
     public static void murdermystery(CommandSender context, String player, String type) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
         JsonObject mmJson;
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
         ApiResult result;
         JsonObject json;
@@ -84,7 +84,7 @@ public class MurderMystery {
                 )));
             } else chain.append(new PlainText("null"));
 
-            if (mmJson.has("murderer_chance")||mmJson.has("detective_chance")||mmJson.has("alpha_chance")) {
+            if (mmJson.has("murderer_chance") || mmJson.has("detective_chance") || mmJson.has("alpha_chance")) {
                 chain.append("\n");
                 if (mmJson.has("murderer_chance")) {
                     chain.append("杀手几率: ").append(String.valueOf(mmJson.get("murderer_chance").getAsInt()));

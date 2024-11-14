@@ -78,6 +78,12 @@ class Hypixel : CompositeCommand(
         Player.player(context, playerName, type)
     }
 
+    @SubCommand("sheep")
+    @Description("查询玩家的绵羊战争数据")
+    fun sheep(context: CommandSender, player: String) {
+        WoolGames.wool(context, player, "sheep")
+    }
+
     @SubCommand("skywars", "sw")
     @Description("查询玩家的空岛战争数据")
     suspend fun CommandSender.sw(player: String) {
@@ -101,12 +107,12 @@ class Hypixel : CompositeCommand(
     fun wg(context: CommandSender, player: String, type: String = "") {
         WoolGames.wool(context, player, type)
     }
-    @SubCommand("sheep")
-    @Description("查询玩家的绵羊战争数据")
-    fun sheep(context: CommandSender, player: String) {
-        WoolGames.wool(context, player, "sheep")
-    }
 
+    @SubCommand("warlords", "wl")
+    @Description("查询玩家的战争领主数据")
+    suspend fun CommandSender.warlords(player: String) {
+        sendMessage(Warlords.Battleground(player))
+    }
 }
 
 class MCSkin : SimpleCommand(

@@ -9,16 +9,16 @@ import net.mamoe.mirai.message.data.PlainText;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Objects;
 
+import static moe.luoluo.util.Format.decimalFormat;
+
 public class Skywars {
     public static MessageChain skywars(String player) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
         ApiResult result;
         JsonObject json;

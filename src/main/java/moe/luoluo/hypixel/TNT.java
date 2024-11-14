@@ -9,11 +9,12 @@ import net.mamoe.mirai.message.data.PlainText;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Objects;
+
+import static moe.luoluo.util.Format.decimalFormat;
 
 public class TNT {
     public static MessageChain tntgames(String player) throws IOException, URISyntaxException {
@@ -41,7 +42,6 @@ public class TNT {
             return chain.build();
         }
         JsonObject tntJson = json.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("TNTGames").getAsJsonObject();
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
         chain.append(new PlainText(Rank.rank(json.get("player").getAsJsonObject()) + " "));
         chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));

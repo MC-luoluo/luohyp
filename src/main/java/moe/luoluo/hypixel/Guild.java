@@ -11,18 +11,16 @@ import net.mamoe.mirai.message.data.PlainText;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
-import static moe.luoluo.Api.formatExp;
+import static moe.luoluo.util.Format.decimalFormat;
+import static moe.luoluo.util.Format.largeNumFormat;
 
 public class Guild {
-    static DecimalFormat decimalFormat = new DecimalFormat("0.00");
-
     public static void guild(CommandSender context, String px, String name, String type) throws URISyntaxException, IOException {
         MessageChainBuilder chain = new MessageChainBuilder();
         MessageChainBuilder achievementChain = new MessageChainBuilder();
@@ -127,7 +125,7 @@ public class Guild {
 
         //经验进度
         int xpLevel = Math.min(level, 14);
-        chain.append(new PlainText(" (" + formatExp(exp) +
+        chain.append(new PlainText(" (" + largeNumFormat(exp) +
                 "/" + exp(xpLevel) + " " +
                 decimalFormat.format((float) exp / expNeeded[xpLevel] * 100) + "%)"
         ));
@@ -151,7 +149,7 @@ public class Guild {
 
         achievementChain.append(new PlainText("\n每日最高经验: "));
         if (determine(achievements, "EXPERIENCE_KINGS")) {
-            achievementChain.append(new PlainText(formatExp(achievements.get("EXPERIENCE_KINGS").getAsInt())));
+            achievementChain.append(new PlainText(largeNumFormat(achievements.get("EXPERIENCE_KINGS").getAsInt())));
         } else achievementChain.append(new PlainText("null"));
 
         achievementChain.append(new PlainText("\n公会胜场数: "));
@@ -175,7 +173,7 @@ public class Guild {
                 sum += expHistory.get(j).getAsInt();
             }
         }
-        achievementChain.append(new PlainText(formatExp(sum)));
+        achievementChain.append(new PlainText(largeNumFormat(sum)));
         int weekExp = sum; //周 平均每位成员经验
 
         //周每日
@@ -189,7 +187,7 @@ public class Guild {
                 } else continue;
                 sum += expHistory.get(s).getAsInt();
             }
-            achievementChain.append(new PlainText(formatExp(sum)));
+            achievementChain.append(new PlainText(largeNumFormat(sum)));
         }
 
 
@@ -205,11 +203,11 @@ public class Guild {
         }
         achievementChain.append(new PlainText("\n平均每位成员经验:"));
         achievementChain.append(new PlainText("\n今日: "));
-        achievementChain.append(new PlainText(formatExp((float) daySum / members.size())));
+        achievementChain.append(new PlainText(largeNumFormat((float) daySum / members.size())));
 
         //一周
         achievementChain.append(new PlainText(" | 一周: "));
-        achievementChain.append(new PlainText(formatExp((float) weekExp / members.size())));
+        achievementChain.append(new PlainText(largeNumFormat((float) weekExp / members.size())));
 
         if (Objects.equals(px, "player")) {
             String uuid = Api.mojang(name, "uuid");
@@ -243,11 +241,11 @@ public class Guild {
                         for (String s : set) {
                             sum += expHistory.get(s).getAsInt();
                         }
-                        membersChain.append(new PlainText(formatExp(sum)));
+                        membersChain.append(new PlainText(largeNumFormat(sum)));
 
                         for (String s : set) {
                             membersChain.append(new PlainText("\n    " + s + ": "));
-                            membersChain.append(new PlainText(formatExp(expHistory.get(s).getAsInt())));
+                            membersChain.append(new PlainText(largeNumFormat(expHistory.get(s).getAsInt())));
 
                             //排名
                             membersChain.append(new PlainText(" #"));
@@ -287,71 +285,71 @@ public class Guild {
             gameExp.append(new PlainText("各游戏经验: "));
             if (expType.has("BEDWARS")) {
                 gameExp.append(new PlainText("\n起床战争: "));
-                gameExp.append(new PlainText(formatExp(expType.get("BEDWARS").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("BEDWARS").getAsFloat())));
             }
             if (expType.has("SKYWARS")) {
                 gameExp.append(new PlainText("\n空岛战争: "));
-                gameExp.append(new PlainText(formatExp(expType.get("SKYWARS").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("SKYWARS").getAsFloat())));
             }
             if (expType.has("DUELS")) {
                 gameExp.append(new PlainText("\n决斗游戏: "));
-                gameExp.append(new PlainText(formatExp(expType.get("DUELS").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("DUELS").getAsFloat())));
             }
             if (expType.has("ARCADE")) {
                 gameExp.append(new PlainText("\n街机游戏: "));
-                gameExp.append(new PlainText(formatExp(expType.get("ARCADE").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("ARCADE").getAsFloat())));
             }
             if (expType.has("BUILD_BATTLE")) {
                 gameExp.append(new PlainText("\n建筑大师: "));
-                gameExp.append(new PlainText(formatExp(expType.get("BUILD_BATTLE").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("BUILD_BATTLE").getAsFloat())));
             }
             if (expType.has("MURDER_MYSTERY")) {
                 gameExp.append(new PlainText("\n密室杀手: "));
-                gameExp.append(new PlainText(formatExp(expType.get("MURDER_MYSTERY").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("MURDER_MYSTERY").getAsFloat())));
             }
             if (expType.has("TNTGAMES")) {
                 gameExp.append(new PlainText("\n掘战游戏: "));
-                gameExp.append(new PlainText(formatExp(expType.get("TNTGAMES").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("TNTGAMES").getAsFloat())));
             }
             if (expType.has("PROTOTYPE")) {
                 gameExp.append(new PlainText("\n实验游戏: "));
-                gameExp.append(new PlainText(formatExp(expType.get("PROTOTYPE").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("PROTOTYPE").getAsFloat())));
             }
             if (expType.has("HOUSING")) {
                 gameExp.append(new PlainText("\n家园: "));
-                gameExp.append(new PlainText(formatExp(expType.get("HOUSING").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("HOUSING").getAsFloat())));
             }
             if (expType.has("SURVIVAL_GAMES")) {
                 gameExp.append(new PlainText("\n闪电饥饿游戏: "));
-                gameExp.append(new PlainText(formatExp(expType.get("SURVIVAL_GAMES").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("SURVIVAL_GAMES").getAsFloat())));
             }
             if (expType.has("WOOL_GAMES")) {
                 gameExp.append(new PlainText("\n羊毛游戏: "));
-                gameExp.append(new PlainText(formatExp(expType.get("WOOL_GAMES").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("WOOL_GAMES").getAsFloat())));
             }
             if (expType.has("PIT")) {
                 gameExp.append(new PlainText("\n天坑乱斗: "));
-                gameExp.append(new PlainText(formatExp(expType.get("PIT").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("PIT").getAsFloat())));
             }
             if (expType.has("BATTLEGROUND")) {
                 gameExp.append(new PlainText("\n战争领主: "));
-                gameExp.append(new PlainText(formatExp(expType.get("BATTLEGROUND").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("BATTLEGROUND").getAsFloat())));
             }
             if (expType.has("SUPER_SMASH")) {
                 gameExp.append(new PlainText("\n星碎英雄: "));
-                gameExp.append(new PlainText(formatExp(expType.get("SUPER_SMASH").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("SUPER_SMASH").getAsFloat())));
             }
             if (expType.has("MCGO")) {
                 gameExp.append(new PlainText("\n警匪大战: "));
-                gameExp.append(new PlainText(formatExp(expType.get("MCGO").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("MCGO").getAsFloat())));
             }
             if (expType.has("WALLS3")) {
                 gameExp.append(new PlainText("\n超级战墙: "));
-                gameExp.append(new PlainText(formatExp(expType.get("WALLS3").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("WALLS3").getAsFloat())));
             }
             if (expType.has("UHC")) {
                 gameExp.append(new PlainText("\nUHC: "));
-                gameExp.append(new PlainText(formatExp(expType.get("UHC").getAsFloat())));
+                gameExp.append(new PlainText(largeNumFormat(expType.get("UHC").getAsFloat())));
             }
             if (expType.has("QUAKECRAFT")
                     || expType.has("ARENA")
@@ -367,7 +365,7 @@ public class Guild {
                 if (expType.has("VAMPIREZ")) legacySum += expType.get("VAMPIREZ").getAsFloat();
                 if (expType.has("GINGERBREAD")) legacySum += expType.get("GINGERBREAD").getAsFloat();
                 if (expType.has("PAINTBALL")) legacySum += expType.get("PAINTBALL").getAsFloat();
-                gameExp.append(new PlainText(formatExp(legacySum)));
+                gameExp.append(new PlainText(largeNumFormat(legacySum)));
             }
         }
 
@@ -457,7 +455,7 @@ public class Guild {
         for (String j : set) {
             sum += expHistory.get(j).getAsInt();
         }
-        chain.append(new PlainText(formatExp(sum)));
+        chain.append(new PlainText(largeNumFormat(sum)));
     }
 
     public static Boolean determine(JsonObject json, String str) {

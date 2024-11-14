@@ -53,7 +53,7 @@ public class Counts {
                 {"IDLE", "其他大厅"},
                 {"SKYBLOCK", "SkyBlock", "dark_auction", "Dark Auction", "hub", "Hub", "garden", "Garden", "dungeon", "Dungeon", "mining_3", "Dwarven Mines", "crystal_hollows", "Crystal Hollows"},
                 {"BEDWARS", "起床战争"},
-                {"SKYWARS", "空岛战争"},
+                {"SKYWARS", "空岛战争", "solo_normal", "单人普通", "teams_normal", "双人普通"},
                 {"DUELS", "决斗游戏"},
                 {"BUILD_BATTLE", "建筑大师", "BUILD_BATTLE_GUESS_THE_BUILD", "建筑猜猜乐"},
                 {"ARCADE", "街机游戏", "DROPPER", "心跳水立方", "ZOMBIES_DEAD_END", "僵尸末日:穷途末路", "ZOMBIES_BAD_BLOOD", "僵尸末日:坏血之宫", "ZOMBIES_ALIEN_ARCADIUM", "僵尸末日:外星游乐园", "ZOMBIES_PRISON", "僵尸末日:监狱风云", "PARTY", "派对游戏", "DAYONE", "行尸走肉", "HALLOWEEN_SIMULATOR", "万圣节模拟器", "PIXEL_PARTY", "像素派对", "SIMON_SAYS", "我说你做"},
@@ -61,6 +61,7 @@ public class Counts {
                 {"WOOL_GAMES", "羊毛游戏", "sheep_wars_two_six", "绵羊战争", "wool_wars_two_four", "羊毛战争", "capture_the_wool_two_twenty", "捕捉羊毛大作战"},
                 {"TNTGAMES", "TNT Games", "TNTAG", "TNT Tag", "TNTRUN", "TNT Run", "CAPTURE", "法师掘战", "BOWSPLEEF", "掘一死箭"},
                 {"WALLS3", "超级战墙"},
+                {"BATTLEGROUND","战争领主","ctf_mini","夺旗","domination","Domination","team_deathmatch","团队死亡竞赛"},
                 {"HOUSING", "家园"},
                 {"PIT", "天坑乱斗"},
                 {"SURVIVAL_GAMES", "闪电饥饿游戏"},
@@ -80,7 +81,7 @@ public class Counts {
                 if (x.length > 2 && type.equals("all") && games.get(x[0]).getAsJsonObject().has("modes")) {
                     JsonObject modes = games.get(x[0]).getAsJsonObject().get("modes").getAsJsonObject();
                     for (int i = 2; i < x.length; i += 2) {
-                        if (modes.has(x[i])) {
+                        if (modes.has(x[i]) && modes.get(x[i]).getAsInt() > 0) {
                             chain.append(("\n|- ")).append(x[i + 1]).append(": ");
                             chain.append(String.valueOf(modes.get(x[i]).getAsInt()));
                         }
