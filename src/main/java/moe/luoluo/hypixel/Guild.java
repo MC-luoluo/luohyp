@@ -27,8 +27,6 @@ public class Guild {
         MessageChainBuilder membersChain = new MessageChainBuilder();
         MessageChainBuilder preferredGames = new MessageChainBuilder();
         MessageChainBuilder membersList = new MessageChainBuilder();
-        MessageChainBuilder membersList2 = new MessageChainBuilder();
-        MessageChainBuilder membersList3 = new MessageChainBuilder();
         MessageChainBuilder gameExp = new MessageChainBuilder();
 
 
@@ -372,13 +370,29 @@ public class Guild {
         if (Objects.equals(type, "members") || Objects.equals(type, "all")) {
             membersList.append(new PlainText("成员列表: "));
             for (int x = 0; x < members.size(); x++) {
-                if (x <= 42) {
-                    gMembers(membersList, members, x);
-                } else if (x <= 84) {
-                    gMembers(membersList2, members, x);
-                } else {
-                    gMembers(membersList3, members, x);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日-HH时mm分ss秒", Locale.CHINA);
+                membersList.append(new PlainText("\n\n玩家: "));
+                membersList.append(new PlainText(Api.mojang(members.get(x).getAsJsonObject().get("uuid").getAsString(), "name")));
+                membersList.append(new PlainText("\nrank: "));
+                membersList.append(new PlainText(members.get(x).getAsJsonObject().get("rank").getAsString()));
+                membersList.append(new PlainText("\n加入时间: "));
+                long t = members.get(x).getAsJsonObject().get("joined").getAsLong();
+                membersList.append(new PlainText(simpleDateFormat.format(new Date(t))));
+                if (members.get(x).getAsJsonObject().has("questParticipation") && members.size() < 85) {
+                    membersList.append(new PlainText("\n完成任务: "));
+                    membersList.append(new PlainText(String.valueOf(members.get(x).getAsJsonObject().get("questParticipation").getAsInt())));
                 }
+                membersList.append(new PlainText("\n周经验: "));
+                JsonObject expHistory = new JsonObject();
+                if (determine(members.get(x).getAsJsonObject(), "expHistory")) {
+                    expHistory = members.get(x).getAsJsonObject().get("expHistory").getAsJsonObject();
+                }
+                set = expHistory.keySet();
+                sum = 0;
+                for (String j : set) {
+                    sum += expHistory.get(j).getAsInt();
+                }
+                membersList.append(new PlainText(largeNumFormat(sum)));
             }
         }
 
@@ -398,12 +412,6 @@ public class Guild {
             if (!membersList.isEmpty()) {
                 builder.add(context.getBot().getId(), context.getBot().getNick(), membersList.build());
             }
-            if (!membersList2.isEmpty()) {
-                builder.add(context.getBot().getId(), context.getBot().getNick(), membersList2.build());
-            }
-            if (!membersList3.isEmpty()) {
-                builder.add(context.getBot().getId(), context.getBot().getNick(), membersList3.build());
-            }
             context.sendMessage(builder.build());
         } else {
             context.sendMessage(chain.build());
@@ -420,43 +428,9 @@ public class Guild {
             if (!membersList.isEmpty()) {
                 context.sendMessage(membersList.build());
             }
-            if (!membersList2.isEmpty()) {
-                context.sendMessage(membersList2.build());
-            }
-            if (!membersList3.isEmpty()) {
-                context.sendMessage(membersList3.build());
-            }
         }
-
     }
 
-
-    public static void gMembers(MessageChainBuilder chain, JsonArray members, int x) throws IOException, URISyntaxException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日-HH时mm分ss秒", Locale.CHINA);
-        Set<String> set;
-        chain.append(new PlainText("\n\n玩家: "));
-        chain.append(new PlainText(Api.mojang(members.get(x).getAsJsonObject().get("uuid").getAsString(), "name")));
-        chain.append(new PlainText("\nrank: "));
-        chain.append(new PlainText(members.get(x).getAsJsonObject().get("rank").getAsString()));
-        chain.append(new PlainText("\n加入时间: "));
-        long t = members.get(x).getAsJsonObject().get("joined").getAsLong();
-        chain.append(new PlainText(simpleDateFormat.format(new Date(t))));
-        if (members.get(x).getAsJsonObject().has("questParticipation")) {
-            chain.append(new PlainText("\n完成任务: "));
-            chain.append(new PlainText(String.valueOf(members.get(x).getAsJsonObject().get("questParticipation").getAsInt())));
-        }
-        chain.append(new PlainText("\n周经验: "));
-        JsonObject expHistory = new JsonObject();
-        if (determine(members.get(x).getAsJsonObject(), "expHistory")) {
-            expHistory = members.get(x).getAsJsonObject().get("expHistory").getAsJsonObject();
-        }
-        set = expHistory.keySet();
-        int sum = 0;
-        for (String j : set) {
-            sum += expHistory.get(j).getAsInt();
-        }
-        chain.append(new PlainText(largeNumFormat(sum)));
-    }
 
     public static Boolean determine(JsonObject json, String str) {
         return json.has(str);

@@ -794,7 +794,5 @@ public class Arcade {
         } else {
             context.sendMessage(chain.build());
         }
-
-
     }
 }
