@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Objects;
 
-import static java.lang.String.*;
+import static moe.luoluo.util.Format.decimalFormat;
 import static moe.luoluo.util.Format.largeNumFormat;
 
 public class TurboKartRacers {
@@ -63,11 +63,11 @@ public class TurboKartRacers {
 
         if (games != 0) {
             if (tkrJson.has("gold_trophy"))
-                goldTrophyRate = format("%.2f", 100.0 * tkrJson.get("gold_trophy").getAsInt() / games) + "%";
+                goldTrophyRate = decimalFormat.format(100.0 * tkrJson.get("gold_trophy").getAsInt() / games) + "%";
             if (tkrJson.has("silver_trophy"))
-                silverTrophyRate = format("%.2f", 100.0 * tkrJson.get("silver_trophy").getAsInt() / games) + "%";
+                silverTrophyRate = decimalFormat.format(100.0 * tkrJson.get("silver_trophy").getAsInt() / games) + "%";
             if (tkrJson.has("bronze_trophy"))
-                bronzeTrophyRate = format("%.2f", 100.0 * tkrJson.get("bronze_trophy").getAsInt() / games) + "%";
+                bronzeTrophyRate = decimalFormat.format(100.0 * tkrJson.get("bronze_trophy").getAsInt() / games) + "%";
         }
 
         chain.append(new PlainText(Rank.rank(json.get("player").getAsJsonObject()) + " "));
