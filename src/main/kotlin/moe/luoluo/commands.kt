@@ -113,6 +113,13 @@ class Hypixel : CompositeCommand(
     suspend fun CommandSender.warlords(player: String) {
         sendMessage(Warlords.Battleground(player))
     }
+
+    @SubCommand("turbokartracers", "tkr")
+    @Description("查询玩家的方块赛车数据")
+    suspend fun CommandSender.turbokartracers(player: String) {
+        sendMessage(TurboKartRacers.GingerBread(player))
+    }
+
 }
 
 class MCSkin : SimpleCommand(
