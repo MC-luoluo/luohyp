@@ -111,8 +111,8 @@ public class CAC {
                 chain.append("\n 射击次数: ").append(String.valueOf(cacJson.get("shots_fired").getAsInt()));
             else chain.append("\n 射击次数: 0");
             if (cacJson.has("headshot_kills"))
-                chain.append(" | 精确击杀: ").append(String.valueOf(cacJson.get("headshot_kills").getAsInt()));
-            else chain.append(" | 精准击杀: 0");
+                chain.append(" | 爆头击杀数: ").append(String.valueOf(cacJson.get("headshot_kills").getAsInt()));
+            else chain.append(" | 爆头击杀数: 0");
         }
 
         chain.append("\n");
@@ -216,7 +216,7 @@ public class CAC {
                 if (secs == 0)
                     chain.append("\n最快胜利: -");
                 else if (secs >= 60) {
-                    int mins = secs /60;
+                    int mins = secs / 60;
                     secs -= mins * 60;
                     chain.append("\n最快胜利: ").append(String.valueOf(mins)).append("m,").append(String.valueOf(secs)).append("s");
                 }else
