@@ -120,6 +120,11 @@ class Hypixel : CompositeCommand(
         sendMessage(TurboKartRacers.GingerBread(player))
     }
 
+    @SubCommand("cac")
+    @Description("查询玩家的警匪大战数据")
+    fun cac(context: CommandSender, player: String, type: String = "") {
+        CAC.mcgo(context, player, type)
+    }
 }
 
 class MCSkin : SimpleCommand(
