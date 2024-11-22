@@ -102,7 +102,7 @@ class Hypixel : CompositeCommand(
         Tournament.tourney(context, player, type)
     }
 
-    @SubCommand("wg")
+    @SubCommand("wool", "wg")
     @Description("查询玩家的羊毛游戏数据")
     fun wg(context: CommandSender, player: String, type: String = "") {
         WoolGames.wool(context, player, type)
@@ -120,7 +120,7 @@ class Hypixel : CompositeCommand(
         sendMessage(TurboKartRacers.GingerBread(player))
     }
 
-    @SubCommand("cac")
+    @SubCommand("copsandcrims", "cac", "cvc")
     @Description("查询玩家的警匪大战数据")
     fun cac(context: CommandSender, player: String, type: String = "") {
         CAC.mcgo(context, player, type)
