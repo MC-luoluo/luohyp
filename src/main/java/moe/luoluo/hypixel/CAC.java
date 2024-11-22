@@ -99,8 +99,8 @@ public class CAC {
             chain.append("\n 击杀: ").append(String.valueOf(totalKills));
             chain.append(" | 死亡: ").append(String.valueOf(totalDeaths));
             if (totalDeaths != 0)
-                chain.append(" | K/D: ").append(decimalFormat.format((float)totalKills / totalDeaths));
-            else chain.append(" | K/D: ").append(decimalFormat.format((float)totalKills));
+                chain.append(" | KDR: ").append(decimalFormat.format((float)totalKills / totalDeaths));
+            else chain.append(" | KDR: ").append(decimalFormat.format((float)totalKills));
 
             chain.append("\n 助攻: ").append(String.valueOf(totalAssists));
             if (totalDeaths != 0)
@@ -108,14 +108,12 @@ public class CAC {
             else chain.append(" | (K+A)/D: ").append(decimalFormat.format((float)totalKills + totalAssists));
 
             if (cacJson.has("shots_fired"))
-                chain.append("\n 射击次数: ").append(String.valueOf(cacJson.get("shots_fired").getAsInt()));
-            else chain.append("\n 射击次数: 0");
+                chain.append("\n 射击数: ").append(String.valueOf(cacJson.get("shots_fired").getAsInt()));
+            else chain.append("\n 射击数: 0");
             if (cacJson.has("headshot_kills"))
-                chain.append(" | 爆头击杀数: ").append(String.valueOf(cacJson.get("headshot_kills").getAsInt()));
-            else chain.append(" | 爆头击杀数: 0");
+                chain.append(" | 爆头击杀: ").append(String.valueOf(cacJson.get("headshot_kills").getAsInt()));
+            else chain.append(" | 爆头击杀: 0");
         }
-
-        chain.append("\n");
 
         //爆破模式
         if (type.equals("boom") || type.equals("def") || type.equals("defusal") || type.equals("all")) {
@@ -129,9 +127,9 @@ public class CAC {
             if (cacJson.has("deaths")) {
                 chain.append(" | 死亡: ").append(String.valueOf(cacJson.get("deaths").getAsInt()));
                 if (cacJson.get("deaths").getAsInt() != 0)
-                    chain.append(" | K/D: ").append(decimalFormat.format((float)cacJson.get("kills").getAsInt() / cacJson.get("deaths").getAsInt()));
-                else chain.append(" | K/D: ").append(decimalFormat.format((float)cacJson.get("kills").getAsInt()));
-            }else chain.append(" | 死亡: 0").append(" | K/D: ").append(decimalFormat.format((float)cacJson.get("kills").getAsInt()));
+                    chain.append(" | KDR: ").append(decimalFormat.format((float)cacJson.get("kills").getAsInt() / cacJson.get("deaths").getAsInt()));
+                else chain.append(" | KDR: ").append(decimalFormat.format((float)cacJson.get("kills").getAsInt()));
+            }else chain.append(" | 死亡: 0").append(" | KDR: ").append(decimalFormat.format((float)cacJson.get("kills").getAsInt()));
 
             if (cacJson.has("assists")) {
                 chain.append("\n| 助攻: ").append(String.valueOf(cacJson.get("assists").getAsInt()));
@@ -146,8 +144,8 @@ public class CAC {
                 else chain.append(" | (K+A)/D: ").append(decimalFormat.format((float)cacJson.get("kills").getAsInt()));
             }
 
-            chain.append("\n| 炸弹安放: ").append(String.valueOf(cacJson.get("bombs_planted").getAsInt()));
-            chain.append("  | 炸弹拆除: ").append(String.valueOf(cacJson.get("bombs_defused").getAsInt()));
+            chain.append("\n| 安放炸弹: ").append(String.valueOf(cacJson.get("bombs_planted").getAsInt()));
+            chain.append("  | 拆除炸弹: ").append(String.valueOf(cacJson.get("bombs_defused").getAsInt()));
         }
 
         //死斗模式
@@ -159,10 +157,10 @@ public class CAC {
             if (cacJson.has("deaths_deathmatch")) {
                 chain.append(" | 死亡: ").append(String.valueOf(cacJson.get("deaths_deathmatch").getAsInt()));
                 if (cacJson.get("deaths_deathmatch").getAsInt() != 0)
-                    chain.append(" | K/D: ").append(decimalFormat.format(
+                    chain.append(" | KDR: ").append(decimalFormat.format(
                             (float)cacJson.get("kills_deathmatch").getAsInt() / cacJson.get("deaths_deathmatch").getAsInt()));
-                else chain.append(" | K/D: ").append(decimalFormat.format((float)cacJson.get("kills_deathmatch").getAsInt()));
-            }else chain.append(" | 死亡: 0").append(" | K/D: ").append(decimalFormat.format((float)cacJson.get("kills_deathmatch").getAsInt()));
+                else chain.append(" | KDR: ").append(decimalFormat.format((float)cacJson.get("kills_deathmatch").getAsInt()));
+            }else chain.append(" | 死亡: 0").append(" | KDR: ").append(decimalFormat.format((float)cacJson.get("kills_deathmatch").getAsInt()));
 
             if (cacJson.has("assists_deathmatch")) {
                 chain.append("\n| 助攻: ").append(String.valueOf(cacJson.get("assists_deathmatch").getAsInt()));
@@ -190,10 +188,10 @@ public class CAC {
             if (cacJson.has("deaths_gungame")) {
                 chain.append(" | 死亡: ").append(String.valueOf(cacJson.get("deaths_gungame").getAsInt()));
                 if (cacJson.get("deaths_gungame").getAsInt() != 0)
-                    chain.append(" | K/D: ").append(decimalFormat.format(
+                    chain.append(" | KDR: ").append(decimalFormat.format(
                             (float)cacJson.get("kills_gungame").getAsInt() / cacJson.get("deaths_gungame").getAsInt()));
-                else chain.append(" | K/D: ").append(decimalFormat.format((float)cacJson.get("kills_gungame").getAsInt()));
-            }else chain.append(" | 死亡: 0").append(" | K/D: ").append(decimalFormat.format((float)cacJson.get("kills_gungame").getAsInt()));
+                else chain.append(" | KDR: ").append(decimalFormat.format((float)cacJson.get("kills_gungame").getAsInt()));
+            }else chain.append(" | 死亡: 0").append(" | KDR: ").append(decimalFormat.format((float)cacJson.get("kills_gungame").getAsInt()));
 
             if (cacJson.has("assists_gungame")) {
                 chain.append("\n| 助攻: ").append(String.valueOf(cacJson.get("assists_gungame").getAsInt()));
@@ -213,15 +211,13 @@ public class CAC {
 
             if (cacJson.has("fastest_win_gungame")) {
                 int secs = cacJson.get("fastest_win_gungame").getAsInt() / 1000;
-                if (secs == 0)
-                    chain.append("\n最快胜利: -");
-                else if (secs >= 60) {
+                if (secs >= 60) {
                     int mins = secs / 60;
                     secs -= mins * 60;
                     chain.append("\n最快胜利: ").append(String.valueOf(mins)).append("m,").append(String.valueOf(secs)).append("s");
                 }else
                     chain.append("\n最快胜利: ").append(String.valueOf(secs)).append("s,").append(String.valueOf((cacJson.get("fastest_win_gungame").getAsInt() % 1000))).append("ms");
-            }else chain.append("\n最快胜利: -");
+            }
 
         }
 
