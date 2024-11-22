@@ -63,11 +63,11 @@ public class TurboKartRacers {
 
         if (games != 0) {
             if (tkrJson.has("gold_trophy"))
-                goldTrophyRate = decimalFormat.format(100.0 * tkrJson.get("gold_trophy").getAsInt() / games) + "%";
+                goldTrophyRate = decimalFormat.format((float)100 * tkrJson.get("gold_trophy").getAsInt() / games) + "%";
             if (tkrJson.has("silver_trophy"))
-                silverTrophyRate = decimalFormat.format(100.0 * tkrJson.get("silver_trophy").getAsInt() / games) + "%";
+                silverTrophyRate = decimalFormat.format((float)100 * tkrJson.get("silver_trophy").getAsInt() / games) + "%";
             if (tkrJson.has("bronze_trophy"))
-                bronzeTrophyRate = decimalFormat.format(100.0 * tkrJson.get("bronze_trophy").getAsInt() / games) + "%";
+                bronzeTrophyRate = decimalFormat.format((float)100 * tkrJson.get("bronze_trophy").getAsInt() / games) + "%";
         }
 
         chain.append(new PlainText(Rank.rank(json.get("player").getAsJsonObject()) + " "));
