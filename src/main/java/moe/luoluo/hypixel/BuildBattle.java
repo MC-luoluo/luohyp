@@ -71,7 +71,7 @@ public class BuildBattle {
                     lead++;
                 }
                 if (lead > 10) {
-                    int[] scoreNeeded = {100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000, 200000, 350000, 500000};
+                    int[] scoreNeeded = {100, 250, 500, 1000, 2000, 3500, 5000, 7500, 10000, 15000, 20000, 30000, 50000, 100000, 200000, 300000, 400000, 500000};
                     int level = 1;
                     for (int j : scoreNeeded) {
                         if (score >= j) {
@@ -79,20 +79,25 @@ public class BuildBattle {
                         } else break;
                     }
                     chain.append(switch (level) {
-                        case 1 -> "Prospect";
-                        case 2 -> "Rookie (初来乍到)";
+                        case 1 -> "Rookie (初来乍到)";
+                        case 2 -> "Untrained (未经雕琢)";
                         case 3 -> "Amateur (初窥门径)";
-                        case 4 -> "Apprentice (学有所成)";
-                        case 5 -> "Trained (技艺精湛)";
+                        case 4 -> "Prospect";
+                        case 5 -> "Apprentice (学有所成)";
                         case 6 -> "Experienced (驾轻就熟)";
                         case 7 -> "Seasoned (历练老成)";
-                        case 8 -> "Skilled (炉火纯青)";
-                        case 9 -> "Talented (技惊四座)";
-                        case 10 -> "Professional (巧夺天工)";
-                        case 11 -> "Artisan";
-                        case 12 -> "Expert (闻名于世)";
-                        case 13 -> "Master (建筑大师)";
-                        case 14 -> "Grandmaster (最强王者)";
+                        case 8 -> "Trained (技艺精湛)";
+                        case 9 -> "Skilled (炉火纯青)";
+                        case 10 -> "Talented (技惊四座)";
+                        case 11 -> "Professional (巧夺天工)";
+                        case 12 -> "Artisan";
+                        case 13 -> "Expert (闻名于世)";
+                        case 14 -> "Master (建筑大师)";
+                        case 15 -> "Legend (传说星耀)";
+                        case 16 -> "Grandmaster (最强王者)";
+                        case 17 -> "Celestial";
+                        case 18 -> "Divine";
+                        case 19 -> "Ascended";
                         default -> "null";
                     });
                     break;
