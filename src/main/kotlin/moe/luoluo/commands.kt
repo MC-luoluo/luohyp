@@ -30,10 +30,22 @@ class Hypixel : CompositeCommand(
         sendMessage(BuildBattle.buildBattle(player))
     }
 
+    @SubCommand("cac", "cvc")
+    @Description("查询玩家的警匪大战数据")
+    fun cac(context: CommandSender, player: String, type: String = "") {
+        CAC.mcgo(context, player, type)
+    }
+
     @SubCommand("duels", "duel")
     @Description("查询玩家的决斗游戏数据")
     fun duel(context: CommandSender, player: String, type: String = "") {
         Duels.duels(context, player, type)
+    }
+
+    @SubCommand("dpr")
+    @Description("查询玩家的心跳水立方数据")
+    fun dpr(context: CommandSender, player: String) {
+        Arcade.arc(context, player, "dpr")
     }
 
     @SubCommand("fish")
@@ -90,6 +102,12 @@ class Hypixel : CompositeCommand(
         sendMessage(Skywars.skywars(player))
     }
 
+    @SubCommand("tkr")
+    @Description("查询玩家的方块赛车数据")
+    suspend fun CommandSender.turbokartracers(player: String) {
+        sendMessage(TurboKartRacers.GingerBread(player))
+    }
+
     @SubCommand("tnt")
     @Description("查询玩家的掘战游戏数据")
     suspend fun CommandSender.tntgames(player: String) {
@@ -114,16 +132,10 @@ class Hypixel : CompositeCommand(
         sendMessage(Warlords.Battleground(player))
     }
 
-    @SubCommand("tkr")
-    @Description("查询玩家的方块赛车数据")
-    suspend fun CommandSender.turbokartracers(player: String) {
-        sendMessage(TurboKartRacers.GingerBread(player))
-    }
-
-    @SubCommand("cac", "cvc")
-    @Description("查询玩家的警匪大战数据")
-    fun cac(context: CommandSender, player: String, type: String = "") {
-        CAC.mcgo(context, player, type)
+    @SubCommand("zb")
+    @Description("查询玩家的僵尸末日数据")
+    fun zb(context: CommandSender, player: String) {
+        Arcade.arc(context, player, "zb")
     }
 }
 
