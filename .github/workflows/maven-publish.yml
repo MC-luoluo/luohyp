@@ -14,8 +14,7 @@ jobs:
       packages: write
 
     steps:
-    - name: Read Properties info
-      id: info
+    - name: Get XML Info
       uses: mavrosxristoforos/get-xml-info@2.0
       with:
         xml-file: 'pom.xml'
