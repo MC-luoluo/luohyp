@@ -16,7 +16,7 @@ jobs:
     steps:
     - name: Read Properties info
       id: info
-      uses: mavrosxristoforos/get-xml-info@1.0
+      uses: mavrosxristoforos/get-xml-info@2.0
       with:
         xml-file: 'pom.xml'
         xpath: '//version'
