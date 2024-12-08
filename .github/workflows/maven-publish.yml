@@ -30,7 +30,7 @@ jobs:
       uses: mavrosxristoforos/get-xml-info@2.0
       with:
         xml-file: 'pom.xml'
-        xpath: '//version'
+        xpath: '//*[local-name()='project']/*[local-name()='version']'
         
     - name: Build with Maven
       run: mvn -B package --file pom.xml
