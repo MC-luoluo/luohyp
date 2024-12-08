@@ -39,4 +39,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: "luohyp-${{ steps.info.outputs.version }}"
-        path: build/libs/*.jar
+        path: target/*.jar
