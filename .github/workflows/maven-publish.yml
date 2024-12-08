@@ -16,10 +16,10 @@ jobs:
     steps:
     - name: Read Properties info
       id: info
-      uses: christian-draeger/read-properties@1.1.1
+      uses: mavrosxristoforos/get-xml-info@1.0
       with:
-        path: pom.xml
-        properties: 'version'
+        xml-file: 'pom.xml'
+        xpath: '//version'
         
     - name: Build with Maven
       run: mvn -B package --file pom.xml
