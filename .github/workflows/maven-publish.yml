@@ -37,4 +37,16 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: "luohyp-${{ steps.getxml.outputs.info }}"
-        path: target/*.jar
+        path: target/luohyp-${{ steps.getxml.outputs.info }}.jar
+        
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: "luohyp-${{ steps.getxml.outputs.info }}"
+        path: target/luohyp-${{ steps.getxml.outputs.info }}-original.jar
+        
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: "luohyp-${{ steps.getxml.outputs.info }}"
+        path: target/luohyp-${{ steps.getxml.outputs.info }}-with-dependencies.jar
