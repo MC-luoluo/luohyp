@@ -23,10 +23,8 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
         
-    - name: check
-      run: ls -al
-    
     - name: Get XML Info
+      id: info
       uses: mavrosxristoforos/get-xml-info@2.0
       with:
         xml-file: 'pom.xml'
