@@ -24,7 +24,7 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
         
     - name: Get XML Info
-      id: info
+      id: getxml
       uses: mavrosxristoforos/get-xml-info@2.0
       with:
         xml-file: 'pom.xml'
