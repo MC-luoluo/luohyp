@@ -128,6 +128,8 @@ public class CAC {
         if (cacJson.has("coins"))
             chain.append(largeNumFormat(cacJson.get("coins").getAsInt()));
         else chain.append("0");
+        if (cacJson.has("score"))
+            chain.append(" | 分数").append(String.valueOf(cacJson.get("score").getAsLong()));
 
         if (type.isEmpty() || type.equals("all")) {
             chain.append("\n|- 总体数据");
