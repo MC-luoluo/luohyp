@@ -146,7 +146,7 @@ public class Bedwars {
             if (bwJson.has("final_deaths_bedwars")) {
                 chain.append(new PlainText(String.valueOf(bwJson.get("final_deaths_bedwars").getAsInt())));
             } else chain.append(new PlainText("0"));
-            chain.append(new PlainText(" | FKDR："));
+            chain.append(new PlainText(" | FKDR: "));
             if (bwJson.has("final_kills_bedwars") && bwJson.has("final_deaths_bedwars")) {
                 chain.append(new PlainText(decimalFormat.format(
                         (float) bwJson.get("final_kills_bedwars").getAsInt() /
@@ -245,7 +245,7 @@ public class Bedwars {
             if (bwJson.has("eight_one_final_deaths_bedwars")) {
                 chain.append(new PlainText(String.valueOf(bwJson.get("eight_one_final_deaths_bedwars").getAsInt())));
             } else chain.append(new PlainText("0"));
-            chain.append(new PlainText(" | FKDR："));
+            chain.append(new PlainText(" | FKDR: "));
             if (bwJson.has("eight_one_final_kills_bedwars") && bwJson.has("eight_one_final_deaths_bedwars")) {
                 chain.append(new PlainText(decimalFormat.format(
                         (float) bwJson.get("eight_one_final_kills_bedwars").getAsInt() /
@@ -344,7 +344,7 @@ public class Bedwars {
             if (bwJson.has("eight_two_final_deaths_bedwars")) {
                 chain.append(new PlainText(String.valueOf(bwJson.get("eight_two_final_deaths_bedwars").getAsInt())));
             } else chain.append(new PlainText("0"));
-            chain.append(new PlainText(" | FKDR："));
+            chain.append(new PlainText(" | FKDR: "));
             if (bwJson.has("eight_two_final_kills_bedwars") && bwJson.has("eight_two_final_deaths_bedwars")) {
                 chain.append(new PlainText(decimalFormat.format(
                         (float) bwJson.get("eight_two_final_kills_bedwars").getAsInt() /
@@ -443,7 +443,7 @@ public class Bedwars {
             if (bwJson.has("four_three_final_deaths_bedwars")) {
                 chain.append(new PlainText(String.valueOf(bwJson.get("four_three_final_deaths_bedwars").getAsInt())));
             } else chain.append(new PlainText("0"));
-            chain.append(new PlainText(" | FKDR："));
+            chain.append(new PlainText(" | FKDR: "));
             if (bwJson.has("four_three_final_kills_bedwars") && bwJson.has("four_three_final_deaths_bedwars")) {
                 chain.append(new PlainText(decimalFormat.format(
                         (float) bwJson.get("four_three_final_kills_bedwars").getAsInt() /
@@ -542,7 +542,7 @@ public class Bedwars {
             if (bwJson.has("four_four_final_deaths_bedwars")) {
                 chain.append(new PlainText(String.valueOf(bwJson.get("four_four_final_deaths_bedwars").getAsInt())));
             } else chain.append(new PlainText("0"));
-            chain.append(new PlainText(" | FKDR："));
+            chain.append(new PlainText(" | FKDR: "));
             if (bwJson.has("four_four_final_kills_bedwars") && bwJson.has("four_four_final_deaths_bedwars")) {
                 chain.append(new PlainText(decimalFormat.format(
                         (float) bwJson.get("four_four_final_kills_bedwars").getAsInt() /
@@ -641,7 +641,7 @@ public class Bedwars {
             if (bwJson.has("two_four_final_deaths_bedwars")) {
                 chain.append(new PlainText(String.valueOf(bwJson.get("two_four_final_deaths_bedwars").getAsInt())));
             } else chain.append(new PlainText("0"));
-            chain.append(new PlainText(" | FKDR："));
+            chain.append(new PlainText(" | FKDR: "));
             if (bwJson.has("two_four_final_kills_bedwars") && bwJson.has("two_four_final_deaths_bedwars")) {
                 chain.append(new PlainText(decimalFormat.format(
                         (float) bwJson.get("two_four_final_kills_bedwars").getAsInt() /
@@ -674,7 +674,7 @@ public class Bedwars {
                 } else chain.append(new PlainText(decimalFormat.format(k)));
             }
         } else {
-            error.append("type有误，支持参数：solo, double, 3s, 4s, 4v4");
+            error.append("type有误，支持参数: solo, double, 3s, 4s, 4v4");
             context.sendMessage(error.build());
             return;
         }

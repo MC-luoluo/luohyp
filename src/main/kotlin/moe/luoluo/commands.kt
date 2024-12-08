@@ -18,13 +18,13 @@ class Hypixel : CompositeCommand(
         Arcade.arc(context, player, type)
     }
 
-    @SubCommand("bedwars", "bw")
+    @SubCommand("bw")
     @Description("查询玩家的起床战争数据")
     fun bw(context: CommandSender, player: String, type: String = "") {
         Bedwars.bedwars(context, player, type)
     }
 
-    @SubCommand("buildbattle", "bb")
+    @SubCommand("bb")
     @Description("查询玩家的建筑大师数据")
     suspend fun CommandSender.bb(player: String) {
         sendMessage(BuildBattle.buildBattle(player))
@@ -66,7 +66,7 @@ class Hypixel : CompositeCommand(
         Counts.playerList(context, type)
     }
 
-    @SubCommand("murdermystery", "mm")
+    @SubCommand("mm")
     @Description("查询玩家的密室杀手数据")
     fun mm(context: CommandSender, player: String, type: String = "") {
         MurderMystery.murdermystery(context, player, type)
@@ -84,13 +84,13 @@ class Hypixel : CompositeCommand(
         WoolGames.wool(context, player, "sheep")
     }
 
-    @SubCommand("skywars", "sw")
+    @SubCommand("sw")
     @Description("查询玩家的空岛战争数据")
     suspend fun CommandSender.sw(player: String) {
         sendMessage(Skywars.skywars(player))
     }
 
-    @SubCommand("tntgames", "tnt")
+    @SubCommand("tnt")
     @Description("查询玩家的掘战游戏数据")
     suspend fun CommandSender.tntgames(player: String) {
         sendMessage(TNT.tntgames(player))
@@ -108,19 +108,19 @@ class Hypixel : CompositeCommand(
         WoolGames.wool(context, player, type)
     }
 
-    @SubCommand("warlords", "wl")
+    @SubCommand("wl")
     @Description("查询玩家的战争领主数据")
     suspend fun CommandSender.warlords(player: String) {
         sendMessage(Warlords.Battleground(player))
     }
 
-    @SubCommand("turbokartracers", "tkr")
+    @SubCommand("tkr")
     @Description("查询玩家的方块赛车数据")
     suspend fun CommandSender.turbokartracers(player: String) {
         sendMessage(TurboKartRacers.GingerBread(player))
     }
 
-    @SubCommand("copsandcrims", "cac", "cvc")
+    @SubCommand("cac", "cvc")
     @Description("查询玩家的警匪大战数据")
     fun cac(context: CommandSender, player: String, type: String = "") {
         CAC.mcgo(context, player, type)
@@ -128,7 +128,7 @@ class Hypixel : CompositeCommand(
 }
 
 class MCSkin : SimpleCommand(
-    luohyp.INSTANCE, "mcskin",
+    luohyp.INSTANCE, "mcskin","mc",
     description = "获取玩家的skin文件"
 ) {
     @Handler
