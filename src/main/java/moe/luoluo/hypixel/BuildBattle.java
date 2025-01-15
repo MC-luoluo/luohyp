@@ -10,7 +10,6 @@ import net.mamoe.mirai.message.data.PlainText;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -18,10 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static moe.luoluo.util.Format.decimalFormat;
+import static moe.luoluo.util.Format.largeNumFormat;
+
 public class BuildBattle {
     public static MessageChain buildBattle(String player) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
         ApiResult result;
         JsonObject json;
@@ -53,9 +54,9 @@ public class BuildBattle {
 
         if (bbJson.has("score")) {
             int score = bbJson.get("score").getAsInt();
-            chain.append(new PlainText("\n积分: "));
-            chain.append(new PlainText(String.valueOf(score)));
-            chain.append(new PlainText(" | 称号: "));
+//            chain.append(new PlainText("\n积分: "));
+//            chain.append(new PlainText(String.valueOf(score)));
+            chain.append(new PlainText("\n称号: "));
             JsonArray l1 = leader.get("leaderboards").getAsJsonObject().get("BUILD_BATTLE").getAsJsonArray().get(0).getAsJsonObject().get("leaders").getAsJsonArray();
             List<String> l2 = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
@@ -65,123 +66,121 @@ public class BuildBattle {
             int lead = 1;
             for (String l : leaders) {
                 if (Objects.equals(json.get("player").getAsJsonObject().get("uuid").getAsString(), l.replaceAll("\"", "").replaceAll("-", ""))) {
-                    chain.append(new PlainText("#" + lead + "建筑师"));
+                    chain.append("#").append(String.valueOf(lead)).append("建筑师");
+                    chain.append(" | 积分: ").append(String.valueOf(score));
                     break;
                 } else {
                     lead++;
                 }
                 if (lead > 10) {
                     int[] scoreNeeded = {100, 250, 500, 1000, 2000, 3500, 5000, 7500, 10000, 15000, 20000, 30000, 50000, 100000, 200000, 300000, 400000, 500000};
-                    int level = 1;
+                    int level = 0;
                     for (int j : scoreNeeded) {
                         if (score >= j) {
                             level++;
                         } else break;
                     }
                     chain.append(switch (level) {
-                        case 1 -> "Rookie (初来乍到)";
-                        case 2 -> "Untrained (未经雕琢)";
-                        case 3 -> "Amateur (初窥门径)";
-                        case 4 -> "Prospect";
-                        case 5 -> "Apprentice (学有所成)";
-                        case 6 -> "Experienced (驾轻就熟)";
-                        case 7 -> "Seasoned (历练老成)";
-                        case 8 -> "Trained (技艺精湛)";
-                        case 9 -> "Skilled (炉火纯青)";
-                        case 10 -> "Talented (技惊四座)";
-                        case 11 -> "Professional (巧夺天工)";
-                        case 12 -> "Artisan";
-                        case 13 -> "Expert (闻名于世)";
-                        case 14 -> "Master (建筑大师)";
-                        case 15 -> "Legend (传说星耀)";
-                        case 16 -> "Grandmaster (最强王者)";
-                        case 17 -> "Celestial";
-                        case 18 -> "Divine";
-                        case 19 -> "Ascended";
+                        case 0 -> "Rookie [初来乍到]";
+                        case 1 -> "Untrained [未经雕琢]";
+                        case 2 -> "Amateur [初窥门径]";
+                        case 3 -> "Prospect";
+                        case 4 -> "Apprentice [学有所成]";
+                        case 5 -> "Experienced [驾轻就熟]";
+                        case 6 -> "Seasoned [历练老成]";
+                        case 7 -> "Trained [技艺精湛]";
+                        case 8 -> "Skilled [炉火纯青]";
+                        case 9 -> "Talented [技惊四座]";
+                        case 10 -> "Professional [巧夺天工]";
+                        case 11 -> "Artisan";
+                        case 12 -> "Expert [闻名于世]";
+                        case 13 -> "Master [建筑大师]";
+                        case 14 -> "Legend [传说星耀]";
+                        case 15 -> "Grandmaster [最强王者]";
+                        case 16 -> "Celestial";
+                        case 17 -> "Divine";
+                        case 18 -> "Ascended";
                         default -> "null";
                     });
+                    chain.append("\n积分: ").append(String.valueOf(score)).append("/").append(String.valueOf(scoreNeeded[level]))
+                            .append(" (").append(decimalFormat.format((float) score / scoreNeeded[level] * 100)).append("%").append(")");
                     break;
                 }
             }
         }
 
-        chain.append(new PlainText("\n代币: "));
-        if (bbJson.has("coins")) {
-            chain.append(new PlainText(String.valueOf(bbJson.get("coins").getAsInt())));
-        } else {
+        chain.append(new PlainText("\nToken: "));
+        if (bbJson.has("coins"))
+            chain.append(new PlainText(largeNumFormat(bbJson.get("coins").getAsInt())));
+        else
             chain.append(new PlainText("0"));
-        }
-        if (bbJson.has("score")) {
-            chain.append(new PlainText(" | 平均每场得分: "));
-            chain.append(new PlainText(decimalFormat.format((double) bbJson.get("score").getAsInt() / bbJson.get("games_played").getAsInt())));
-        }
+        if (bbJson.has("score"))
+            chain.append(new PlainText(" | 平均每场积分: "))
+                    .append(decimalFormat.format((double) bbJson.get("score").getAsInt() / bbJson.get("games_played").getAsInt()));
 
         chain.append(new PlainText("\n游戏场次: "));
-        if (bbJson.has("games_played")) {
+        if (bbJson.has("games_played"))
             chain.append(new PlainText(String.valueOf(bbJson.get("games_played").getAsInt())));
-        } else {
+        else
             chain.append(new PlainText("0"));
-        }
-        chain.append(new PlainText(" | 胜场数: "));
+        chain.append(new PlainText(" | 胜场: "));
         if (bbJson.has("wins")) {
-            chain.append(new PlainText(String.valueOf(bbJson.get("wins").getAsInt())));
-            chain.append(new PlainText(" | 胜率: "));
-            chain.append(new PlainText(decimalFormat.format((double) bbJson.get("wins").getAsInt() / bbJson.get("games_played").getAsInt() * 100)));
-            chain.append(new PlainText("%"));
-        } else {
+            chain.append(String.valueOf(bbJson.get("wins").getAsInt()));
+            chain.append(" | 胜率: ")
+                    .append(decimalFormat.format((double) bbJson.get("wins").getAsInt() / bbJson.get("games_played").getAsInt() * 100)).append("%");
+        } else
             chain.append(new PlainText("0"));
-        }
 
         chain.append(new PlainText("\n投票数: "));
-        if (bbJson.has("total_votes")) {
+        if (bbJson.has("total_votes"))
             chain.append(new PlainText(String.valueOf(bbJson.get("total_votes").getAsInt())));
-        } else {
+        else
             chain.append(new PlainText("0"));
-        }
         chain.append(new PlainText(" | 超级选票: "));
-        if (bbJson.has("super_votes")) {
+        if (bbJson.has("super_votes"))
             chain.append(new PlainText(String.valueOf(bbJson.get("super_votes").getAsInt())));
-        } else {
+        else
             chain.append(new PlainText("0"));
+
+        chain.append(new PlainText("\n单人模式胜场: "));
+        if (bbJson.has("wins_solo_normal"))
+            chain.append(new PlainText(String.valueOf(bbJson.get("wins_solo_normal").getAsInt())));
+        else
+            chain.append(new PlainText("0"));
+        chain.append(new PlainText(" | 团队模式胜场: "));
+        if (bbJson.has("wins_teams_normal"))
+            chain.append(new PlainText(String.valueOf(bbJson.get("wins_teams_normal").getAsInt())));
+        else
+            chain.append(new PlainText("0"));
+
+        if (bbJson.has("solo_most_points")) {
+            chain.append("\n单人最高分数: ").append(String.valueOf(bbJson.get("solo_most_points").getAsInt()));
+            if (bbJson.has("teams_most_points"))
+                chain.append(" | 团队最高分数: ").append(String.valueOf(bbJson.get("teams_most_points").getAsInt()));
         }
 
         chain.append(new PlainText("\n猜猜乐胜场: "));
-        if (bbJson.has("wins_guess_the_build")) {
+        if (bbJson.has("wins_guess_the_build"))
             chain.append(new PlainText(String.valueOf(bbJson.get("wins_guess_the_build").getAsInt())));
-        } else {
+        else
             chain.append(new PlainText("0"));
-        }
         chain.append(new PlainText(" | 猜对次数: "));
-        if (bbJson.has("correct_guesses")) {
+        if (bbJson.has("correct_guesses"))
             chain.append(new PlainText(String.valueOf(bbJson.get("correct_guesses").getAsInt())));
-        } else {
+        else
             chain.append(new PlainText("0"));
-        }
 
-        chain.append(new PlainText("\n单人模式胜场: "));
-        if (bbJson.has("wins_solo_normal")) {
-            chain.append(new PlainText(String.valueOf(bbJson.get("wins_solo_normal").getAsInt())));
-        } else {
-            chain.append(new PlainText("0"));
-        }
-        chain.append(new PlainText(" | 团队模式胜场: "));
-        if (bbJson.has("wins_teams_normal")) {
-            chain.append(new PlainText(String.valueOf(bbJson.get("wins_teams_normal").getAsInt())));
-        } else {
-            chain.append(new PlainText("0"));
-        }
         chain.append(new PlainText("\n高手模式胜场: "));
-        if (bbJson.has("wins_solo_pro")) {
+        if (bbJson.has("wins_solo_pro"))
             chain.append(new PlainText(String.valueOf(bbJson.get("wins_solo_pro").getAsInt())));
-        } else {
+        else
             chain.append(new PlainText("0"));
-        }
-        chain.append(new PlainText("\nSpeed Builders胜场: "));
-        if (bbJson.has("wins_speed_builders")) {
+
+        chain.append(new PlainText(" | 记忆速建胜场: "));
+        if (bbJson.has("wins_speed_builders"))
             chain.append(new PlainText(String.valueOf(bbJson.get("wins_speed_builders").getAsInt())));
-        } else {
+        else
             chain.append(new PlainText("0"));
-        }
         return chain.build();
     }
 }

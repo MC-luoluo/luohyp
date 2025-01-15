@@ -8,7 +8,7 @@ import net.mamoe.mirai.console.command.SimpleCommand
 
 
 class Hypixel : CompositeCommand(
-    luohyp.INSTANCE, "hypixel", "hyp",
+    luohyp.INSTANCE, "hypixel", "hyp", "luohyp",
     description = "查询玩家的Hypixel数据"
 ) {
 
@@ -140,7 +140,7 @@ class Hypixel : CompositeCommand(
 }
 
 class MCSkin : SimpleCommand(
-    luohyp.INSTANCE, "mcskin","mc",
+    luohyp.INSTANCE, "mcskin", "mc",
     description = "获取玩家的skin文件"
 ) {
     @Handler
