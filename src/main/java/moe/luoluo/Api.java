@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
@@ -23,18 +24,8 @@ public class Api {
             default -> new URI("https://api.mojang.com/users/profiles/minecraft/" + arg1);
         };
         String result = request(uri);
-        if (result.isEmpty()) {
-            return "";
-        } else if (result.startsWith("java.net.ConnectException:")) {
-            return "TimedOut";
-        } else if (result.startsWith("java.io.FileNotFoundException:")) {
+        if (result.equals("NotFound")) {
             return "NotFound";
-        } else if (result.startsWith("java.io.IOException:")) {
-            return "IO";
-        } else if (result.startsWith("java.net.SocketException:")) {
-            return "reset";
-        } else if (result.startsWith("javax.net.ssl.SSLHandshakeException:")) {
-            return "sslEr";
         }
         Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
         JsonObject json = gson.fromJson(result, JsonObject.class);
@@ -42,7 +33,7 @@ public class Api {
             return json.get("id").getAsString();
         } else if (get.equals("name")) {
             return json.get("name").getAsString();
-        } else return "null";
+        } else throw new IOException();
 
     }
 
@@ -55,7 +46,7 @@ public class Api {
     }
 
     public static ApiResult hypixel(String type, String parameter, String value) throws URISyntaxException, IOException {
-        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + config.INSTANCE.getHypixelAPIkey() + "&" + parameter + "=" + URLEncoder.encode(value, StandardCharsets.UTF_8));
+        URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + Config.INSTANCE.getHypixelAPIkey() + "&" + parameter + "=" + URLEncoder.encode(value, StandardCharsets.UTF_8));
         JsonObject result;
         String s = "";
         try {
@@ -67,7 +58,7 @@ public class Api {
                 logger.error("请求失败，返回本地缓存", e);
                 return new ApiResult(new Gson().fromJson(Data.getHypixelData(type, value), JsonObject.class), Long.parseLong(Data.getHypixelDataTime(type, value)));
             }
-            if (config.INSTANCE.getHypixelAPIkey().isEmpty()) {
+            if (Config.INSTANCE.getHypixelAPIkey().isEmpty()) {
                 throw new JsonSyntaxException("HypixelAPIkey为空，请前往配置文件填写HypixelAPIkey");
             }
             throw new JsonSyntaxException(e);
@@ -76,12 +67,12 @@ public class Api {
         return new ApiResult(result, -1);
     }
 
-    public static String request(URI uri) throws MalformedURLException {
+    public static String request(URI uri) throws IOException {
         System.setProperty("java.net.preferIPv6Addresses", "true");
 
         Proxy proxy = null;
-        if (!config.INSTANCE.getProxy().isEmpty()) {
-            proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(config.INSTANCE.getProxy(), Integer.parseInt(config.INSTANCE.getProxyPort())));
+        if (!Config.INSTANCE.getProxy().isEmpty()) {
+            proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(Config.INSTANCE.getProxy(), Integer.parseInt(Config.INSTANCE.getProxyPort())));
         }
         URL url = uri.toURL();
         BufferedReader in = null;
@@ -104,8 +95,8 @@ public class Api {
             while ((line = in.readLine()) != null) {
                 result.append(line);
             }
-        } catch (IOException e) {
-            return String.valueOf(e);
+        } catch (FileNotFoundException e) {
+            return "NotFound";
         } finally {
             try {
                 if (in != null) {

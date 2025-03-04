@@ -5,7 +5,7 @@ import net.mamoe.mirai.console.data.ValueDescription
 import net.mamoe.mirai.console.data.value
 
 
-object config : AutoSavePluginConfig("config") {
+object Config : AutoSavePluginConfig("config") {
     @ValueDescription("填写Hypixel API key，可在'https://developer.hypixel.net/dashboard'获取")
     var HypixelAPIkey: String by value("")
     @ValueDescription("填写该选项后，请求API将会使用代理")

@@ -369,8 +369,8 @@ public class Guild {
 
         if (Objects.equals(type, "members") || Objects.equals(type, "all")) {
             membersList.append(new PlainText("成员列表: "));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd'T'HH:mm:ss", Locale.CHINA);
             for (int x = 0; x < members.size(); x++) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日-HH时mm分ss秒", Locale.CHINA);
                 membersList.append(new PlainText("\n\n玩家: "));
                 membersList.append(new PlainText(Api.mojang(members.get(x).getAsJsonObject().get("uuid").getAsString(), "name")));
                 membersList.append(new PlainText("\nrank: "));

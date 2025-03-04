@@ -6,6 +6,9 @@ import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.CompositeCommand
 import net.mamoe.mirai.console.command.SimpleCommand
 
+/* TODO: 在此处捕获错误并返回消息，调用的子类中如果有不符合预期的行为直接抛出异常即可，此处处理后将错误结果告知用户
+     将data使用数据库存储，方便存取
+ */
 
 class Hypixel : CompositeCommand(
     luohyp.INSTANCE, "hypixel", "hyp", "luohyp",
@@ -27,7 +30,7 @@ class Hypixel : CompositeCommand(
     @SubCommand("bb")
     @Description("查询玩家的建筑大师数据")
     suspend fun CommandSender.bb(player: String) {
-        sendMessage(BuildBattle.buildBattle(player))
+        sendMessage(errhandle{BuildBattle.buildBattle(player)})
     }
 
     @SubCommand("cac", "cvc")
@@ -51,7 +54,13 @@ class Hypixel : CompositeCommand(
     @SubCommand("fish")
     @Description("查询玩家的钓鱼数据")
     suspend fun CommandSender.fish(player: String) {
-        sendMessage(Fish.fish(player))
+        sendMessage(errhandle{Fish.fish(player)})
+    }
+
+    @SubCommand("games", "recentgames")
+    @Description("查询玩家最近游玩")
+    suspend fun CommandSender.games(player: String) {
+        sendMessage(errhandle{RecentGames.recentGames(player)})
     }
 
     @SubCommand("guild")
@@ -99,19 +108,19 @@ class Hypixel : CompositeCommand(
     @SubCommand("sw")
     @Description("查询玩家的空岛战争数据")
     suspend fun CommandSender.sw(player: String) {
-        sendMessage(Skywars.skywars(player))
+        sendMessage(errhandle{Skywars.skywars(player)})
     }
 
     @SubCommand("tkr")
     @Description("查询玩家的方块赛车数据")
     suspend fun CommandSender.turbokartracers(player: String) {
-        sendMessage(TurboKartRacers.GingerBread(player))
+        sendMessage(errhandle{TurboKartRacers.GingerBread(player)})
     }
 
     @SubCommand("tnt")
     @Description("查询玩家的掘战游戏数据")
     suspend fun CommandSender.tntgames(player: String) {
-        sendMessage(TNT.tntgames(player))
+        sendMessage(errhandle{TNT.tntgames(player)})
     }
 
     @SubCommand("tournament", "tourney")
@@ -129,7 +138,7 @@ class Hypixel : CompositeCommand(
     @SubCommand("wl")
     @Description("查询玩家的战争领主数据")
     suspend fun CommandSender.warlords(player: String) {
-        sendMessage(Warlords.Battleground(player))
+        sendMessage(errhandle{Warlords.Battleground(player)})
     }
 
     @SubCommand("zb")

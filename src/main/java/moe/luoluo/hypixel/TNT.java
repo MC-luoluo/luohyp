@@ -125,7 +125,7 @@ public class TNT {
             int record = tntJson.get("record_pvprun").getAsInt();
             chain.append(new PlainText(record >= 60 ?
                     (record / 60) + ":" + String.format("%02d", record % 60) :
-                    "0:" + String.format("%02d", record % 60)
+                    "00:" + String.format("%02d", record % 60)
             ));
         }
 
