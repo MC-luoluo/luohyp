@@ -616,15 +616,18 @@ public class Arcade {
             //僵尸末日穷途末路
             chain.append(new PlainText("\n|- 穷途末路: "));
 
-            chain.append(new PlainText("\n| 生存回合: "));
-            if (acdJson.has("total_rounds_survived_zombies_deadend")) {
-                chain.append(new PlainText(String.valueOf(acdJson.get("total_rounds_survived_zombies_deadend").getAsInt())));
-            } else chain.append(new PlainText("null"));
-
-            chain.append(new PlainText(" | 胜场: "));
-            if (acdJson.has("wins_zombies_deadend")) {
-                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_deadend").getAsInt())));
-            } else chain.append("无");
+            chain.append(new PlainText("\n| 胜场: "));
+            if (acdJson.has("wins_zombies_deadend_normal")) {
+                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_deadend_normal").getAsInt())));
+            } else chain.append("-");
+            chain.append(" | ");
+            if (acdJson.has("wins_zombies_deadend_hard")) {
+                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_deadend_hard").getAsInt())));
+            } else chain.append("-");
+            chain.append(" | ");
+            if (acdJson.has("wins_zombies_deadend_rip")) {
+                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_deadend_rip").getAsInt())));
+            } else chain.append("-");
 
             chain.append(new PlainText("\n| 最佳回合: "));
             if (acdJson.has("best_round_zombies_deadend_normal")) {
@@ -658,15 +661,18 @@ public class Arcade {
             //僵尸末日坏血之宫
             chain.append(new PlainText("\n|- 坏血之宫: "));
 
-            chain.append(new PlainText("\n| 生存回合: "));
-            if (acdJson.has("total_rounds_survived_zombies_badblood")) {
-                chain.append(new PlainText(String.valueOf(acdJson.get("total_rounds_survived_zombies_badblood").getAsInt())));
-            } else chain.append(new PlainText("null"));
-
-            chain.append(new PlainText(" | 胜场: "));
-            if (acdJson.has("wins_zombies_badblood")) {
-                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_badblood").getAsInt())));
-            } else chain.append("无");
+            chain.append(new PlainText("\n| 胜场: "));
+            if (acdJson.has("wins_zombies_badblood_normal")) {
+                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_badblood_normal").getAsInt())));
+            } else chain.append("-");
+            chain.append(" | ");
+            if (acdJson.has("wins_zombies_badblood_hard")) {
+                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_badblood_hard").getAsInt())));
+            } else chain.append("-");
+            chain.append(" | ");
+            if (acdJson.has("wins_zombies_badblood_rip")) {
+                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_badblood_rip").getAsInt())));
+            } else chain.append("-");
 
             chain.append(new PlainText("\n| 最佳回合: "));
             if (acdJson.has("best_round_zombies_badblood_normal")) {
@@ -701,15 +707,18 @@ public class Arcade {
             //僵尸末日外星游乐园
             chain.append(new PlainText("\n|- 外星游乐园: "));
 
-            chain.append(new PlainText("\n| 生存回合: "));
-            if (acdJson.has("total_rounds_survived_zombies_alienarcadium")) {
-                chain.append(new PlainText(String.valueOf(acdJson.get("total_rounds_survived_zombies_alienarcadium").getAsInt())));
-            } else chain.append(new PlainText("null"));
-
-            chain.append(new PlainText(" | 胜场: "));
-            if (acdJson.has("wins_zombies_alienarcadium")) {
-                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_alienarcadium").getAsInt())));
-            } else chain.append("无");
+            chain.append(new PlainText("\n| 胜场: "));
+            if (acdJson.has("wins_zombies_alienarcadium_normal")) {
+                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_alienarcadium_normal").getAsInt())));
+            } else chain.append("-");
+            chain.append(" | ");
+            if (acdJson.has("wins_zombies_alienarcadium_hard")) {
+                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_alienarcadium_hard").getAsInt())));
+            } else chain.append("-");
+            chain.append(" | ");
+            if (acdJson.has("wins_zombies_alienarcadium_rip")) {
+                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_alienarcadium_rip").getAsInt())));
+            } else chain.append("-");
 
             chain.append(new PlainText("\n| 最佳回合: "));
             if (acdJson.has("best_round_zombies_alienarcadium_normal")) {
@@ -742,15 +751,18 @@ public class Arcade {
 
             chain.append(new PlainText("\n|- 监狱风云: "));
 
-            chain.append(new PlainText("\n| 总生存回合: "));
-            if (acdJson.has("total_rounds_survived_zombies_prison")) {
-                chain.append(new PlainText(String.valueOf(acdJson.get("total_rounds_survived_zombies_prison").getAsInt())));
-            } else chain.append(new PlainText("null"));
-
-            chain.append(new PlainText(" | 胜场: "));
-            if (acdJson.has("wins_zombies_prison")) {
-                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_prison").getAsInt())));
-            } else chain.append("无");
+            chain.append(new PlainText("\n| 胜场: "));
+            if (acdJson.has("wins_zombies_prison_normal")) {
+                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_prison_normal").getAsInt())));
+            } else chain.append("-");
+            chain.append(" | ");
+            if (acdJson.has("wins_zombies_prison_hard")) {
+                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_prison_hard").getAsInt())));
+            } else chain.append("-");
+            chain.append(" | ");
+            if (acdJson.has("wins_zombies_prison_rip")) {
+                chain.append(new PlainText(String.valueOf(acdJson.get("wins_zombies_prison_rip").getAsInt())));
+            } else chain.append("-");
 
             chain.append(new PlainText("\n| 最佳回合: "));
             if (acdJson.has("best_round_zombies_prison_normal")) {
