@@ -28,15 +28,9 @@ public class Rank {
 
                     if (json.has("rankPlusColor")) {  //++颜色
                         n1 = color(json.get("rankPlusColor").getAsString());
-                        if (n1.isEmpty()) {
-                            System.out.println(json.get("rankPlusColor").getAsString());
-                        }
                     }
-                    if (json.has("monthlyRankColor")) {  //rank颜色
-                        n2 = color(json.get("monthlyRankColor").getAsString());
-                        if (n2.isEmpty()) {
-                            System.out.println(json.get("monthlyRankColor").getAsString());
-                        }
+                    if (json.has("monthlyRankColor") && Objects.equals(json.get("monthlyRankColor").getAsString(), "AQUA")) {  //rank颜色
+                        n2 = "青";
                     }
 
                     if (rankPlus && json.get("monthlyPackageRank").getAsString().equals("SUPERSTAR")) {
@@ -65,12 +59,11 @@ public class Rank {
         map.put("WHITE", "白");
         map.put("BLUE", "蓝");
         map.put("AQUA", "青");
-
         map.put("DARK_GREEN", "深绿");
         map.put("DARK_RED", "深红");
         map.put("DARK_AQUA", "深水绿");
         map.put("DARK_PURPLE", "深紫");
-        map.put("深灰", "");
+        map.put("DARK_GRAY", "深灰");
         map.put("BLACK", "黑");
         map.put("DARK_BLUE", "深蓝");
 

@@ -15,6 +15,7 @@ import java.time.ZoneId;
 import java.util.Objects;
 
 import static moe.luoluo.util.Format.decimalFormat;
+import static moe.luoluo.util.Format.largeNumFormat;
 
 public class Skywars {
     public static MessageChain skywars(String player) throws IOException, URISyntaxException {
@@ -48,40 +49,7 @@ public class Skywars {
         chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
         chain.append(new PlainText(" | 空岛战争数据:"));
 
-        if (swJson.has("games_played_skywars")) {
-            chain.append(new PlainText("\n总游戏场次: "));
-            chain.append(new PlainText(String.valueOf(swJson.get("games_played_skywars").getAsInt())));
-        }
-        if (swJson.has("coins")) {
-            chain.append(new PlainText(" | 硬币: "));
-            chain.append(new PlainText(String.valueOf(swJson.get("coins").getAsInt())));
-        }
-
-        chain.append(new PlainText("\n等级: "));
-        if (swJson.has("skywars_experience")) {
-            long exp = swJson.get("skywars_experience").getAsLong();
-            int[] expNeeded = {20, 50, 80, 100, 250, 500, 1000, 1500, 2500, 4000, 5000, 10000};
-            int level = 1;
-            for (int j : expNeeded) {
-                if (exp >= j) {
-                    exp -= j;
-                    level++;
-                } else break;
-            }
-            while (exp >= 10000) {
-                level++;
-                exp -= 10000;
-            }
-            chain.append(new PlainText(String.valueOf(level)));
-            //经验进度
-            int xpLevel = Math.min(level - 1, 11);
-            chain.append(new PlainText(" (" + exp +
-                    "/" + exp(xpLevel) + " " +
-                    decimalFormat.format((float) exp / expNeeded[xpLevel] * 100) + "%)"
-            ));
-        } else chain.append("null");
-
-        chain.append(new PlainText("\n游戏场次: "));
+        chain.append("\n游戏次数: ");
         int temp = 0;
         if (swJson.has("wins")) {
             temp += swJson.get("wins").getAsInt();
@@ -95,12 +63,45 @@ public class Skywars {
             chain.append(new PlainText(String.valueOf(swJson.get("win_streak").getAsInt())));
         }
 
-        /*if (skywars_experience(swJson)) {
-            chain.append(new PlainText("\n当前经验值: "));
-            chain.append(new PlainText(String.valueOf(swJson.get("skywars_experience").getAsDouble())));
-            chain.append(new PlainText(" | 硬币: "));
-            chain.append(new PlainText(String.valueOf(swJson.get("coins").getAsInt())));
-        }*/
+        chain.append(new PlainText("\n硬币: "));
+        if (swJson.has("coins")) {
+            chain.append(largeNumFormat(swJson.get("coins").getAsInt()));
+        } else chain.append("null");
+        if (swJson.has("cosmetic_tokens"))
+            chain.append(" | 代币: ").append(largeNumFormat(swJson.get("cosmetic_tokens").getAsInt()));
+
+        chain.append(new PlainText("\n等级: "));
+        if (swJson.has("skywars_experience")) {
+            long exp = swJson.get("skywars_experience").getAsLong();
+            int[] expNeeded = {10, 25, 50, 75, 100, 250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2500, 3000, 3500, 4000, 4500, 5000};
+            int level = 1;
+            for (int j : expNeeded) {
+                if (exp >= j) {
+                    exp -= j;
+                    level++;
+                } else break;
+            }
+            while (exp >= 5000) {
+                level++;
+                exp -= 5000;
+            }
+            chain.append(new PlainText(String.valueOf(level)));
+            //经验进度
+            int xpLevel = Math.min(level - 1, 18);
+            chain.append(new PlainText(" (" + exp +
+                    "/" + exp(xpLevel) + " " +
+                    decimalFormat.format((float) exp / expNeeded[xpLevel] * 100) + "%)"
+            ));
+        } else chain.append("null");
+
+        chain.append("\n灵魂: ");
+        if (swJson.has("souls"))
+            chain.append(String.valueOf(swJson.get("souls").getAsInt()));
+        else chain.append("null");
+        if (swJson.has("heads"))
+            chain.append(" | 头颅: ").append(String.valueOf(swJson.get("heads").getAsInt()));
+        if (swJson.has("opals"))
+            chain.append(" | 欧泊: ").append(String.valueOf(swJson.get("opals").getAsInt()));
 
         if (swJson.has("wins") && swJson.has("losses")) {
             chain.append(new PlainText("\n胜场: "));
@@ -131,22 +132,9 @@ public class Skywars {
                             (float) swJson.get("deaths").getAsInt()))));
         }
 
-        chain.append(new PlainText("\n头颅: "));
-        if (swJson.has("heads")) {
-            chain.append(new PlainText(String.valueOf(swJson.get("heads").getAsInt())));
-        } else {
-            chain.append(new PlainText("null"));
-        }
-        chain.append(new PlainText(" | 灵魂: "));
-        if (swJson.has("souls")) {
-            chain.append(new PlainText(String.valueOf(swJson.get("souls").getAsInt())));
-        } else {
-            chain.append(new PlainText("null"));
-        }
-
         if (swJson.has("games_lab")) {
             chain.append(new PlainText("\n\n实验模式: "));
-            chain.append(new PlainText("\n游戏场次: "));
+            chain.append(new PlainText("\n游戏次数: "));
             temp = 0;
             if (swJson.has("wins_lab")) {
                 temp += swJson.get("wins_lab").getAsInt();
@@ -240,7 +228,7 @@ public class Skywars {
     }
 
     public static String exp(int exp) {
-        String[] map = {"20", "50", "80", "100", "250", "500", "1k", "1.5k", "2.5k", "4k", "5k", "10k"};
+        String[] map = {"10", "25", "50", "75", "100", "250", "500", "750", "1k", "1.25k", "1.5k", "1.75k", "2k", "2.5k", "3k", "3.5k", "4k", "4.5k", "5k"};
         return map[exp];
     }
 }
