@@ -52,7 +52,7 @@ public class Api {
         try {
             s = request(uri);
             result = new Gson().fromJson(s, JsonObject.class);
-        } catch (JsonSyntaxException e) {
+        } catch (JsonSyntaxException | IOException e) {
             logger.warn("请求结果: {}", s);
             if (!Data.getHypixelData(type, value).equals("null")) {
                 logger.error("请求失败，返回本地缓存", e);
