@@ -96,7 +96,7 @@ public class Skywars {
                         "/" + exp(xpLevel) + " " +
                         decimalFormat.format((float) exp / expNeeded[xpLevel] * 100) + "%)"
                 ));
-            } else chain.append("(MAX)");
+            } else chain.append(" (MAX)");
         } else chain.append("null");
 
         chain.append("\n灵魂: ");
