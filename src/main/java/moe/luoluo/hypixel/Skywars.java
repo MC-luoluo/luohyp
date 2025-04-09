@@ -85,13 +85,18 @@ public class Skywars {
                 level++;
                 exp -= 5000;
             }
+            //max sw level is 500
+            if (level > 500)
+                level = 500;
             chain.append(new PlainText(String.valueOf(level)));
             //经验进度
-            int xpLevel = Math.min(level - 1, 18);
-            chain.append(new PlainText(" (" + exp +
-                    "/" + exp(xpLevel) + " " +
-                    decimalFormat.format((float) exp / expNeeded[xpLevel] * 100) + "%)"
-            ));
+            if (level != 500) { // same as "if (level < 500)"
+                int xpLevel = Math.min(level - 1, 18);
+                chain.append(new PlainText(" (" + exp +
+                        "/" + exp(xpLevel) + " " +
+                        decimalFormat.format((float) exp / expNeeded[xpLevel] * 100) + "%)"
+                ));
+            } else chain.append("(MAX)");
         } else chain.append("null");
 
         chain.append("\n灵魂: ");
@@ -132,6 +137,7 @@ public class Skywars {
                             (float) swJson.get("deaths").getAsInt()))));
         }
 
+        //lab
         if (swJson.has("games_lab")) {
             chain.append(new PlainText("\n\n实验模式: "));
             chain.append(new PlainText("\n游戏次数: "));
@@ -187,42 +193,6 @@ public class Skywars {
                 }
             }
         }
-
-        /*
-        if (melee_kills(swJson)) {
-            chain.append(new PlainText("\n近战杀敌数: "));
-            chain.append(new PlainText(String.valueOf(swJson.get("melee_kills").getAsInt())));
-            chain.append(new PlainText(" | 弓箭击杀: "));
-            chain.append(new PlainText(String.valueOf(swJson.get("bow_kills").getAsInt())));
-            chain.append(new PlainText(" | 推入虚空: "));
-            chain.append(new PlainText(String.valueOf(swJson.get("void_kills").getAsInt())));
-        }
-
-        if (arrows_shot(swJson)) {
-            chain.append(new PlainText("\n箭矢射击数: "));
-            chain.append(new PlainText(String.valueOf(swJson.get("arrows_shot").getAsInt())));
-            chain.append(new PlainText(" | 箭矢命中数: "));
-            chain.append(new PlainText(String.valueOf(swJson.get("arrows_hit").getAsInt())));
-            chain.append(new PlainText(" | 箭矢命中率: "));
-            chain.append(new PlainText(decimalFormat.format(
-                    (float) swJson.get("arrows_hit").getAsInt() /
-                            (float) swJson.get("arrows_shot").getAsInt())));
-        }
-
-        if (chests_opened(swJson)) {
-            chain.append(new PlainText("\n打开箱子个数: "));
-            chain.append(new PlainText(String.valueOf(swJson.get("chests_opened").getAsInt())));
-        }
-
-        if (enderpearls_thrown(swJson)) {
-            chain.append(new PlainText(" | 扔出末影珍珠数: "));
-            chain.append(new PlainText(String.valueOf(swJson.get("enderpearls_thrown").getAsInt())));
-        }
-
-        if (souls_gathered(swJson)) {
-            chain.append(new PlainText(" | 获得的灵魂: "));
-            chain.append(new PlainText(String.valueOf(swJson.get("souls_gathered").getAsInt())));
-        }*/
 
         return chain.build();
     }
