@@ -17,6 +17,10 @@ object Data : AutoSavePluginData("data") {
         owner_ = owner
         storage_ = storage
     }
+
+    private var HypixelData: MutableMap<String, MutableMap<String, Pair<Long, String>>> by value()
+
+    //保存：将目前已添加数据写入文件
     @JvmStatic
     @OptIn(ConsoleExperimentalApi::class)
     private fun save() {
@@ -26,14 +30,19 @@ object Data : AutoSavePluginData("data") {
             // 处理异常
         }
     }
-    private val HypixelData: MutableMap<String, MutableMap<String, Pair<Long, String>>> by value()
 
+    //获取：从文件读取数据
     @JvmStatic
     fun getHypixelData(type: String, uuid: String): String {
+        //获取uuid对应的map
         val idMap = HypixelData[uuid]
+        //失败返回"null"
         idMap ?: return "null"
+        //尝试获取type对应的Pair
         val typePair = idMap[type]
+        //失败返回"null"
         typePair ?: return "null"
+        //找到返回Pair的第二项(JSON)
         return typePair.second
     }
 
@@ -46,12 +55,20 @@ object Data : AutoSavePluginData("data") {
         return typePair.first.toString()
     }
 
+    //设置：存储该玩家的新数据
     @JvmStatic
     fun setHypixelData(type: String, uuid: String, json: JsonObject) {
+        //获取uuid对应的map，没有就创建
         val uuidMap = HypixelData.getOrPut(uuid) { mutableMapOf() }
+        //将type和当前时间戳和JSON存入Map
         uuidMap[type] = (System.currentTimeMillis() to json.toString())
         HypixelData[uuid] = uuidMap
         save()
-//        HypixelData[uuid]?.put(type,(System.currentTimeMillis() to json.toString()))
+    }
+
+    //清空：清除所有缓存数据
+    @JvmStatic
+    fun resetData() {
+        HypixelData.clear()
     }
 }
