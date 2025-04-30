@@ -10,11 +10,26 @@ import java.net.URISyntaxException;
 
 public class Mojang {
     public static String mojang(String arg1, String get) throws IOException, URISyntaxException {
-        URI uri = switch (arg1.length()) {
-            case 32, 36 -> new URI("https://api.minecraftservices.com/minecraft/profile/lookup/" + arg1);
-            default -> new URI("https://api.mojang.com/users/profiles/minecraft/" + arg1);
+        URI uri;
+        URI uri2 = switch (arg1.length()) {
+            case 32, 36 -> {
+                uri = new URI("https://api.minecraftservices.com/minecraft/profile/lookup/" + arg1);
+                yield new URI("https://sessionserver.mojang.com/session/minecraft/profile/" + arg1);
+            }
+            default -> {
+
+                uri = new URI("https://api.mojang.com/users/profiles/minecraft/" + arg1);
+                yield new URI("https://api.minecraftservices.com/minecraft/profile/lookup/name/" + arg1);
+            }
         };
-        String result = Api.request(uri);
+        ;
+        String result;
+        try {
+            result = Api.request(uri);
+        } catch (IOException e) {
+            result = Api.request(uri2);
+        }
+
         if (result.equals("NotFound")) {
             return "NotFound";
         }
