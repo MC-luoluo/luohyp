@@ -1,8 +1,8 @@
 package moe.luoluo.hypixel;
 
 import com.google.gson.JsonObject;
-import moe.luoluo.Api;
-import moe.luoluo.ApiResult;
+import moe.luoluo.apis.ApiResult;
+import moe.luoluo.apis.Hypixel;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -25,8 +25,8 @@ public class Counts {
         ApiResult result;
         JsonObject json;
         try {
-            result = Api.hypixel("counts");
-            json = result.getJson();
+            result = Hypixel.hypixel("counts");
+            json = result.json();
         } catch (URISyntaxException | IOException e) {
             context.sendMessage(new MessageChainBuilder().append("请求失败, 请检查控制台错误日志").build());
             logger.error("请求失败", e);
@@ -39,8 +39,8 @@ public class Counts {
 
 
         MessageChainBuilder chain = new MessageChainBuilder();
-        if (result.getTime() != -1) {
-            Instant instant = Instant.ofEpochMilli(result.getTime());
+        if (result.time() != -1) {
+            Instant instant = Instant.ofEpochMilli(result.time());
             LocalDateTime localDate = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
             chain.append("\uD83D\uDFE5").append(localDate.toString()).append("\n");
         }

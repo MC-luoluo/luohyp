@@ -2,6 +2,7 @@ package moe.luoluo;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import moe.luoluo.apis.ApiResult;
 
 import java.io.File;
 import java.sql.*;

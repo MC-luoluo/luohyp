@@ -1,8 +1,9 @@
 package moe.luoluo.hypixel;
 
 import com.google.gson.JsonObject;
-import moe.luoluo.Api;
-import moe.luoluo.ApiResult;
+import moe.luoluo.apis.ApiResult;
+import moe.luoluo.apis.Hypixel;
+import moe.luoluo.apis.Mojang;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -20,13 +21,13 @@ public class Fish {
 
         ApiResult result;
         JsonObject json;
-        String uuid = Api.mojang(player, "uuid");
+        String uuid = Mojang.mojang(player, "uuid");
         if (Objects.equals(uuid, "NotFound")) {
             chain.append("玩家不存在");
             return chain.build();
         } else {
-            result = Api.hypixel("player", uuid);
-            json = result.getJson();
+            result = Hypixel.playerStatus(uuid);
+            json = result.json();
         }
 
         /*
@@ -35,8 +36,8 @@ public class Fish {
         MessageChainBuilder lava = new MessageChainBuilder();
         MessageChainBuilder ice = new MessageChainBuilder();*/
 
-        if (result.getTime() != -1) {
-            Instant instant = Instant.ofEpochMilli(result.getTime());
+        if (result.time() != -1) {
+            Instant instant = Instant.ofEpochMilli(result.time());
             LocalDateTime localDate = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
             chain.append("\uD83D\uDFE5").append(localDate.toString()).append("\n");
         }

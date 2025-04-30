@@ -3,21 +3,18 @@ package moe.luoluo.hypixel;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import moe.luoluo.Api;
-import moe.luoluo.ApiResult;
+import moe.luoluo.apis.ApiResult;
+import moe.luoluo.apis.Hypixel;
+import moe.luoluo.apis.Mojang;
+import moe.luoluo.apis.Skin;
 import moe.luoluo.util.Member;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
-import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.utils.ExternalResource;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -38,22 +35,22 @@ public class Player {
 
         ApiResult result;
         JsonObject json;
-        String uuid = Api.mojang(player, "uuid");
+        String uuid = Mojang.mojang(player, "uuid");
         if (Objects.equals(uuid, "NotFound")) {
             context.sendMessage("玩家不存在");
             return;
         } else {
-            result = Api.hypixel("player", uuid);
-            json = result.getJson();
+            result = Hypixel.playerStatus(uuid);
+            json = result.json();
         }
 
-        if (result.getTime() != -1) {
-            Instant instant = Instant.ofEpochMilli(result.getTime());
+        if (result.time() != -1) {
+            Instant instant = Instant.ofEpochMilli(result.time());
             LocalDateTime localDate = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
             chain.append("\uD83D\uDFE5").append(localDate.toString()).append("\n");
         }
 
-        JsonObject guild = Api.hypixel("guild", "player", Api.mojang(player, "uuid")).getJson();
+        JsonObject guild = Hypixel.hypixel("guild", "player", Mojang.mojang(player, "uuid")).json();
         if (!json.get("player").isJsonObject()) {
             chain.append("该玩家的Hypixel数据为空");
             context.sendMessage(chain.build());
@@ -63,7 +60,7 @@ public class Player {
 
         JsonObject online;
         if (playerJson.has("lastLogout")) {
-            online = Api.hypixel("status", Api.mojang(player, "uuid")).getJson();
+            online = Hypixel.hypixel("status", Mojang.mojang(player, "uuid")).json();
         } else {
             online = null;
         }
@@ -128,7 +125,8 @@ public class Player {
             chain.append(guild.get("guild").getAsJsonObject().get("name").getAsString());
 
             Gson gson = new Gson();
-            Type memberListType = new TypeToken<List<Member>>() {}.getType();
+            Type memberListType = new TypeToken<List<Member>>() {
+            }.getType();
             List<Member> members = gson.fromJson(guild.get("guild").getAsJsonObject().get("members").getAsJsonArray(), memberListType);
 
             Optional<Member> member = members.stream()
@@ -136,8 +134,7 @@ public class Player {
                     .findFirst();
 
             member.ifPresent(m -> chain.append(" (").append(m.rank).append(")"));
-        }
-        else chain.append("无");
+        } else chain.append("无");
 
         chain.append("\n首次登录: ");
         if (playerJson.has("firstLogin"))
@@ -176,36 +173,19 @@ public class Player {
                 chain.append("\n| TikTok: ").append(links.get("TIKTOK").getAsString());
         }
 
-        URI uri;
-        byte[] data;
         try {
-            uri = new URI("https://crafatar.com/renders/body/" + playerJson.get("uuid").getAsString() + "?scale=10" + "&overlay");
-            HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
-            conn.setRequestMethod("GET");
-            conn.setConnectTimeout(5000);
-            InputStream is = conn.getInputStream();
-
-            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[6024];
-            int len;
-            while ((len = is.read(buffer)) != -1) {
-                outStream.write(buffer, 0, len);
-            }
-            is.close();
-
-            data = outStream.toByteArray();
+            byte[] data = Skin.render(uuid);
+            if (context.getSubject() != null)
+                chain.append(context.getSubject().uploadImage(ExternalResource.create(data)));
 
         } catch (IOException e) {
-            chain.append("\n\n皮肤图片加载失败");
+            chain.append("\n\n皮肤渲染图加载失败");
             context.sendMessage(chain.build());
             System.out.println("以对下方报错进行处理, 若 crafatar.com 正常访问请联系作者");
             throw new RuntimeException(e);
         }
 
-        if (context.getSubject() != null) {
-            Image img = context.getSubject().uploadImage(ExternalResource.create(data));
-            chain.append(img);
-        }
+
         if (type.equals("all") && context.getSubject() != null) {
             ForwardMessageBuilder builder = new ForwardMessageBuilder(context.getSubject());
             builder.add(Objects.requireNonNull(context.getBot()).getId(), context.getBot().getNick(), chain.build());

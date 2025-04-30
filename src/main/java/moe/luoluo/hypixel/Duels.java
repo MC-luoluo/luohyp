@@ -1,8 +1,9 @@
 package moe.luoluo.hypixel;
 
 import com.google.gson.JsonObject;
-import moe.luoluo.Api;
-import moe.luoluo.ApiResult;
+import moe.luoluo.apis.ApiResult;
+import moe.luoluo.apis.Hypixel;
+import moe.luoluo.apis.Mojang;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -25,13 +26,13 @@ public class Duels {
 
         ApiResult result;
         JsonObject json;
-        String uuid = Api.mojang(player, "uuid");
+        String uuid = Mojang.mojang(player, "uuid");
         if (Objects.equals(uuid, "NotFound")) {
             context.sendMessage("玩家不存在");
             return;
         } else {
-            result = Api.hypixel("player", uuid);
-            json = result.getJson();
+            result = Hypixel.playerStatus(uuid);
+            json = result.json();
         }
 
         JsonObject playerJson;
@@ -39,8 +40,8 @@ public class Duels {
         JsonObject achievements;
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-        if (result.getTime() != -1) {
-            Instant instant = Instant.ofEpochMilli(result.getTime());
+        if (result.time() != -1) {
+            Instant instant = Instant.ofEpochMilli(result.time());
             LocalDateTime localDate = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
             main.append("\uD83D\uDFE5").append(localDate.toString()).append("\n");
         }
