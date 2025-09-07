@@ -3,10 +3,7 @@ package moe.luoluo.hypixel;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import moe.luoluo.apis.ApiResult;
-import moe.luoluo.apis.Hypixel;
-import moe.luoluo.apis.Mojang;
-import moe.luoluo.apis.Skin;
+import moe.luoluo.apis.*;
 import moe.luoluo.util.Member;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
@@ -35,12 +32,12 @@ public class Player {
 
         ApiResult result;
         JsonObject json;
-        String uuid = Mojang.mojang(player, "uuid");
+        String uuid = MojangApi.mojang(player, "uuid");
         if (Objects.equals(uuid, "NotFound")) {
             context.sendMessage("玩家不存在");
             return;
         } else {
-            result = Hypixel.playerStatus(uuid);
+            result = HypixelApi.playerStatus(uuid);
             json = result.json();
         }
 
@@ -50,7 +47,7 @@ public class Player {
             chain.append("\uD83D\uDFE5").append(localDate.toString()).append("\n");
         }
 
-        JsonObject guild = Hypixel.hypixel("guild", "player", Mojang.mojang(player, "uuid")).json();
+        JsonObject guild = HypixelApi.general("guild", "player", MojangApi.mojang(player, "uuid")).json();
         if (!json.get("player").isJsonObject()) {
             chain.append("该玩家的Hypixel数据为空");
             context.sendMessage(chain.build());
@@ -60,11 +57,11 @@ public class Player {
 
         JsonObject online;
         if (playerJson.has("lastLogout")) {
-            online = Hypixel.hypixel("status", Mojang.mojang(player, "uuid")).json();
+            online = HypixelApi.general("status", MojangApi.mojang(player, "uuid")).json();
         } else {
             online = null;
         }
-        chain.append(Rank.rank(playerJson)).append(" "); //玩家名称前缀
+        chain.append(HypixelRank.rank(playerJson)).append(" "); //玩家名称前缀
         chain.append(playerJson.get("displayname").getAsString());
 
         if (online != null && online.has("session")) {
@@ -174,7 +171,7 @@ public class Player {
         }
 
         try {
-            byte[] data = Skin.render(uuid);
+            byte[] data = SkinApi.render(uuid);
             if (context.getSubject() != null)
                 chain.append(context.getSubject().uploadImage(ExternalResource.create(data)));
 

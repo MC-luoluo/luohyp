@@ -2,8 +2,9 @@ package moe.luoluo.hypixel;
 
 import com.google.gson.JsonObject;
 import moe.luoluo.apis.ApiResult;
-import moe.luoluo.apis.Hypixel;
-import moe.luoluo.apis.Mojang;
+import moe.luoluo.apis.HypixelApi;
+import moe.luoluo.apis.MojangApi;
+import moe.luoluo.apis.HypixelRank;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -27,12 +28,12 @@ public class Arcade {
 
         ApiResult result;
         JsonObject json;
-        String uuid = Mojang.mojang(player, "uuid");
+        String uuid = MojangApi.mojang(player, "uuid");
         if (Objects.equals(uuid, "NotFound")) {
             context.sendMessage("玩家不存在");
             return;
         } else {
-            result = Hypixel.playerStatus(uuid);
+            result = HypixelApi.playerStatus(uuid);
             json = result.json();
         }
         type = type.toLowerCase();
@@ -51,7 +52,7 @@ public class Arcade {
         achievements = json.get("player").getAsJsonObject().get("achievements").getAsJsonObject();
         acdJson = json.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("Arcade").getAsJsonObject();
 
-        chain.append(new PlainText(Rank.rank(json.get("player").getAsJsonObject()))); //玩家名称前缀
+        chain.append(new PlainText(HypixelRank.rank(json.get("player").getAsJsonObject()))); //玩家名称前缀
         chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
         chain.append(new PlainText(" | 街机游戏数据："));
 
@@ -396,7 +397,7 @@ public class Arcade {
         }
 
         //我说你做
-        if (type.equals("hypixel says") || type.equals("hypixel say") || type.equals("says") || type.equals("all")) {
+        if (type.equals("general says") || type.equals("general say") || type.equals("says") || type.equals("all")) {
             chain.append(new PlainText("\n我说你做: "));
             chain.append(new PlainText("\n| 我说你做胜场: "));
             if (acdJson.has("wins_simon_says")) {

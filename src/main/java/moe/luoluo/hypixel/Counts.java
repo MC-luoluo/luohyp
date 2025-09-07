@@ -2,7 +2,7 @@ package moe.luoluo.hypixel;
 
 import com.google.gson.JsonObject;
 import moe.luoluo.apis.ApiResult;
-import moe.luoluo.apis.Hypixel;
+import moe.luoluo.apis.HypixelApi;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -25,7 +25,7 @@ public class Counts {
         ApiResult result;
         JsonObject json;
         try {
-            result = Hypixel.hypixel("counts");
+            result = HypixelApi.general("counts");
             json = result.json();
         } catch (URISyntaxException | IOException e) {
             context.sendMessage(new MessageChainBuilder().append("请求失败, 请检查控制台错误日志").build());

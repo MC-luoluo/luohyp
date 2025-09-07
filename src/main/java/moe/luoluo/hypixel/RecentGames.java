@@ -3,8 +3,8 @@ package moe.luoluo.hypixel;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import moe.luoluo.apis.ApiResult;
-import moe.luoluo.apis.Hypixel;
-import moe.luoluo.apis.Mojang;
+import moe.luoluo.apis.HypixelApi;
+import moe.luoluo.apis.MojangApi;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -23,12 +23,12 @@ public class RecentGames {
 
         ApiResult result;
         JsonObject json;
-        String uuid = Mojang.mojang(player, "uuid");
+        String uuid = MojangApi.mojang(player, "uuid");
         if (Objects.equals(uuid, "NotFound")) {
             chain.append("玩家不存在");
             return chain.build();
         } else {
-            result = Hypixel.hypixel("recentgames", uuid);
+            result = HypixelApi.general("recentgames", uuid);
             json = result.json();
         }
 
@@ -43,7 +43,7 @@ public class RecentGames {
             return chain.build();
         }
 
-        chain.append(Mojang.mojang(uuid, "name"));
+        chain.append(MojangApi.mojang(uuid, "name"));
         chain.append(" | 最近游玩: ");
 
         JsonArray games = json.get("games").getAsJsonArray();

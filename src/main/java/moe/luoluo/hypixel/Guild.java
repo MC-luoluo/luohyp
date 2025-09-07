@@ -3,8 +3,9 @@ package moe.luoluo.hypixel;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import moe.luoluo.apis.ApiResult;
-import moe.luoluo.apis.Hypixel;
-import moe.luoluo.apis.Mojang;
+import moe.luoluo.apis.HypixelApi;
+import moe.luoluo.apis.MojangApi;
+import moe.luoluo.apis.HypixelRank;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -38,16 +39,16 @@ public class Guild {
         JsonObject json;
         switch (px) {
             case "name", "id":
-                result = Hypixel.hypixel("guild", px, name);
+                result = HypixelApi.general("guild", px, name);
                 json = result.json();
                 break;
             default:
-                String uuid = Mojang.mojang(name, "uuid");
+                String uuid = MojangApi.mojang(name, "uuid");
                 if (Objects.equals(uuid, "NotFound")) {
                     context.sendMessage("玩家不存在");
                     return;
                 } else {
-                    result = Hypixel.hypixel("guild", px, uuid);
+                    result = HypixelApi.general("guild", px, uuid);
                     json = result.json();
                 }
                 break;
@@ -80,7 +81,7 @@ public class Guild {
             //chain.append(new PlainText("\n标签: "));
             chain.append(new PlainText(" [" + json.get("tag").getAsString() + "]"));
             if (json.has("tagColor")) {
-                chain.append(new PlainText("(" + Rank.color(json.get("tagColor").getAsString()) + ")"));
+                chain.append(new PlainText("(" + HypixelRank.color(json.get("tagColor").getAsString()) + ")"));
             }
         }
 
@@ -90,7 +91,7 @@ public class Guild {
         chain.append(new PlainText("\n会长: "));
         for (int i = 0; i < members.size(); i++) {
             if (members.get(i).getAsJsonObject().get("rank").getAsString().equals("Guild Master") || members.get(i).getAsJsonObject().get("rank").getAsString().equals("GUILDMASTER")) {
-                chain.append(new PlainText(Mojang.mojang(members.get(i).getAsJsonObject().get("uuid").getAsString(), "name")));
+                chain.append(new PlainText(MojangApi.mojang(members.get(i).getAsJsonObject().get("uuid").getAsString(), "name")));
                 break;
             }
         }
@@ -209,9 +210,9 @@ public class Guild {
         achievementChain.append(new PlainText(largeNumFormat((float) weekExp / members.size())));
 
         if (Objects.equals(px, "player")) {
-            String uuid = Mojang.mojang(name, "uuid");
+            String uuid = MojangApi.mojang(name, "uuid");
             membersChain.append(new PlainText("成员: "));
-            membersChain.append(new PlainText(Mojang.mojang(uuid, "name")));
+            membersChain.append(new PlainText(MojangApi.mojang(uuid, "name")));
 
             for (int i = 0; i < members.size(); i++) {
                 JsonObject member = members.get(i).getAsJsonObject();
@@ -373,7 +374,7 @@ public class Guild {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd'T'HH:mm:ss", Locale.CHINA);
             for (int x = 0; x < members.size(); x++) {
                 membersList.append(new PlainText("\n\n玩家: "));
-                membersList.append(new PlainText(Mojang.mojang(members.get(x).getAsJsonObject().get("uuid").getAsString(), "name")));
+                membersList.append(new PlainText(MojangApi.mojang(members.get(x).getAsJsonObject().get("uuid").getAsString(), "name")));
                 membersList.append(new PlainText("\nrank: "));
                 membersList.append(new PlainText(members.get(x).getAsJsonObject().get("rank").getAsString()));
                 membersList.append(new PlainText("\n加入时间: "));

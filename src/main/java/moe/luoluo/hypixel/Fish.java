@@ -2,8 +2,9 @@ package moe.luoluo.hypixel;
 
 import com.google.gson.JsonObject;
 import moe.luoluo.apis.ApiResult;
-import moe.luoluo.apis.Hypixel;
-import moe.luoluo.apis.Mojang;
+import moe.luoluo.apis.HypixelApi;
+import moe.luoluo.apis.MojangApi;
+import moe.luoluo.apis.HypixelRank;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -21,12 +22,12 @@ public class Fish {
 
         ApiResult result;
         JsonObject json;
-        String uuid = Mojang.mojang(player, "uuid");
+        String uuid = MojangApi.mojang(player, "uuid");
         if (Objects.equals(uuid, "NotFound")) {
             chain.append("玩家不存在");
             return chain.build();
         } else {
-            result = Hypixel.playerStatus(uuid);
+            result = HypixelApi.playerStatus(uuid);
             json = result.json();
         }
 
@@ -52,7 +53,7 @@ public class Fish {
         JsonObject playerJson = json.get("player").getAsJsonObject();
         JsonObject fishJson = playerJson.get("stats").getAsJsonObject().get("MainLobby").getAsJsonObject().get("fishing").getAsJsonObject();
 
-        chain.append(new PlainText(Rank.rank(playerJson) + " "));
+        chain.append(new PlainText(HypixelRank.rank(playerJson) + " "));
         chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
         chain.append(new PlainText(" | 大厅钓鱼数据:"));
         if (fishJson.has("stats") && fishJson.get("stats").getAsJsonObject().has("permanent")) {

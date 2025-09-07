@@ -3,8 +3,9 @@ package moe.luoluo.hypixel;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import moe.luoluo.apis.ApiResult;
-import moe.luoluo.apis.Hypixel;
-import moe.luoluo.apis.Mojang;
+import moe.luoluo.apis.HypixelApi;
+import moe.luoluo.apis.MojangApi;
+import moe.luoluo.apis.HypixelRank;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -27,16 +28,16 @@ public class BuildBattle {
 
         ApiResult result;
         JsonObject json;
-        String uuid = Mojang.mojang(player, "uuid");
+        String uuid = MojangApi.mojang(player, "uuid");
         if (Objects.equals(uuid, "NotFound")) {
             chain.append("玩家不存在");
             return chain.build();
         } else {
-            result = Hypixel.playerStatus(uuid);
+            result = HypixelApi.playerStatus(uuid);
             json = result.json();
         }
 
-        JsonObject leader = Hypixel.hypixel("leaderboards").json();
+        JsonObject leader = HypixelApi.general("leaderboards").json();
 
         if (result.time() != -1) {
             Instant instant = Instant.ofEpochMilli(result.time());
@@ -49,7 +50,7 @@ public class BuildBattle {
             return chain.build();
         }
         JsonObject bbJson = json.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("BuildBattle").getAsJsonObject();
-        chain.append(new PlainText(Rank.rank(json.get("player").getAsJsonObject()) + " ")); //玩家名称前缀
+        chain.append(new PlainText(HypixelRank.rank(json.get("player").getAsJsonObject()) + " ")); //玩家名称前缀
         chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
         chain.append(new PlainText(" | 建筑大师数据: "));
 

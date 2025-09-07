@@ -1,8 +1,8 @@
 package moe.luoluo.mcskin;
 
 import com.google.gson.JsonObject;
-import moe.luoluo.apis.Mojang;
-import moe.luoluo.apis.Skin;
+import moe.luoluo.apis.MojangApi;
+import moe.luoluo.apis.SkinApi;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -21,19 +21,19 @@ public class MCskin {
     public static void mcskin(CommandSender context, String player) throws IOException, URISyntaxException {
         MessageChainBuilder chain = new MessageChainBuilder();
 
-        String uuid = Mojang.mojang(player, "uuid");
+        String uuid = MojangApi.mojang(player, "uuid");
         if (Objects.equals(uuid, "NotFound")) {
             context.sendMessage("玩家不存在");
             return;
         }
 
-        JsonObject profile = Skin.getProfile(uuid);
+        JsonObject profile = SkinApi.getProfile(uuid);
 
         chain.append("玩家: ").append(profile.get("profileName").getAsString());
         chain.append("\nuuid: ").append(profile.get("profileId").getAsString());
 
         try {
-            byte[] data = Skin.render(uuid);
+            byte[] data = SkinApi.render(uuid);
             if (context.getSubject() != null)
                 chain.append(context.getSubject().uploadImage(ExternalResource.create(data)));
 
@@ -42,9 +42,9 @@ public class MCskin {
             log.error(String.valueOf(new RuntimeException(e)));
         }
 
-        URI skinUri = Skin.getSkinUri(profile);
+        URI skinUri = SkinApi.getSkinUri(profile);
         try {
-            byte[] data = Skin.skin(skinUri);
+            byte[] data = SkinApi.skin(skinUri);
             if (context.getSubject() != null)
                 chain.append(context.getSubject().uploadImage(ExternalResource.create(data)));
 
@@ -54,10 +54,10 @@ public class MCskin {
         }
         chain.append("\n皮肤链接: ").append(String.valueOf(skinUri));
 
-        URI capeUri = Skin.getCapeUri(profile);
+        URI capeUri = SkinApi.getCapeUri(profile);
         if (capeUri != null) {
             try {
-                byte[] data = Skin.skin(capeUri);
+                byte[] data = SkinApi.skin(capeUri);
                 if (context.getSubject() != null)
                     chain.append(context.getSubject().uploadImage(ExternalResource.create(data)));
 
@@ -71,7 +71,7 @@ public class MCskin {
         URI ofCape = new URI("http://s.optifine.net/capes/" + profile.get("profileName").getAsString() + ".png");
         byte[] ofData;
         try {
-            ofData = Skin.skin(ofCape);
+            ofData = SkinApi.skin(ofCape);
             if (context.getSubject() != null)
                 chain.append(context.getSubject().uploadImage(ExternalResource.create(ofData)));
 

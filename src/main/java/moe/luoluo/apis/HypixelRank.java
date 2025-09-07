@@ -1,4 +1,4 @@
-package moe.luoluo.hypixel;
+package moe.luoluo.apis;
 
 import com.google.gson.JsonObject;
 
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Rank {
+public class HypixelRank {
     public static String rank(JsonObject json) {
         if (json.has("prefix")) {
             return json.get("prefix").getAsString().replaceAll("§.","");
