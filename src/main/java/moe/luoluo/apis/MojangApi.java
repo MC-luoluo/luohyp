@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class Mojang {
+public class MojangApi {
     public static String mojang(String arg1, String get) throws IOException, URISyntaxException {
         URI uri;
         URI uri2 = switch (arg1.length()) {

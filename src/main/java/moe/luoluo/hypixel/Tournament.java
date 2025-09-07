@@ -2,8 +2,9 @@ package moe.luoluo.hypixel;
 
 import com.google.gson.JsonObject;
 import moe.luoluo.apis.ApiResult;
-import moe.luoluo.apis.Hypixel;
-import moe.luoluo.apis.Mojang;
+import moe.luoluo.apis.HypixelApi;
+import moe.luoluo.apis.MojangApi;
+import moe.luoluo.apis.HypixelRank;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -25,12 +26,12 @@ public class Tournament {
 
         ApiResult result;
         JsonObject json;
-        String uuid = Mojang.mojang(player, "uuid");
+        String uuid = MojangApi.mojang(player, "uuid");
         if (Objects.equals(uuid, "NotFound")) {
             context.sendMessage("玩家不存在");
             return;
         } else {
-            result = Hypixel.playerStatus(uuid);
+            result = HypixelApi.playerStatus(uuid);
             json = result.json();
         }
 
@@ -46,7 +47,7 @@ public class Tournament {
             return;
         }
         JsonObject tourneyJson = json.get("player").getAsJsonObject().get("tourney").getAsJsonObject();
-        chain.append(new PlainText(Rank.rank(json.get("player").getAsJsonObject()) + " ")); //玩家名称前缀
+        chain.append(new PlainText(HypixelRank.rank(json.get("player").getAsJsonObject()) + " ")); //玩家名称前缀
         chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
         chain.append(new PlainText(" | 锦标赛数据: "));
         if (tourneyJson.has("first_join_lobby")) {

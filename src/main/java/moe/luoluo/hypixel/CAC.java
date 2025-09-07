@@ -2,8 +2,9 @@ package moe.luoluo.hypixel;
 
 import com.google.gson.JsonObject;
 import moe.luoluo.apis.ApiResult;
-import moe.luoluo.apis.Hypixel;
-import moe.luoluo.apis.Mojang;
+import moe.luoluo.apis.HypixelApi;
+import moe.luoluo.apis.MojangApi;
+import moe.luoluo.apis.HypixelRank;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -27,13 +28,13 @@ public class CAC {
         ApiResult result;
         JsonObject json;
 
-        String uuid = Mojang.mojang(player, "uuid");
+        String uuid = MojangApi.mojang(player, "uuid");
         if (Objects.equals(uuid, "NotFound")) {
             chain.append("玩家不存在");
             context.sendMessage(chain.build());
             return;
         } else {
-            result = Hypixel.playerStatus(uuid);
+            result = HypixelApi.playerStatus(uuid);
             json = result.json();
         }
 
@@ -94,7 +95,7 @@ public class CAC {
             totalAssists += cacJson.get("assists_gungame").getAsInt();
 
 
-        chain.append(new PlainText(Rank.rank(json.get("player").getAsJsonObject()) + " ")); //玩家名称前缀
+        chain.append(new PlainText(HypixelRank.rank(json.get("player").getAsJsonObject()) + " ")); //玩家名称前缀
         chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
         chain.append(new PlainText(" | 警匪大战数据: "));
 

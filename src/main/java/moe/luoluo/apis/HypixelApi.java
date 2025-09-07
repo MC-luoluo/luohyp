@@ -12,20 +12,20 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-public class Hypixel {
-    public static ApiResult hypixel(String type) throws URISyntaxException, IOException {
-        return hypixel(type, "", "");
+public class HypixelApi {
+    public static ApiResult general(String type) throws URISyntaxException, IOException {
+        return general(type, "", "");
     }
 
-    public static ApiResult hypixel(String type, String uuid) throws URISyntaxException, IOException {
-        return hypixel(type, "uuid", uuid);
+    public static ApiResult general(String type, String uuid) throws URISyntaxException, IOException {
+        return general(type, "uuid", uuid);
     }
 
     public static ApiResult playerStatus (String uuid) throws URISyntaxException, IOException {
-        return hypixel("player", "uuid", uuid);
+        return general("player", "uuid", uuid);
     }
 
-    public static ApiResult hypixel(String type, String parameter, String value) throws URISyntaxException, IOException {
+    public static ApiResult general(String type, String parameter, String value) throws URISyntaxException, IOException {
         URI uri = new URI("https://api.hypixel.net/" + type + "?key=" + Config.INSTANCE.getHypixelAPIkey() + "&" + parameter + "=" + URLEncoder.encode(value, StandardCharsets.UTF_8));
         JsonObject result;
         String s = "";

@@ -2,8 +2,9 @@ package moe.luoluo.hypixel;
 
 import com.google.gson.JsonObject;
 import moe.luoluo.apis.ApiResult;
-import moe.luoluo.apis.Hypixel;
-import moe.luoluo.apis.Mojang;
+import moe.luoluo.apis.HypixelApi;
+import moe.luoluo.apis.MojangApi;
+import moe.luoluo.apis.HypixelRank;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -25,12 +26,12 @@ public class MurderMystery {
 
         ApiResult result;
         JsonObject json;
-        String uuid = Mojang.mojang(player, "uuid");
+        String uuid = MojangApi.mojang(player, "uuid");
         if (Objects.equals(uuid, "NotFound")) {
             context.sendMessage("玩家不存在");
             return;
         } else {
-            result = Hypixel.playerStatus(uuid);
+            result = HypixelApi.playerStatus(uuid);
             json = result.json();
         }
 
@@ -47,7 +48,7 @@ public class MurderMystery {
         }
         mmJson = json.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("MurderMystery").getAsJsonObject();
 
-        chain.append(new PlainText(Rank.rank(json.get("player").getAsJsonObject()) + " "));
+        chain.append(new PlainText(HypixelRank.rank(json.get("player").getAsJsonObject()) + " "));
         chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
         chain.append(new PlainText(" | 密室杀手数据:"));
 

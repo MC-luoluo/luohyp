@@ -13,7 +13,7 @@ import java.util.Base64;
 
 import static moe.luoluo.apis.Api.request;
 
-public class Skin {
+public class SkinApi {
     public static byte[] render(String uuid) throws URISyntaxException, IOException {
         URI uri = new URI("https://nmsr.nickac.dev/fullbody/" + uuid);
         return skin(uri);
